@@ -1,0 +1,39 @@
+{
+    "ACC_GRAVITY": 9.80665,
+    "GAS_CONSTANT": 530.0,
+    "pipe": {
+      "length": 363000,
+      "diameter": 1.422,
+      "friction": 1.8e-3
+    },
+    "fluid": {
+      "temperature": 276.25
+    },
+    "initial_conditions": {
+      "pressure" : 8400000,
+      "momentum" : 463.33
+    },
+    "boundary_conditions": {
+      "inlet": {
+        "pressure": 8400000
+      },
+      "outlet": {
+        "momentum": "momentum_at_outlet"
+      }
+    },
+    "discretization": {
+      "space": {
+        "resolution": 32,
+        "order": 1
+      },
+      "time": {
+        "start": 0,
+        "end": 24,
+        "step": 100
+      }
+    },
+    "io": {
+      "frequency": 1,
+      "filename": "results_pHCha09"
+    }
+}
