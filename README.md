@@ -34,19 +34,19 @@ Necessary tools :
 
 ## Building phgasnets
 
-A convenience script [`RUNME.sh`](README.md) is provided to build and run all the demos.
+A convenience script [`RUNME.sh`](RUNME.sh) is provided to build and run all the demos.
 
 If you choose to pursue it differently, the following sequence of commands builds phgasnets.
 
-> Current working directory is assumed as the top-level project directory [`phgasnets.cpp\`] and the build files will be placed in `build` directory.
+> Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
-```
+```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 ```
 
 If any of the dependencies are at a custom location and CMake cannot find it, you may indicate the paths as,
 
-```
+```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\custom\library\location"
 ```
 
