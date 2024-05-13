@@ -1,11 +1,24 @@
-# Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
+
+            _                                      _        
+           | |                                    | |       
+     _ __  | |__    __ _   __ _  ___  _ __    ___ | |_  ___ 
+    | '_ \ | '_ \  / _` | / _` |/ __|| '_ \  / _ \| __|/ __|
+    | |_) || | | || (_| || (_| |\__ \| | | ||  __/| |_ \__ \
+    | .__/ |_| |_| \__, | \__,_||___/|_| |_| \___| \__||___/
+    | |             __/ |                                   
+    |_|            |___/                                    
+
+phgasnets-cpp
+=============
+
+Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
 Authors:
   - [Ashwin S. Nayak](https://orcid.org/0000-0002-9855-2377)
   - [Thomas Bendokat](https://orcid.org/0000-0002-0671-6291)
 
 Affiliation:
-  - [Max Planck Institute for Dynamics of Complex Technical Systems](https://www.mpi-magdeburg.mpg.de/)
+  - [Max Planck Institute for Dynamics of Complex Technical Systems](https://www.mpi-magdeburg.mpg.de/), Magdeburg, Germany.
 
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
