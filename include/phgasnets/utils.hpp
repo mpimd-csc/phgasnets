@@ -3,6 +3,7 @@
 // This file is part of phgasnets
 //
 // SPDX-License-Identifier:  GPL-3.0-or-later
+# pragma once
 
 # include <operators.hpp>
 # include <vector>
