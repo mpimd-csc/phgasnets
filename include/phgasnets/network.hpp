@@ -9,7 +9,6 @@
 # include "compressor.hpp"
 # include "utils.hpp"
 # include <vector>
-# include <iostream>
 
 namespace PHModel {
   struct Network {
