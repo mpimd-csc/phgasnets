@@ -1,7 +1,5 @@
 # Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
-Supplement to the article submitted for PAMM 2024.
-
 Authors:
   - [Ashwin S. Nayak](https://orcid.org/0000-0002-9855-2377)
   - [Thomas Bendokat](https://orcid.org/0000-0002-0671-6291)
@@ -30,16 +28,17 @@ You can make use of [development containers](https://containers.dev/) to develop
 
 Necessary tools :
 
-- [Docker](https://docs.docker.com/engine/install/) installed and configured to access the Hinkskalle container registry for MPI-Magdeburg CSC Group.
+- [Docker](https://docs.docker.com/engine/install/),
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
 
 ## Building phgasnets
 
-A convenience script [`RUNME.sh`](README.md) is provided to build and run the demos.
+A convenience script [`RUNME.sh`](README.md) is provided to build and run all the demos.
 
-The following sequence of commands builds phgasnets.
-It assumes that your current working directory is the top-level directory [phgasnets.cpp] and the build files will be placed in `build` directory.
+If you choose to pursue it differently, the following sequence of commands builds phgasnets.
+
+> Current working directory is assumed as the top-level project directory [`phgasnets.cpp\`] and the build files will be placed in `build` directory.
 
 ```
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"

@@ -1,3 +1,9 @@
+// Copyright (C) 2024 Max Planck Institute for Dynamics of Complex Technical Systems, Magdeburg
+//
+// This file is part of phgasnets
+//
+// SPDX-License-Identifier:  GPL-3.0-or-later
+
 # include "pipe.hpp"
 # include "operators.hpp"
 
