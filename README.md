@@ -1,10 +1,16 @@
 # Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
-Supplement to article submitted for PAMM 2024.
+Supplement to the article submitted for PAMM 2024.
 
 Authors:
-  - Ashwin Nayak
-  - Thomas Bendokat
+  - [Ashwin S. Nayak](https://orcid.org/0000-0002-9855-2377)
+  - [Thomas Bendokat](https://orcid.org/0000-0002-0671-6291)
+
+Affiliation:
+  - [Max Planck Institute for Dynamics of Complex Technical Systems](https://www.mpi-magdeburg.mpg.de/)
+
+License:
+  - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
 ## Prerequisites
 
@@ -46,4 +52,3 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\c
 ```
 
 To compile in debug mode set the `DCMAKE_BUILD_TYPE=` flag to `Debug` instead.
-
