@@ -47,8 +47,6 @@ Necessary tools :
 
 ## Building phgasnets
 
-A convenience script [`RUNME.sh`](RUNME.sh) is provided to build and run all the demos.
-
 If you choose to pursue it differently, the following sequence of commands builds phgasnets.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
@@ -64,3 +62,5 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\c
 ```
 
 To compile in debug mode set the `DCMAKE_BUILD_TYPE=` flag to `Debug` instead.
+
+A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos.

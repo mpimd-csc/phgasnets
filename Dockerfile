@@ -1,3 +1,11 @@
+# Dockerfile for development environment
+# Primary purpose of this file is for use with VSCode DevContainer Extension.
+#
+# To build a docker image named "phgasnets-dev" from this file run the commands,
+#
+# docker build . --tag phgasnets-dev
+#
+
 FROM debian:bookworm
 
 ARG USERNAME=user
@@ -5,14 +13,12 @@ ARG USER_UID=1001
 ARG USER_GID=${USER_UID}
 ARG HIGHFIVE_PATH=/opt/highfive
 
-SHELL ["/bin/bash", "-c"]
 RUN addgroup --gid ${USER_GID} ${USERNAME} \
     && adduser --disabled-password --gecos '' --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} \
     && usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
 
-# Cpp dependencies
 RUN apt-get update && apt-get install -y \
     build-essential cmake git \
     libeigen3-dev libceres-dev nlohmann-json3-dev libhdf5-dev catch2 doxygen && \
@@ -30,4 +36,4 @@ RUN apt-get update && apt-get install -y \
 
 USER ${USERNAME}
 
-ENTRYPOINT ["/bin/bash", "-c", "while sleep 1000; do :; done"]
+ENV SHELL /bin/bash
