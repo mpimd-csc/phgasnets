@@ -1,0 +1,14 @@
+FROM phgasnets-dev
+
+ARG SRC_DIR=/phgasnets/src
+ARG BUILD_DIR=/phgasnets/build
+
+COPY . ${SRC_DIR}
+RUN cmake -B ${BUILD_DIR} -S ${SRC_DIR} -DCMAKE_BUILD_TYPE=Release && cmake --build ${BUILD_DIR} --parallel
+
+ARG OUT_DIR=/phgasnets/run
+VOLUME ${OUT_DIR}
+ENV BUILD_DIR ${BUILD_DIR}
+ENV OUT_DIR ${OUT_DIR}
+
+CMD ${SRC_DIR}/RUNME.sh

@@ -5,6 +5,10 @@
 #
 # docker build . --tag phgasnets-dev
 #
+# To run the codes within the container use,
+#
+# docker run --rm -it -v ${PWD}:/src -w /src phgasnets-dev
+#
 
 FROM debian:bookworm
 
