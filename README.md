@@ -23,19 +23,7 @@ Affiliation:
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
-## Prerequisites
-
-Building phgasnets requires the following software installed:
-
-* A C++17-compliant compiler
-* CMake `>= 3.9`
-* [Eigen](https://gitlab.com/libeigen/eigen)
-* [Ceres](http://ceres-solver.org/)
-* [HighFive](https://bluebrain.github.io/HighFive/)
-* [nlohmann_json](https://github.com/nlohmann/json)
-
-
-## Development Container
+## Development Container (Optional)
 
 You can make use of [development containers](https://containers.dev/) to develop and also test the codes in this repository.
 
@@ -47,7 +35,20 @@ Necessary tools :
 
 ## Building phgasnets
 
-If you choose to pursue it differently, the following sequence of commands builds phgasnets.
+If you are not using the development container, you need to manually build `phgasnets` library.
+
+Building requires the following dependencies:
+
+* A C++17-compliant compiler
+* CMake `>= 3.9`
+* [Eigen](https://gitlab.com/libeigen/eigen) for handling linear algebra,
+* [Ceres](http://ceres-solver.org/) for solving non-linear system of equations,
+* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) for writing/reading states to HDF5 format,
+* [nlohmann_json](https://github.com/nlohmann/json) for reading JSON configuration files.
+
+Note the locations of these libraries in case they are not installed through standard package managers.
+
+The following sequence of commands builds phgasnets.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
@@ -55,12 +56,24 @@ If you choose to pursue it differently, the following sequence of commands build
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 ```
 
-If any of the dependencies are at a custom location and CMake cannot find it, you may indicate the paths as,
+CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated as,
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\custom\library\location"
+cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\custom\library1;\path\to\custom\library2"
 ```
 
-To compile in debug mode set the `DCMAKE_BUILD_TYPE=` flag to `Debug` instead.
+To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
+
+## Demos
+
+Once the library is built, you can run the demos provided in the `demos\` folder. Configuration files `config.json` provides the requisite run-time parameters for the demos.
+
+  - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
+  - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
+  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
+
+Running the demos results in state files at different time instances saved in a HDF5 file.
+A `plot` script is provided to plot the results at the pipe endpoints.
+For more details, refer to the local READMEs within.
 
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos.
