@@ -59,14 +59,14 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated as,
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\custom\library1;\path\to\custom\library2"
+cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="/path/to/custom/library1;/path/to/custom/library2"
 ```
 
 To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
 
 ## Demos
 
-Once the library is built, you can run the demos provided in the `demos\` folder.
+Once the library is built, you can run the demos provided in the `demos/` folder.
 Note that the demo executables take configuration parameters as input.
 Configuration files `config.json` provides the requisite parameters.
 
