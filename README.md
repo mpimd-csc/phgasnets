@@ -56,8 +56,8 @@ If you are not using the development container, you need to manually build `phga
 
 Building requires the following dependencies:
 
-* A C++17-compliant compiler
-* CMake `>= 3.9`
+* A C++17-compliant compiler e.g. [gcc](https://gcc.gnu.org/)
+* [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
 * [Eigen](https://gitlab.com/libeigen/eigen) for handling linear algebra,
 * [Ceres](http://ceres-solver.org/) for solving non-linear system of equations,
 * [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) for writing/reading states to HDF5 format,
