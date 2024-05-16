@@ -23,9 +23,26 @@ Affiliation:
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
-## Development Container (Optional)
+## Getting Started
 
-You can make use of [development containers](https://containers.dev/) to develop and also test the codes in this repository.
+To use the code, you must first set the environment and dependent libraries.
+
+You may either choose to use,
+  - Development containers
+  - Manually configure and build.
+
+Once the library is built, you can **run the demos** provided in the `demos/` folder.
+
+Three demos are provided:
+
+  - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
+  - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
+  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
+
+
+### Development Container
+
+You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
 
 Necessary tools :
 
@@ -33,7 +50,7 @@ Necessary tools :
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
 
-## Building phgasnets
+### Manually configure and build
 
 If you are not using the development container, you need to manually build `phgasnets` library.
 
@@ -64,11 +81,9 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="/path/to/c
 
 To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
 
-## Demos
+### Run Demos
 
-Once the library is built, you can run the demos provided in the `demos/` folder.
-Note that the demo executables take configuration parameters as input.
-Configuration files `config.json` provides the requisite parameters.
+The demo executables are available in the `build` directory and take configuration parameters `config.json` as input.
 
 To run the `single_pipe` demo, for example,
 
@@ -78,12 +93,6 @@ build/demos/single_pipe/single_pipe demos/single_pipe/config.json
 
 This runs the transient simulation and for saves the state at each time instance into a HDF5 file.
 The demos also provide a `plot` script to plot the pressure/momentum values at nodes as `.pdf`.
-
-Three demos are provided:
-
-  - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
-  - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
-  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
 
 Running the demos results in state files at different time instances saved in a HDF5 file.
 A `plot` script is provided to plot the results at the pipe endpoints.
