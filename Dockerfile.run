@@ -1,14 +1,19 @@
 FROM phgasnets-dev
 
-ARG SRC_DIR=/phgasnets/src
+ARG PROJECT_DIR=/phgasnets/src
 ARG BUILD_DIR=/phgasnets/build
-
-COPY . ${SRC_DIR}
-RUN cmake -B ${BUILD_DIR} -S ${SRC_DIR} -DCMAKE_BUILD_TYPE=Release && cmake --build ${BUILD_DIR} --parallel
-
 ARG OUT_DIR=/phgasnets/run
+
+USER root
+
+COPY . ${PROJECT_DIR}
+
+RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && cmake --build ${BUILD_DIR} --parallel && chmod +x ${PROJECT_DIR}/RUNME.sh
+
 VOLUME ${OUT_DIR}
+
+ENV PROJECT_DIR ${PROJECT_DIR}
 ENV BUILD_DIR ${BUILD_DIR}
 ENV OUT_DIR ${OUT_DIR}
 
-CMD ${SRC_DIR}/RUNME.sh
+CMD ${PROJECT_DIR}/RUNME.sh
