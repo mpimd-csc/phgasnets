@@ -28,8 +28,9 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
-  - Development containers
-  - Manually configure and build.
+  - VSCode Development containers
+  - Manually build and use docker containers
+  - Manually configure and build source code
 
 Once the library is built, you can **run the demos** provided in the `demos/` folder.
 
@@ -49,12 +50,16 @@ Necessary tools :
 - [Docker](https://docs.docker.com/engine/install/),
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
+Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
+This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
+Proceed to [building phgasnets](#build).
 
-### Manually configure and build
+> The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
+> The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
-If you are not using the development container, you need to manually build `phgasnets` library.
+### Build
 
-Building requires the following dependencies:
+Building requires the following dependencies (if not using the devcontainer):
 
 * A C++17-compliant compiler e.g. [gcc](https://gcc.gnu.org/)
 * [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
@@ -91,11 +96,13 @@ To run the `single_pipe` demo, for example,
 build/demos/single_pipe/single_pipe demos/single_pipe/config.json
 ```
 
-This runs the transient simulation and for saves the state at each time instance into a HDF5 file.
-The demos also provide a `plot` script to plot the pressure/momentum values at nodes as `.pdf`.
+This runs the transient simulation and saves the state at each time instance into a HDF5 file.
+A `plot` script is provided to parse the config file, read the specified HDF5 files and plot the pressure/momentum values at the pipe endpoints.
 
-Running the demos results in state files at different time instances saved in a HDF5 file.
-A `plot` script is provided to plot the results at the pipe endpoints.
-For more details, refer to the local READMEs within.
+```
+demos/single_pipe/plot -c demos/single_pipe/config.json
+```
+
+For specific details, refer to the local READMEs within.
 
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results.
