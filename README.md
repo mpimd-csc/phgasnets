@@ -52,7 +52,7 @@ Necessary tools :
 
 Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
 This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
-Proceed to [building phgasnets](#build).
+Proceed to [building `phgasnets`](#build).
 
 > The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
 > The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
@@ -61,7 +61,7 @@ Proceed to [building phgasnets](#build).
 
 The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host.
 
-First, build the base imag with all dependencies using,
+First, build the base image with all dependencies using,
 ```bash
 docker build -t phgasnets-dev -f Dockerfile.dev .
 ```
@@ -91,7 +91,7 @@ Building requires the following dependencies (if not using the devcontainer):
 
 Note the locations of these libraries in case they are not installed through standard package managers.
 
-The following sequence of commands builds phgasnets.
+The following sequence of commands builds `phgasnets`.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
