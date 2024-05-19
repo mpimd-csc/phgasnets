@@ -28,8 +28,8 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
-  - VSCode Development containers
-  - Manually build and use docker containers
+  - [VSCode Development containers](#development-container)
+  - [Manually build and use docker containers]()
   - Manually configure and build source code
 
 Once the library is built, you can **run the demos** provided in the `demos/` folder.
@@ -41,7 +41,7 @@ Three demos are provided:
   - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
 
 
-### Development Container
+### VSCode Development Container
 
 You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
 
@@ -56,6 +56,27 @@ Proceed to [building phgasnets](#build).
 
 > The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
 > The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
+
+### Docker Container
+
+The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host.
+
+First, build the base imag with all dependencies using,
+```bash
+docker build -t phgasnets-dev -f Dockerfile.dev .
+```
+
+Second, build the final image which contains all the source code and executables,
+```bash
+docker build -t phgasnets -f Dockerfile.run .
+```
+
+Create a folder named `results` to store results and run the container specifying the `results` folder,
+```bash
+mkdir results
+docker run --rm -v ${PWD}/results:/phgasnets/run phgasnets
+```
+This should run all the demos and store the generated PDFs in the `results` folder.
 
 ### Build
 

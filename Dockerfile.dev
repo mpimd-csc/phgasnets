@@ -1,13 +1,12 @@
 # Dockerfile for development environment
-# Primary purpose of this file is for use with VSCode DevContainer Extension.
 #
-# To build a docker image named "phgasnets-dev" from this file run the commands,
+# Primary purpose is for use with VSCode DevContainer Extension.
+#
+# To build a docker image manually from this file run the commands,
 #
 # docker build . --tag phgasnets-dev
 #
-# To run the codes within the container use,
-#
-# docker run --rm -it -v ${PWD}:/src -w /src phgasnets-dev
+# NOTE: This file is not intended for running source-code but only to setup dependencies!
 #
 
 FROM debian:bookworm

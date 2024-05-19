@@ -1,3 +1,18 @@
+# Dockerfile for running demos
+#
+# Primary purpose is to provide a containerized run for generating results
+#
+# NOTE: THIS image requires phgasnets-dev to be built (see Dockerfile.dev for more).
+#
+# To build this docker image from this file run the commands,
+#
+# docker build --tag phgasnets .
+#
+# To run this container and save results in the (host) computer, run the following commands
+#
+# mkdir results
+# docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets
+
 FROM phgasnets-dev
 
 ARG PROJECT_DIR=/phgasnets/src
