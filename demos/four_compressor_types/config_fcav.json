@@ -7,9 +7,9 @@
       "friction": 1.8e-3
     },
     "compressor": {
-      "type" : "FP",
+      "type" : "FC",
       "model": "AV",
-      "specification": 8800000
+      "specification": 1.2
     },
     "fluid": {
       "isentropic_exponent": 1.4
@@ -40,6 +40,6 @@
     },
     "io": {
       "frequency": 1,
-      "filename": "results_pH_four_compressors"
+      "filename": "results_pH_FCAV"
     }
 }
