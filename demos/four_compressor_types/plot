@@ -26,6 +26,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Process some configuration file.")
     parser.add_argument('-c', '--config', default='config.json', help='JSON configuration file')
     parser.add_argument('-p', '--pipe-id', default=0, help='Compressor Case: Pipe ID')
+    parser.add_argument('--csv', action=argparse.BooleanOptionalAction)
     parser.add_argument('-O','--out-dir', default=pathlib.Path.cwd(), type=pathlib.Path)
     return parser.parse_args()
 
@@ -129,3 +130,28 @@ plot.add_outflow_momentum(outflow_momentum)
 outfile = args.out_dir / (filename +'_pipe'+ args.pipe_id + '.pdf')
 plot.save(outfile)
 print(f"Plot saved as [{outfile}]")
+
+if args.csv:
+    import numpy as np
+
+    outdata = np.c_[
+        timestamps,
+        inflow_pressure,
+        outflow_pressure,
+        inflow_momentum,
+        outflow_momentum
+    ]
+
+    outfile = args.out_dir / (filename +'_pipe'+ args.pipe_id + '.csv')
+    np.savetxt(
+        outfile,
+        outdata,
+        header="time \
+    inletPressure \
+    outletPressure \
+    inletMomentum \
+    outletMomentum ",
+        comments=''
+    )
+
+    print(f"Plot data saved as [{outfile}]")

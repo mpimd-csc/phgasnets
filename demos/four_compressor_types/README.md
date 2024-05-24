@@ -50,3 +50,5 @@ Finally, the `plot` executable file can parse the config and generated results f
 ```
 
 The argument `-p` with an integer value refers to the first and second pipes respectively.
+
+An additional flag `--csv` can be used to output plot data into a `.csv` file.

@@ -28,8 +28,13 @@ popd > /dev/null
 
 # Run four compressor types
 echo -e "\e[33m[DEMO] Run four_compressor_types\e[0m"
+compressor_types=("fcam" "fcav" "fpav" "fpam")
 pushd ${PROJECT_DIR}/demos/four_compressor_types > /dev/null
-${DEMO_DIR}/four_compressor_types/four_compressor_types config.json
-./plot -c config.json -p 0 -O ${OUT_DIR}
-./plot -c config.json -p 1 -O ${OUT_DIR}
+for COMPR_TYPE in "${compressor_types[@]}"
+do
+  CONFIG_FILE="config_${COMPR_TYPE}.json"
+  ${DEMO_DIR}/four_compressor_types/four_compressor_types ${CONFIG_FILE}
+  ./plot -c ${CONFIG_FILE} -p 0 -O ${OUT_DIR} --csv
+  ./plot -c ${CONFIG_FILE} -p 1 -O ${OUT_DIR} --csv
+done
 popd > /dev/null
