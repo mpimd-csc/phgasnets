@@ -28,18 +28,17 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
-  - [VSCode Development containers](#development-container)
-  - [Manually build and use docker containers]()
-  - Manually configure and build source code
+  - [VSCode Development containers](#vscode-development-container)
+  - [Manually build and use docker containers](#docker-container)
+  - [Manually configure and build source code](#build)
 
-Once the library is built, you can **run the demos** provided in the `demos/` folder.
+Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
 Three demos are provided:
 
   - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
   - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
   - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
-
 
 ### VSCode Development Container
 
