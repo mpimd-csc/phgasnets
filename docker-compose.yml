@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: phgasnets-dev
+
+  run:
+    build:
+      context: .
+      dockerfile: Dockerfile.run
+    image: phgasnets
+    volumes:
+      - ./results:/phgasnets/run

@@ -58,24 +58,19 @@ Proceed to [building `phgasnets`](#build).
 
 ### Docker Container
 
-The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host.
+The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host. Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
 
-First, build the base image with all dependencies using,
+Build the image which contains all the source code and executables,
 ```bash
-docker build -t phgasnets-dev -f Dockerfile.dev .
+docker-compose build
 ```
 
-Second, build the final image which contains all the source code and executables,
-```bash
-docker build -t phgasnets -f Dockerfile.run .
-```
-
-Create a folder named `results` to store results and run the container specifying the `results` folder,
+Create a folder named `results` to store results and run the container,
 ```bash
 mkdir results
-docker run --rm -v ${PWD}/results:/phgasnets/run phgasnets
+docker-compose run --rm run
 ```
-This should run all the demos and store the generated PDFs in the `results` folder.
+This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 
 ### Build
 
