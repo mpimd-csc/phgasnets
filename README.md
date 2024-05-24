@@ -28,8 +28,8 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
+  - [Build and run in containers](#docker-container)
   - [VSCode Development containers](#vscode-development-container)
-  - [Manually build and use docker containers](#docker-container)
   - [Manually configure and build source code](#build)
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
@@ -39,22 +39,6 @@ Three demos are provided:
   - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
   - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
   - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
-
-### VSCode Development Container
-
-You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
-
-Necessary tools :
-
-- [Docker](https://docs.docker.com/engine/install/),
-- [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
-
-Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
-This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
-Proceed to [building `phgasnets`](#build).
-
-> The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
-> The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
 ### Docker Container
 
@@ -71,6 +55,22 @@ mkdir results
 docker-compose run --rm run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
+
+### VSCode Development Container
+
+You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
+
+Necessary tools :
+
+- [Docker](https://docs.docker.com/engine/install/),
+- [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+
+Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
+This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
+Proceed to [building `phgasnets`](#build).
+
+> The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
+> The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
 ### Build
 
