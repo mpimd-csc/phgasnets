@@ -5,7 +5,7 @@
 - Scenario considered is over a 24-hr period.
 - The pipe does not have a horizontal profile and as such hx = 0.
 - The temperature of the fluid at the inlet is assumed a constant 3.1 deg C and the specific gas constant is 530 J/kg-mol.
-- The supply pressure of the pipe was maintained at 84 bar at the inlet node.
+- The supply pressure of the pipe was maintained at 80 bar at the inlet node.
 - The demand massflux fluctuates sharply at the outlet every 6-hr time interval,
 
 | Time (h) | Massflux (kg/m^2-s) |
