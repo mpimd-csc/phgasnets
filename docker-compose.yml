@@ -25,4 +25,4 @@ services:
       dockerfile: Dockerfile.run
     image: phgasnets-run
     volumes:
-      - ./results:/phgasnets/run
+      - "${RESULTS_DIR:-./results}:/phgasnets/run"

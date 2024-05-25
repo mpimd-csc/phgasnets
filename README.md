@@ -55,6 +55,9 @@ mkdir results
 docker-compose run --rm phgasnets-run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
+If an alternate path is desired to store the results, this maybe specied through an environment variable `RESULTS_DIR` before building.
+
+> Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container.
 
 ### VSCode Development Container
 
