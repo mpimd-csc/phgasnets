@@ -1,7 +1,7 @@
 {
     "name": "phgasnets-dev",
     "build" : {
-        "dockerfile": "Dockerfile"
+        "dockerfile": "Dockerfile.dev"
     },
     "customizations": {
         "vscode": {
