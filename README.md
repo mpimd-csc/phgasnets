@@ -58,7 +58,7 @@ This should run all the demos in a disposable container and store the generated 
 
 ### VSCode Development Container
 
-You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
+If you intend to develop the source code, you can also make use of [development containers](https://containers.dev/) to set up the requisit environment,
 
 Necessary tools :
 
@@ -67,14 +67,14 @@ Necessary tools :
 
 Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
 This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
-Proceed to [building `phgasnets`](#build).
+Proceed to [building `phgasnets`](#build). Once the library is built, you can run the demos.
 
 > The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
 > The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
 ### Build
 
-Building requires the following dependencies (if not using the devcontainer):
+Building requires installing the following dependencies (if not using the devcontainer):
 
 * A C++17-compliant compiler e.g. [gcc](https://gcc.gnu.org/)
 * [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
