@@ -32,7 +32,7 @@ COPY RUNME.sh ${PROJECT_DIR}/RUNME.sh
 RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
     cmake --build ${BUILD_DIR} --parallel && \
     chmod +x ${PROJECT_DIR}/RUNME.sh && \
-    chown -R user /phgasnets
+    mkdir -p ${OUT_DIR} && chown -R user /phgasnets
 
 VOLUME ${OUT_DIR}
 

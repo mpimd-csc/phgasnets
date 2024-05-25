@@ -6,7 +6,7 @@ echo -e "\e[33m[INFO] Project directory:\e[0m ${PROJECT_DIR}"
 BUILD_DIR="${BUILD_DIR:=${PROJECT_DIR}/build}"
 echo -e "\e[33m[INFO] Build directory:\e[0m ${BUILD_DIR}"
 
-OUT_DIR="${OUT_DIR:=.}"
+OUT_DIR="${OUT_DIR:=${PROJECT_DIR}/results}"
 echo -e "\e[33m[INFO] Results directory:\e[0m ${OUT_DIR}"
 
 DEMO_DIR="${BUILD_DIR}/demos"
