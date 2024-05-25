@@ -17,8 +17,10 @@ namespace PHModel {
     /**
      * Constructs a Compressor object with the specified compression ratio and isentropic exponent.
      *
-     * @param compression_ratio the compression ratio of the compressor
-     * @param isentropic_exponent the isentropic exponent of the compressor
+     * @param type the framework type of the compressor
+     * @param model the model assumption of the compressor
+     * @param specification the fixed spec of the compressor (compression_ratio/outlet_pressure)
+     * @param isentropic_exponent the isentropic exponent of the fluid
      *
      * @throws None
      */
