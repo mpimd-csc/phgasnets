@@ -37,4 +37,5 @@ do
   ./plot -c ${CONFIG_FILE} -p 0 -O ${OUT_DIR} --csv
   ./plot -c ${CONFIG_FILE} -p 1 -O ${OUT_DIR} --csv
 done
+./plotall -O ${OUT_DIR}
 popd > /dev/null

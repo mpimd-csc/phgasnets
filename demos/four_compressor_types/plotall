@@ -30,8 +30,10 @@ args = parse_arguments()
 data = {}
 compressor_types = ["FCAV", "FCAM", "FPAM", "FPAV"]
 
+print("Agglomerating plots for all compressors...")
 for compr in compressor_types:
   data[compr] = {}
+  print("Reading CSV files [results_pH_"+compr+"_*]")
   data[compr]['pipe0'] = np.loadtxt(args.out_dir / ('results_pH_'+compr+'_pipe0.csv'),skiprows=1)
   data[compr]['pipe1'] = np.loadtxt(args.out_dir / ('results_pH_'+compr+'_pipe1.csv'),skiprows=1)
 
@@ -110,4 +112,6 @@ for j in range(4):
 axs[0,0].set_ylabel('Pressure [bar]')
 axs[1,0].set_ylabel('Massflux [kg/m^2-s]')
 
-plt.savefig(args.out_dir / "results_four_compressor_types.pdf", bbox_inches='tight')
+outfile = args.out_dir / "results_four_compressor_types.pdf"
+plt.savefig(outfile, bbox_inches='tight')
+print(f"Agglomerated plot saved as [{outfile}]")
