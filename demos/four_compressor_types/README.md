@@ -52,3 +52,10 @@ Finally, the `plot` executable file can parse the config and generated results f
 The argument `-p` with an integer value refers to the first and second pipes respectively.
 
 An additional flag `--csv` can be used to output plot data into a `.csv` file.
+
+For plotting a unified plot with all the compressor configurations, you can use the `plotall` script.
+This requires the directory with `.csv` files generated through `plot` script for the four compressor types mentioned through `OUT_DIR`.
+
+```bash
+./plotall -O ${OUT_DIR}
+```
