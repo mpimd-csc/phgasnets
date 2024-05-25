@@ -9,7 +9,7 @@
     "compressor": {
       "type" : "FP",
       "model": "AV",
-      "specification": 8800000
+      "specification": 8400000
     },
     "fluid": {
       "isentropic_exponent": 1.4
