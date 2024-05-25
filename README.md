@@ -44,6 +44,9 @@ Three demos are provided:
 
 The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host. Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
 
+Necessary tools :
+- [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine and Docker Compose.
+
 Build the `phgasnets-run` image which contains the environment, the source code and executables,
 ```bash
 docker-compose build
@@ -58,6 +61,8 @@ This should run all the demos in a disposable container and store the generated 
 If an alternate path is desired to store the results, this maybe specied through an environment variable `RESULTS_DIR` before building.
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container.
+
+> Docker Compose is just provided for ease. For an advanced docker user, follow instructions within the Dockerfiles for building and running using just Docker Engine. This may better serve when you use Docker alternatives like Podman.
 
 ### VSCode Development Container
 
