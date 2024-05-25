@@ -28,9 +28,9 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
-  - [Build and run in containers](#docker-container)
-  - [VSCode Development containers](#vscode-development-container)
-  - [Manually configure and build source code](#build)
+  - [Build and run in containers](#docker-container): Recommended for beginners to reproduce results
+  - [VSCode Development containers](#vscode-development-container): Recommended for developers to enhance source code
+  - [Manually configure and build source code](#build): Recommended for advanced users for fine-grained customizations.
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
@@ -70,7 +70,7 @@ If you intend to develop the source code, you can also make use of [development 
 
 Necessary tools :
 
-- [Docker](https://docs.docker.com/engine/install/),
+- [Docker Engine](https://docs.docker.com/engine/install/),
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
 Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
@@ -109,7 +109,7 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="/path/to/c
 
 To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
 
-### Run Demos
+## Run Demos
 
 The demo executables are available in the `build` directory and take configuration parameters `config.json` as input.
 
