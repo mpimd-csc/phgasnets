@@ -1,0 +1,113 @@
+#!/usr/bin/python3
+
+import pathlib
+import argparse
+import numpy as np
+import matplotlib.pyplot as plt
+
+plot_params = {
+    'font.family': 'Latin Modern Math',
+    'font.size': 13,
+    'axes.grid': True,
+    'lines.linewidth': 1.8,
+    'grid.linewidth': 0.35,
+    'grid.color': 'lightgray',
+    'legend.loc': 'upper right',
+    'legend.fancybox': True,
+    'legend.framealpha' : 0.8,
+    'legend.edgecolor': 'gray',
+    'legend.fontsize': 10,
+    # 'text.usetex': True,
+    'figure.dpi': 300
+}
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process all CSV files to produce one unified plot.")
+    parser.add_argument('-O','--out-dir', default=pathlib.Path.cwd(), type=pathlib.Path)
+    return parser.parse_args()
+
+args = parse_arguments()
+data = {}
+compressor_types = ["FCAV", "FCAM", "FPAM", "FPAV"]
+
+for compr in compressor_types:
+  data[compr] = {}
+  data[compr]['pipe0'] = np.loadtxt(args.out_dir / ('results_pH_'+compr+'_pipe0.csv'),skiprows=1)
+  data[compr]['pipe1'] = np.loadtxt(args.out_dir / ('results_pH_'+compr+'_pipe1.csv'),skiprows=1)
+
+plt.rcParams.update(plot_params)
+fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(18,9))
+
+# Pressure plots
+
+# Row 0, Col 0
+axs[0,0].plot(data['FCAV']['pipe0'][:,0], data['FCAV']['pipe0'][:,1], linestyle='-', color='green')
+
+# Row 0, Col 1
+axs[0,1].plot(data['FCAV']['pipe0'][:,0], data['FCAV']['pipe0'][:,2], linestyle='-', color='red')
+axs[0,1].plot(data['FCAM']['pipe0'][:,0], data['FCAM']['pipe0'][:,2], linestyle='-', color='blue')
+axs[0,1].plot(data['FPAV']['pipe0'][:,0], data['FPAV']['pipe0'][:,2], linestyle='-', color='purple')
+axs[0,1].plot(data['FPAM']['pipe0'][:,0], data['FPAM']['pipe0'][:,2], linestyle='-', color='gray')
+
+# Row 0, Col 2
+axs[0,2].plot(data['FCAV']['pipe1'][:,0], data['FCAV']['pipe1'][:,1], linestyle='-', color='red')
+axs[0,2].plot(data['FCAM']['pipe1'][:,0], data['FCAM']['pipe1'][:,1], linestyle='-', color='blue')
+axs[0,2].plot(data['FPAV']['pipe1'][:,0], data['FPAV']['pipe1'][:,1], linestyle='-', color='purple')
+axs[0,2].plot(data['FPAM']['pipe1'][:,0], data['FPAM']['pipe1'][:,1], linestyle='-', color='gray')
+
+# Row 0, Col 2
+axs[0,3].plot(data['FCAV']['pipe1'][:,0], data['FCAV']['pipe1'][:,2], linestyle='-', color='red')
+axs[0,3].plot(data['FCAM']['pipe1'][:,0], data['FCAM']['pipe1'][:,2], linestyle='-', color='blue')
+axs[0,3].plot(data['FPAV']['pipe1'][:,0], data['FPAV']['pipe1'][:,2], linestyle='-', color='purple')
+axs[0,3].plot(data['FPAM']['pipe1'][:,0], data['FPAM']['pipe1'][:,2], linestyle='-', color='gray')
+
+# Row 1, Col 0
+axs[1,0].plot(data['FCAV']['pipe0'][:,0], data['FCAV']['pipe0'][:,3], linestyle='-', color='red')
+axs[1,0].plot(data['FCAM']['pipe0'][:,0], data['FCAM']['pipe0'][:,3], linestyle='-', color='blue')
+axs[1,0].plot(data['FPAV']['pipe0'][:,0], data['FPAV']['pipe0'][:,3], linestyle='-', color='purple')
+axs[1,0].plot(data['FPAM']['pipe0'][:,0], data['FPAM']['pipe0'][:,3], linestyle='-', color='gray')
+
+# Row 1, Col 1
+axs[1,1].plot(data['FCAV']['pipe0'][:,0], data['FCAV']['pipe0'][:,4], linestyle='-', color='red')
+axs[1,1].plot(data['FCAM']['pipe0'][:,0], data['FCAM']['pipe0'][:,4], linestyle='-', color='blue')
+axs[1,1].plot(data['FPAV']['pipe0'][:,0], data['FPAV']['pipe0'][:,4], linestyle='-', color='purple')
+axs[1,1].plot(data['FPAM']['pipe0'][:,0], data['FPAM']['pipe0'][:,4], linestyle='-', color='gray')
+
+# Row 1, Col 2
+axs[1,2].plot(data['FCAV']['pipe1'][:,0], data['FCAV']['pipe1'][:,3], linestyle='-', color='red')
+axs[1,2].plot(data['FCAM']['pipe1'][:,0], data['FCAM']['pipe1'][:,3], linestyle='-', color='blue')
+axs[1,2].plot(data['FPAV']['pipe1'][:,0], data['FPAV']['pipe1'][:,3], linestyle='-', color='purple')
+axs[1,2].plot(data['FPAM']['pipe1'][:,0], data['FPAM']['pipe1'][:,3], linestyle='-', color='gray')
+
+# Row 1, Col 3
+axs[1,3].plot(data['FCAV']['pipe1'][:,0], data['FCAV']['pipe1'][:,4], linestyle='-', color='green')
+
+# Set Time limits
+for i in range(2):
+  for j in range(4):
+    axs[i,j].set_xlim(0,24)
+
+# Set Pressure and Massflux limits
+for j in range(4):
+  axs[0,j].set_ylim(70,95)
+  axs[1,j].set_ylim(300,600)
+
+# Set y tick labels off on in-between plots
+for i in range(2):
+  for j in [1,2]:
+    plt.setp(axs[i,j].get_yticklabels(), visible=False)
+
+# Set y ticks on right side plots
+for i in range(2):
+    axs[i,3].yaxis.tick_right()
+    axs[i,3].yaxis.set_label_position("right")
+
+# Set X labels on bottom plots
+for j in range(4):
+  axs[1,j].set_xlabel('Time [h]')
+
+# Set Y labels on left plots
+axs[0,0].set_ylabel('Pressure [bar]')
+axs[1,0].set_ylabel('Massflux [kg/m^2-s]')
+
+plt.savefig(args.out_dir / "results_four_compressor_types.pdf", bbox_inches='tight')
