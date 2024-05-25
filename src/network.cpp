@@ -23,10 +23,10 @@ Network::Network(
     n_state += pipe.n_state;
     n_res += pipe.n_res;
   }
-  E = diagonalBlock2(operators_e);
-  J = diagonalBlock2(operators_j);
-  R = diagonalBlock2(operators_r);
-  G = diagonalBlock2(operators_g);
+  E = diagonalBlock(operators_e);
+  J = diagonalBlock(operators_j);
+  R = diagonalBlock(operators_r);
+  G = diagonalBlock(operators_g);
   effort.resize(n_res);
 }
 
@@ -57,7 +57,7 @@ void Network::set_gas_state(const Vector& state) {
   auto postcompressor_momentum = pipes[1].mom(0);
 
   // build network R operator
-  R = diagonalBlock2(operators_r);
+  R = diagonalBlock(operators_r);
 
   // update network G operator
   G.coeffRef(pipes[0].n_res-1, 1) = -postcompressor_momentum;

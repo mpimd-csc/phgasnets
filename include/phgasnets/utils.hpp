@@ -17,15 +17,7 @@ Eigen::VectorXd verticallyBlockVectors(
 );
 
 SparseMatrix diagonalBlock(
-    const std::vector<BasePHOperator>& operators
-);
-
-SparseMatrix diagonalBlock2(
     const std::vector<std::reference_wrapper<BasePHOperator>>& operators
-);
-
-Eigen::VectorXd verticallyBlockVectors2(
-    const std::vector<Eigen::Ref<Vector>> vectors
 );
 
 }

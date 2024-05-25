@@ -107,7 +107,7 @@ int main(int argc, char** argv){
   pipeR_init_density.setConstant(p0*compr_ratio/(R*outlet_temperature));
   pipeR_init_momentum.setConstant(mom0);
 
-  Vector init_state = PHModel::verticallyBlockVectors2({
+  Vector init_state = PHModel::verticallyBlockVectors({
     pipeL_init_density, pipeL_init_momentum,
     pipeR_init_density, pipeR_init_momentum
   });
