@@ -21,7 +21,13 @@ ARG OUT_DIR=/phgasnets/run
 
 USER root
 
-COPY . ${PROJECT_DIR}
+COPY demos ${PROJECT_DIR}/demos
+COPY include ${PROJECT_DIR}/include
+COPY src ${PROJECT_DIR}/src
+COPY CMakeLists.txt ${PROJECT_DIR}/CMakeLists.txt
+COPY README.md ${PROJECT_DIR}/README.md
+COPY LICENSE.md ${PROJECT_DIR}/LICENSE.md
+COPY RUNME.sh ${PROJECT_DIR}/RUNME.sh
 
 RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
     cmake --build ${BUILD_DIR} --parallel && \
