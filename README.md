@@ -77,7 +77,7 @@ Start VS Code, run the "Dev Containers: Open Folder in Container..." command fro
 This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
 Proceed to [building `phgasnets`](#build). Once the library is built, you can run the demos.
 
-> The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
+> The container specification is provided by [`Dockerfile.dev`](Dockerfile.dev) which contains all the dependencies required for the project.
 > The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
 ### Build
@@ -101,13 +101,14 @@ The following sequence of commands builds `phgasnets`.
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 ```
 
-CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated as,
+This configures the project by finding the dependencies and generating host-specific build instructions. To complete the build and generate executables,
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="/path/to/custom/library1;/path/to/custom/library2"
+cmake --build build
 ```
 
-To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
+CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/custom/library1;/path/to/custom/library2"` flag.
+To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead and repeat instructions.
 
 ## Run Demos
 
