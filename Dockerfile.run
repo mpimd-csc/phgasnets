@@ -6,12 +6,12 @@
 #
 # To build this docker image from this file run the commands,
 #
-# docker build --tag phgasnets .
+# docker build --tag phgasnets-run .
 #
 # To run this container and save results in the (host) computer, run the following commands
 #
 # mkdir results
-# docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets
+# docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets-run
 
 FROM phgasnets-dev
 

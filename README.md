@@ -44,7 +44,7 @@ Three demos are provided:
 
 The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host. Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
 
-Build the image which contains all the source code and executables,
+Build the `phgasnets-run` image which contains the environment, the source code and executables,
 ```bash
 docker-compose build
 ```
@@ -52,7 +52,7 @@ docker-compose build
 Create a folder named `results` to store results and run the container,
 ```bash
 mkdir results
-docker-compose run --rm run
+docker-compose run --rm phgasnets-run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 
