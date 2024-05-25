@@ -126,23 +126,6 @@ namespace PHModel {
             R_operator R;
     };
 
-    struct Rt_operator2: BasePHOperator{
-        Rt_operator2(
-            const int n_rho,
-            const int n_mom,
-            const double friction,
-            const double diameter
-        );
-        void update_state(
-            const Vector& rho,
-            const Vector& mom
-        );
-        private:
-            const double friction, diameter;
-            Vector friction_term_vec; // state-dependent friction term
-            SparseMatrix V, I; // state-independent projector matrix
-    };
-
     struct Y_operator: BasePHOperator{
         Y_operator(
             const int n_rho,

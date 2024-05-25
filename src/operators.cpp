@@ -162,42 +162,6 @@ void Rt_operator::update_state(
     mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
 }
 
-Rt_operator2::Rt_operator2(
-    const int n_rho,
-    const int n_mom,
-    const double friction,
-    const double diameter
-) :
-    BasePHOperator(n_rho, n_mom),
-    friction(friction), diameter(diameter),
-    friction_term_vec(n_mom), I(n_mom, n_mom), V(n_mom, n_rho+n_mom+2)
-{
-    data.resize(n_mom);
-    mat.resize(n_rho+n_mom+2, n_rho+n_mom+2);
-
-    // Create the V and I matrices
-    // V = [0 I 0]
-    std::vector<Triplet> data_v(n_mom);
-    for (int i = 0; i < n_mom; ++i)
-        data_v[i] = Triplet(i, n_rho+i, 1.0);
-    V.setFromTriplets(data_v.begin(), data_v.end());
-
-    I.setIdentity();
-}
-
-void Rt_operator2::update_state(
-    const Vector& rho,
-    const Vector& mom
-) {
-    // Update the friction term
-    friction_term_vec = (friction * (mom.array()/rho.array()).abs()) / (2 * diameter);
-
-    for(int i = 0; i < n_mom; ++i){
-        data[i] = Triplet(n_rho+i, n_rho+i, friction_term_vec(i));
-    }
-    mat = V.transpose() * (I * friction_term_vec) * V;
-}
-
 // Y_operator constructor
 Y_operator::Y_operator(
     const int n_rho,
