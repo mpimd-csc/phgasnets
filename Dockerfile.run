@@ -1,0 +1,45 @@
+# Dockerfile for running demos
+#
+# Primary purpose is to provide a containerized run for generating results
+#
+# NOTE: THIS image requires phgasnets-dev to be built (see Dockerfile.dev for more).
+#
+# To build this docker image from this file run the commands,
+#
+# docker build --tag phgasnets-run .
+#
+# To run this container and save results in the (host) computer, run the following commands
+#
+# mkdir results
+# docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets-run
+
+FROM phgasnets-dev
+
+ARG PROJECT_DIR=/phgasnets/src
+ARG BUILD_DIR=/phgasnets/build
+ARG OUT_DIR=/phgasnets/run
+
+USER root
+
+COPY demos ${PROJECT_DIR}/demos
+COPY include ${PROJECT_DIR}/include
+COPY src ${PROJECT_DIR}/src
+COPY CMakeLists.txt ${PROJECT_DIR}/CMakeLists.txt
+COPY README.md ${PROJECT_DIR}/README.md
+COPY LICENSE.md ${PROJECT_DIR}/LICENSE.md
+COPY RUNME.sh ${PROJECT_DIR}/RUNME.sh
+
+RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build ${BUILD_DIR} --parallel && \
+    chmod +x ${PROJECT_DIR}/RUNME.sh && \
+    mkdir -p ${OUT_DIR} && chown -R user /phgasnets
+
+VOLUME ${OUT_DIR}
+
+ENV PROJECT_DIR ${PROJECT_DIR}
+ENV BUILD_DIR ${BUILD_DIR}
+ENV OUT_DIR ${OUT_DIR}
+
+USER user
+
+CMD ${PROJECT_DIR}/RUNME.sh

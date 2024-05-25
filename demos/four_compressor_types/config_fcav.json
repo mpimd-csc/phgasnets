@@ -7,7 +7,9 @@
       "friction": 1.8e-3
     },
     "compressor": {
-      "compression_ratio": 1.2
+      "type" : "FC",
+      "model": "AV",
+      "specification": 1.2
     },
     "fluid": {
       "isentropic_exponent": 1.4
@@ -33,11 +35,11 @@
       "time": {
         "start": 0,
         "end": 24,
-        "step": 1000
+        "step": 100
       }
     },
     "io": {
       "frequency": 1,
-      "filename": "results_pH_two_pipe_compressor"
+      "filename": "results_pH_FCAV"
     }
 }

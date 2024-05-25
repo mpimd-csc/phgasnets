@@ -1,0 +1,28 @@
+# Docker Compose Specification
+#
+# This file specifies build and run instructions for the project phgasnets
+#
+# To build the containers, run the command,
+#
+# docker-compose build
+#
+# To run the project, and delete the container later,
+#
+# docker-compose run --rm run
+
+version: '3.8'
+
+services:
+  phgasnets-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: phgasnets-dev
+
+  phgasnets-run:
+    build:
+      context: .
+      dockerfile: Dockerfile.run
+    image: phgasnets-run
+    volumes:
+      - ./results:/phgasnets/run

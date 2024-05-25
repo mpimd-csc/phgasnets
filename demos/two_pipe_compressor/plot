@@ -4,6 +4,7 @@ import json
 import h5py
 import matplotlib.pyplot as plt
 import argparse
+import pathlib
 
 plot_params = {
     'font.family': 'Latin Modern Math',
@@ -25,6 +26,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Process some configuration file.")
     parser.add_argument('-c', '--config', default='config.json', help='JSON configuration file')
     parser.add_argument('-p', '--pipe-id', default=0, help='Compressor Case: Pipe ID')
+    parser.add_argument('-O','--out-dir', default=pathlib.Path.cwd(), type=pathlib.Path)
     return parser.parse_args()
 
 class MorgenPipePlot:
@@ -96,6 +98,7 @@ class MorgenPipePlot:
 
 args = parse_arguments()
 print("Config file:", args.config)
+print("Output directory:", args.out_dir)
 
 with open(args.config, 'r') as f:
     config = json.load(f)
@@ -132,6 +135,7 @@ plot.add_inflow_pressure(inflow_pressure)
 plot.add_inflow_momentum(inflow_momentum)
 plot.add_outflow_pressure(outflow_pressure)
 plot.add_outflow_momentum(outflow_momentum)
-plot.save(filename +'_pipe'+ args.pipe_id + '.pdf')
 
-print(f"Plot saved as [{filename +'_pipe'+ args.pipe_id + '.pdf'}]")
+outfile = args.out_dir / (filename +'_pipe'+ args.pipe_id + '.pdf')
+plot.save(outfile)
+print(f"Plot saved as [{outfile}]")

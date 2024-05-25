@@ -23,31 +23,69 @@ Affiliation:
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
-## Prerequisites
+## Getting Started
 
-Building phgasnets requires the following software installed:
+To use the code, you must first set the environment and dependent libraries.
 
-* A C++17-compliant compiler
-* CMake `>= 3.9`
-* [Eigen](https://gitlab.com/libeigen/eigen)
-* [Ceres](http://ceres-solver.org/)
-* [HighFive](https://bluebrain.github.io/HighFive/)
-* [nlohmann_json](https://github.com/nlohmann/json)
+You may either choose to use,
+  - [Build and run in containers](#docker-container)
+  - [VSCode Development containers](#vscode-development-container)
+  - [Manually configure and build source code](#build)
 
+Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
-## Development Container
+Three demos are provided:
 
-You can make use of [development containers](https://containers.dev/) to develop and also test the codes in this repository.
+  - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
+  - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
+  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
+
+### Docker Container
+
+The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host. Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
+
+Build the `phgasnets-run` image which contains the environment, the source code and executables,
+```bash
+docker-compose build
+```
+
+Create a folder named `results` to store results and run the container,
+```bash
+mkdir results
+docker-compose run --rm phgasnets-run
+```
+This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
+
+### VSCode Development Container
+
+You can make use of [development containers](https://containers.dev/) to set up the environment, run the demos and also develop the codes in this repository.
 
 Necessary tools :
 
 - [Docker](https://docs.docker.com/engine/install/),
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
+Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
+This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
+Proceed to [building `phgasnets`](#build).
 
-## Building phgasnets
+> The container specification is provided by `Dockerfile.dev` which contains all the dependencies required for the project.
+> The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
 
-If you choose to pursue it differently, the following sequence of commands builds phgasnets.
+### Build
+
+Building requires the following dependencies (if not using the devcontainer):
+
+* A C++17-compliant compiler e.g. [gcc](https://gcc.gnu.org/)
+* [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
+* [Eigen](https://gitlab.com/libeigen/eigen) for handling linear algebra,
+* [Ceres](http://ceres-solver.org/) for solving non-linear system of equations,
+* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) for writing/reading states to HDF5 format,
+* [nlohmann_json](https://github.com/nlohmann/json) for reading JSON configuration files.
+
+Note the locations of these libraries in case they are not installed through standard package managers.
+
+The following sequence of commands builds `phgasnets`.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
@@ -55,12 +93,31 @@ If you choose to pursue it differently, the following sequence of commands build
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 ```
 
-If any of the dependencies are at a custom location and CMake cannot find it, you may indicate the paths as,
+CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated as,
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="\path\to\custom\library\location"
+cmake -B build -S . -DCMAKE_BUILD_TYPE="Release" -DCMAKE_PREFIX_PATH="/path/to/custom/library1;/path/to/custom/library2"
 ```
 
-To compile in debug mode set the `DCMAKE_BUILD_TYPE=` flag to `Debug` instead.
+To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead.
 
-A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos.
+### Run Demos
+
+The demo executables are available in the `build` directory and take configuration parameters `config.json` as input.
+
+To run the `single_pipe` demo, for example,
+
+```
+build/demos/single_pipe/single_pipe demos/single_pipe/config.json
+```
+
+This runs the transient simulation and saves the state at each time instance into a HDF5 file.
+A `plot` script is provided to parse the config file, read the specified HDF5 files and plot the pressure/momentum values at the pipe endpoints.
+
+```
+demos/single_pipe/plot -c demos/single_pipe/config.json
+```
+
+For specific details, refer to the local READMEs within.
+
+A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results.

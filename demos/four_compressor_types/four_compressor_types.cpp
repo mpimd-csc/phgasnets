@@ -125,10 +125,17 @@ int main(int argc, char** argv){
   // input at boundary
   Eigen::Vector4d u_b({
     inlet_pressure,
-    1.0/std::pow(network.compressors[0].specification, 1/network.compressors[0].isentropic_exponent),
-    compressors[0].specification,
+    0.0,
+    network.compressors[0].specification,
     -momentum_at_outlet(0.0)
   });
+
+  if (network.compressors[0].model == "AV") {
+    u_b(1) = 1.0/std::pow(network.compressors[0].specification, 1/network.compressors[0].isentropic_exponent);
+  }
+  else if (network.compressors[0].model == "AM") {
+    u_b(1) = 1.0;
+  }
 
   // configure solver
   Problem problem_steady;
