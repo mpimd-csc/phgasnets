@@ -47,10 +47,8 @@ The project offers two dockerfiles,
   - [`Dockerfile.run`](Dockerfile.run) to build the library and run the demos,
 without having to install dependencies on the host.
 
-Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
-
 Necessary tools :
-  - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine and Docker Compose.
+  - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine (tested with `26.1.3`).
 
 Build the `phgasnets-dev` image which contains the environment,
 
@@ -66,14 +64,11 @@ docker build -f Dockerfile.run --tag phgasnets-run .
 Create a folder named `results` to store results and run the container,
 ```bash
 mkdir results
-docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets-run
+docker run --rm -it -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets-run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
-If an alternate path is desired to store the results, this maybe specified by setting an environment variable `RESULTS_DIR` before building.
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container.
-
-> Docker Compose is just provided for ease. Follow instructions within the Dockerfiles for building and running using just Docker CLI.
 
 ### VSCode Development Container
 
