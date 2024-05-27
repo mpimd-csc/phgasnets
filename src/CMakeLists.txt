@@ -1,9 +1,3 @@
-enable_language(C)
-
-# HighFive
-find_package(HDF5 REQUIRED)
-find_package(HighFive 2.8 REQUIRED)
-
 # target
 add_library(phgasnets derivative.cpp gasconstant.cpp operators.cpp pipe.cpp compressor.cpp utils.cpp network.cpp io.cpp steady.cpp transient.cpp)
 

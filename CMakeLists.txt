@@ -21,8 +21,17 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -fopenmp -march=nati
 
 # Compilation options
 # Find external dependencies
+
+# Eigen
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
+
+# HDF5
+enable_language(C)
+find_package(HDF5 REQUIRED)
+
+# HighFive
+find_package(HighFive 2.8 REQUIRED)
 
 # compile the library
 add_subdirectory(src)
