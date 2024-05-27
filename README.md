@@ -55,12 +55,12 @@ Necessary tools :
 Build the `phgasnets-dev` image which contains the environment,
 
 ```bash
-docker build . --tag phgasnets-dev
+docker build -f Dockerfile.dev --tag phgasnets-dev .
 ```
 
 Build the `phgasnets-run` image which contains the source code and executables,
 ```bash
-docker build --tag phgasnets-run .
+docker build -f Dockerfile.run --tag phgasnets-run .
 ```
 
 Create a folder named `results` to store results and run the container,
