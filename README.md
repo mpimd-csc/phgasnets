@@ -52,15 +52,21 @@ Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplif
 Necessary tools :
   - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine and Docker Compose.
 
-Build the `phgasnets-run` image which contains the environment, the source code and executables,
+Build the `phgasnets-dev` image which contains the environment,
+
 ```bash
-docker-compose build
+docker build . --tag phgasnets-dev
+```
+
+Build the `phgasnets-run` image which contains the source code and executables,
+```bash
+docker build --tag phgasnets-run .
 ```
 
 Create a folder named `results` to store results and run the container,
 ```bash
 mkdir results
-docker-compose run --rm phgasnets-run
+docker run --rm -it -v ${PWD}/results:/phgasnets/run phgasnets-run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 If an alternate path is desired to store the results, this maybe specified by setting an environment variable `RESULTS_DIR` before building.
