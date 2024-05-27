@@ -42,10 +42,14 @@ Three demos are provided:
 
 ### Docker Container
 
-The project offers two dockerfiles [`Dockerfile.dev`](Dockerfile.dev) and [`Dockerfile.run`](Dockerfile.run) with the necessary instructions to set the relevant environment and run the codes without having to install dependencies on the host. Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
+The project offers two dockerfiles,
+  - [`Dockerfile.dev`](Dockerfile.dev) to set the relevant dependencies and,
+  - [`Dockerfile.run`](Dockerfile.run) to build the library and run the demos,
+without having to install dependencies on the host.
+Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
 
 Necessary tools :
-- [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine and Docker Compose.
+  - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine and Docker Compose.
 
 Build the `phgasnets-run` image which contains the environment, the source code and executables,
 ```bash
@@ -58,15 +62,15 @@ mkdir results
 docker-compose run --rm phgasnets-run
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
-If an alternate path is desired to store the results, this maybe specied through an environment variable `RESULTS_DIR` before building.
+If an alternate path is desired to store the results, this maybe specified by setting an environment variable `RESULTS_DIR` before building.
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container.
 
-> Docker Compose is just provided for ease. For an advanced docker user, follow instructions within the Dockerfiles for building and running using just Docker Engine. This may better serve when you use Docker alternatives like Podman.
+> Docker Compose is just provided for ease. Follow instructions within the Dockerfiles for building and running using just Docker CLI.
 
 ### VSCode Development Container
 
-If you intend to develop the source code, you can also make use of [development containers](https://containers.dev/) to set up the requisit environment,
+If you intend to develop the source code without modifying anything on your host computer, you can make use of [development containers](https://containers.dev/) for setting up the requisite environment,
 
 Necessary tools :
 
@@ -74,7 +78,9 @@ Necessary tools :
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
 Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
+
 This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
+
 Proceed to [building `phgasnets`](#build). Once the library is built, you can run the demos.
 
 > The container specification is provided by [`Dockerfile.dev`](Dockerfile.dev) which contains all the dependencies required for the project.
@@ -84,10 +90,10 @@ Proceed to [building `phgasnets`](#build). Once the library is built, you can ru
 
 Building requires installing the following dependencies (if not using the devcontainer):
 
-* A C++17-compliant compiler e.g. [gcc](https://gcc.gnu.org/)
+* [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
 * [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
-* [Eigen](https://gitlab.com/libeigen/eigen) for handling linear algebra,
-* [Ceres](http://ceres-solver.org/) for solving non-linear system of equations,
+* [Eigen3](https://gitlab.com/libeigen/eigen) for handling linear algebra,
+* [Ceres](http://ceres-solver.org/) `>2.0` for solving non-linear system of equations,
 * [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) for writing/reading states to HDF5 format,
 * [nlohmann_json](https://github.com/nlohmann/json) for reading JSON configuration files.
 
@@ -100,15 +106,15 @@ The following sequence of commands builds `phgasnets`.
 ```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
 ```
+This configures the project by finding the dependencies and generating host-specific build instructions.
 
-This configures the project by finding the dependencies and generating host-specific build instructions. To complete the build and generate executables,
-
+To compile and create executables,
 ```bash
 cmake --build build
 ```
 
-CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location the paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/custom/library1;/path/to/custom/library2"` flag.
-To compile in debug mode set `DCMAKE_BUILD_TYPE=Debug` instead and repeat instructions.
+CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
+To compile in debug mode and utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/) use `-DCMAKE_BUILD_TYPE=Debug` instead and build.
 
 ## Run Demos
 
@@ -116,14 +122,14 @@ The demo executables are available in the `build` directory and take configurati
 
 To run the `single_pipe` demo, for example,
 
-```
+```bash
 build/demos/single_pipe/single_pipe demos/single_pipe/config.json
 ```
 
 This runs the transient simulation and saves the state at each time instance into a HDF5 file.
 A `plot` script is provided to parse the config file, read the specified HDF5 files and plot the pressure/momentum values at the pipe endpoints.
 
-```
+```bash
 demos/single_pipe/plot -c demos/single_pipe/config.json
 ```
 
