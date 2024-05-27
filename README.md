@@ -46,6 +46,7 @@ The project offers two dockerfiles,
   - [`Dockerfile.dev`](Dockerfile.dev) to set the relevant dependencies and,
   - [`Dockerfile.run`](Dockerfile.run) to build the library and run the demos,
 without having to install dependencies on the host.
+
 Additionally a [`docker-compose.yml`](docker-compose.yml) is included to simplify the build process.
 
 Necessary tools :
@@ -91,14 +92,26 @@ Proceed to [building `phgasnets`](#build). Once the library is built, you can ru
 Building requires installing the following dependencies (if not using the devcontainer):
 
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
-* [CMake](https://gitlab.kitware.com/cmake/cmake) `>= 3.9`
-* [Eigen3](https://gitlab.com/libeigen/eigen) for handling linear algebra,
-* [Ceres](http://ceres-solver.org/) `>2.0` for solving non-linear system of equations,
-* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) for writing/reading states to HDF5 format,
-* [nlohmann_json](https://github.com/nlohmann/json) for reading JSON configuration files.
+* [CMake](https://gitlab.kitware.com/cmake/cmake)
+* [Eigen3](https://gitlab.com/libeigen/eigen) `>=3.4.0` for handling linear algebra,
+* [Ceres](http://ceres-solver.org/) `>=2.0.0` for solving non-linear system of equations,
+* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) `>=2.8` for writing/reading states to HDF5 format,
+* [nlohmann_json](https://github.com/nlohmann/json) `>=3.10` for reading JSON configuration files.
 
-Note the locations of these libraries in case they are not installed through standard package managers.
+All these dependencies **except HighFive** are available through standard UNIX package managers.
+Instructions to install HighFive can be obtained [here](https://github.com/BlueBrain/HighFive/blob/v2.9.0/doc/installation.md).
 
+> CMake offers version compatibility check for all these dependencies.
+
+Note the locations of all the libraries in case any were not installed through standard package managers.
+
+Additional requirements are required for `plot` scripts in the demo:
+* [Python3](https://www.python.org) `>=3.2` interpreter,
+* [h5py](https://www.h5py.org/) package to parse HDF5 files,
+* [Matplotlib](https://matplotlib.org/) library to plot,
+* [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
+
+All these libraries are also available through standard UNIX package managers or python package managers `pip`.
 The following sequence of commands builds `phgasnets`.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
