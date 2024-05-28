@@ -1,21 +1,15 @@
-# Dockerfile for development environment
+# Build a docker image manually from this file with,
 #
-# Primary purpose is for use with VSCode DevContainer Extension.
+# docker build . --tag phgasnets
 #
-# To build a docker image manually from this file run the commands,
+# To run this container and save results in the host, run the following commands
 #
-# docker build . --tag phgasnets-dev
+# mkdir results
+# docker run --rm -it -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets
 #
-# NOTE: This file is not intended for running source-code but only to setup dependencies!
-#
-
 FROM debian:12-slim
 
-ARG HIGHFIVE_PATH=/opt/highfive
-ARG HIGHFIVE_TAG="v2.9.0"
-ARG HIGHFIVE_GIT="https://github.com/BlueBrain/HighFive.git"
-
-# install all required packages
+# install all dependencies through apt
 RUN apt-get update && \
     # set timezone within container
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
@@ -23,13 +17,18 @@ RUN apt-get update && \
     # install C++ dependencies from apt
     apt-get install -y build-essential cmake git pkg-config \
         libeigen3-dev libceres-dev nlohmann-json3-dev libhdf5-dev && \
+    # install python dependencies for plot
     apt-get install -y python3 python3-pip python3-numpy python3-matplotlib python3-h5py && \
-    # install latin modern fonts for plots
+    # install latin modern fonts for plot
     apt-get install -y fonts-lmodern fontconfig && \
     mkdir -p /usr/local/share/fonts/otf && cd /usr/local/share/fonts/otf && \
     ln -s /usr/share/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf && fc-cache
 
 # install highfive - not available in apt
+ARG HIGHFIVE_PATH=/opt/highfive
+ARG HIGHFIVE_TAG="v2.9.0"
+ARG HIGHFIVE_GIT="https://github.com/BlueBrain/HighFive.git"
+
 RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     git init && git remote add origin ${HIGHFIVE_GIT} && \
     git fetch --depth 1 origin tag ${HIGHFIVE_TAG} && \
@@ -45,4 +44,29 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     cmake --install build && \
     rm -rf ${HIGHFIVE_PATH}-src
 
+# paths for hosting the project files
+ARG PROJECT_DIR=/phgasnets/src
+ARG BUILD_DIR=/phgasnets/build
+ARG OUT_DIR=/phgasnets/run
+
+# copy relevant project source files into container
+COPY demos ${PROJECT_DIR}/demos
+COPY include ${PROJECT_DIR}/include
+COPY src ${PROJECT_DIR}/src
+COPY CMakeLists.txt ${PROJECT_DIR}/CMakeLists.txt
+COPY README.md ${PROJECT_DIR}/README.md
+COPY LICENSE.md ${PROJECT_DIR}/LICENSE.md
+COPY RUNME.sh ${PROJECT_DIR}/RUNME.sh
+
+# build source
+RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build ${BUILD_DIR} --parallel
+
+# set env variables for RUNME
+ENV PROJECT_DIR ${PROJECT_DIR}
+ENV BUILD_DIR ${BUILD_DIR}
+ENV OUT_DIR ${OUT_DIR}
+ENV MPLCONFIGDIR /tmp/
+
+# set default shell
 ENV SHELL /bin/bash

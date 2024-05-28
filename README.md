@@ -28,9 +28,8 @@ License:
 To use the code, you must first set the environment and dependent libraries.
 
 You may either choose to use,
-  - [Build and run in containers](#docker-container): Recommended for beginners to reproduce results
-  - [VSCode Development containers](#vscode-development-container): Recommended for developers to enhance source code
-  - [Manually configure and build source code](#build): Recommended for advanced users for fine-grained customizations.
+  - [Build and run in containers](#docker-container): Recommended to primarily reproduce results
+  - [Manually configure and build source code](#build): Recommended for fine-grained customizations and develop source.
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
@@ -42,55 +41,30 @@ Three demos are provided:
 
 ### Docker Container
 
-The project offers two dockerfiles,
-  - [`Dockerfile.dev`](Dockerfile.dev) to set the relevant dependencies and,
-  - [`Dockerfile.run`](Dockerfile.run) to build the library and run the demos,
+The project offers a [`Dockerfile`](Dockerfile) to set the relevant dependencies, host the source code, build and run the demos,
 without having to install dependencies on the host.
 
-Necessary tools :
+Necessary tools:
   - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine (tested with `26.1.3`).
 
-Build the `phgasnets-dev` image which contains the environment,
+Build the `phgasnets` image which contains the environment, copies the source code and builds executables
 
 ```bash
-docker build -f Dockerfile.dev --tag phgasnets-dev .
-```
-
-Build the `phgasnets-run` image which contains the source code and executables,
-```bash
-docker build -f Dockerfile.run --tag phgasnets-run .
+docker build -f Dockerfile --tag phgasnets .
 ```
 
 Create a folder named `results` to store results and run the container,
 ```bash
 mkdir results
-docker run --rm -it -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets-run
+docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 
-> Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container.
-
-### VSCode Development Container
-
-If you intend to develop the source code without modifying anything on your host computer, you can make use of [development containers](https://containers.dev/) for setting up the requisite environment,
-
-Necessary tools :
-
-- [Docker Engine](https://docs.docker.com/engine/install/),
-- [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
-
-Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1) or quick actions Status bar item, and select the project folder.
-
-This should start setting up the container which can take a while (~10-15 min) and open the project within the container.
-
-Proceed to [building `phgasnets`](#build). Once the library is built, you can run the demos.
-
-> The container specification is provided by [`Dockerfile.dev`](Dockerfile.dev) which contains all the dependencies required for the project.
-> The JSON file [`.devcontainer.json`](.devcontainer.json) specifies the image to use along with VSCode extensions available within the development container.
+> Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container. This also preserves user permissions on the files that are created within the container.
 
 ### Build
 
-Building requires installing the following dependencies (if not using the devcontainer):
+Building requires installing the following dependencies (if not using the container):
 
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
 * [CMake](https://gitlab.kitware.com/cmake/cmake)
