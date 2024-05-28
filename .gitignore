@@ -1,0 +1,6 @@
+*.pdf
+*.h5
+*.csv
+
+results
+build
