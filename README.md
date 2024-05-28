@@ -42,6 +42,8 @@ You may either choose to use,
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
+> For developers, a [development container](#development-container-for-developers) is also available to ease the workflow.
+
 Three demos are provided:
 
   - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
@@ -144,3 +146,19 @@ demos/single_pipe/plot -c demos/single_pipe/config.json
 > For detailed description on each demo, refer to the READMEs within.
 
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results.
+
+## Development Container (for developers)
+
+If you intend to develop the source code without modifying/installing any dependencies on your host computer, you can make use of [development containers](https://containers.dev/) for setting up the requisite environment.
+
+A specification file `.devcontainer.json` is provided (and recommended) for development workflow.
+
+Necessary tools :
+- [Docker Engine](https://docs.docker.com/engine/install/),
+- [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension (support since 2019. Tested with version `1.87.2`).
+
+Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1), and select the project folder.
+While done for the first time, this should start building the container and can take a while (~5-10 min) and subsequently open the project within the container.
+The build is cached for subsequent runs and should be fairly quick thereon.
+
+Proceed to compiling `phgasnets` in the terminal and once the library is built, you can run the demos.
