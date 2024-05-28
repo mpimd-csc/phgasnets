@@ -1,0 +1,24 @@
+{
+    "name": "phgasnets-dev",
+    "build" : {
+        "dockerfile": "Dockerfile"
+    },
+    "remoteUser": "vscode",
+    "remoteEnv": {
+        "PROJECT_DIR": "${containerWorkspaceFolder}",
+        "BUILD_DIR": "${containerWorkspaceFolder}/build",
+        "OUT_DIR": "${containerWorkspaceFolder}/results"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "james-yu.latex-workshop",
+                "eamodio.gitlens",
+                "shardulm94.trailing-spaces",
+                "stkb.rewrap",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-python.python"
+            ]
+        }
+    }
+}

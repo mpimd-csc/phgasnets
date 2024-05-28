@@ -53,10 +53,7 @@ ARG OUT_DIR=/phgasnets/run
 COPY demos ${PROJECT_DIR}/demos
 COPY include ${PROJECT_DIR}/include
 COPY src ${PROJECT_DIR}/src
-COPY CMakeLists.txt ${PROJECT_DIR}/CMakeLists.txt
-COPY README.md ${PROJECT_DIR}/README.md
-COPY LICENSE.md ${PROJECT_DIR}/LICENSE.md
-COPY RUNME.sh ${PROJECT_DIR}/RUNME.sh
+COPY CMakeLists.txt README.md LICENSE.md RUNME.sh ${PROJECT_DIR}/
 
 # build source
 RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
@@ -68,5 +65,18 @@ ENV BUILD_DIR ${BUILD_DIR}
 ENV OUT_DIR ${OUT_DIR}
 ENV MPLCONFIGDIR /tmp/
 
+# provide a non-root user for devcontainer
+# the args for UID and GID will be overridden by VSCode
+# Ref https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=${USER_UID}
+
+RUN addgroup --gid ${USER_GID} ${USERNAME} && \
+    adduser --disabled-password --gecos '' --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} && \
+    usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
+
 # set default shell
 ENV SHELL /bin/bash
+
+CMD ${PROJECT_DIR}/RUNME.sh
