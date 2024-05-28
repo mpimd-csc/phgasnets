@@ -26,6 +26,7 @@ License:
 ## Getting Started
 
 To use the code, you must first set the environment and dependent libraries.
+Instructions provided here are provided for standard UNIX distributions, but maybe easily adopted(but not tested) in other operating systems.
 
 You may either choose to use,
   - [Build and run in containers](#docker-container): Recommended to primarily reproduce results
@@ -86,7 +87,8 @@ Additional requirements are required for `plot` scripts in the demo:
 * [Matplotlib](https://matplotlib.org/) library to plot,
 * [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
 
-All these libraries are also available through standard UNIX package managers or python package managers `pip`.
+All these libraries are also available either through standard UNIX package managers or Python package manager, `pip`.
+
 The following sequence of commands builds `phgasnets`.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
@@ -121,6 +123,6 @@ A `plot` script is provided to parse the config file, read the specified HDF5 fi
 demos/single_pipe/plot -c demos/single_pipe/config.json
 ```
 
-For specific details, refer to the local READMEs within.
+> For detailed description on each demo, refer to the READMEs within.
 
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results.
