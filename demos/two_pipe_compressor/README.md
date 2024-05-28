@@ -22,7 +22,7 @@ Build the `two_pipe_compressor` executable following instructions in the project
 The program additionally needs a JSON configuration file as an argument to run.
 
 ```bash
-${BUILD_DIR}/demos/two_pipe_compressor/two_pipe_compressor demos/two_pipe_compressor/config.json
+${BUILD_DIR}/demos/two_pipe_compressor/two_pipe_compressor config.json
 ```
 Set the environment variable or substitute `BUILD_DIR` to the build path.
 
@@ -33,7 +33,7 @@ The results will be written to an HDF5 file with a filename specified within the
 Finally, the `plot` executable file can parse the config and generated results file to write a PDF plot with the same name.
 
 ```bash
-./plot --config ./demos/two_pipe_compressor/config.json -p 0
-./plot --config ./demos/two_pipe_compressor/config.json -p 1
+./plot --config config.json -p 0
+./plot --config config.json -p 1
 ```
 The argument `-p` with an integer value refers to the first and second pipes respectively.

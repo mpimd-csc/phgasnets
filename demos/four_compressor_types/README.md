@@ -17,7 +17,7 @@
 
 Four different compressor types are mentioned in the various `.json` files,
 
-| Compressor Type | Framework                       | Assumption        | Config File        |
+| Compressor Type | Framework                       | Assumption        | `CONFIG_FILE`      |
 |-----------------|---------------------------------|-------------------|--------------------|
 | FPAM            | Fixed Output Pressure of 88 bar | Constant Momentum | `config_fpam.json` |
 | FPAV            | Fixed Output Pressure of 88 bar | Constant Velocity | `config_fpav.json` |
@@ -31,7 +31,7 @@ Build the `four_compressor_types` executable following instructions in the proje
 The program additionally needs a JSON configuration file as an argument to run.
 
 ```bash
-${BUILD_DIR}/demos/four_compressor_types/four_compressor_types demos/four_compressor_types/${CONFIG_FILE}
+${BUILD_DIR}/demos/four_compressor_types/four_compressor_types ${CONFIG_FILE}
 ```
 
 Set the environment variable or substitute `BUILD_DIR` to the build path.
@@ -45,8 +45,8 @@ The results will be written to an HDF5 file with a filename specified within the
 Finally, the `plot` executable file can parse the config and generated results file to write a PDF plot with the same name.
 
 ```bash
-./plot --config ./demos/four_compressor_types/${CONFIG_FILE} -p 0
-./plot --config ./demos/four_compressor_types/${CONFIG_FILE} -p 1
+./plot --config ${CONFIG_FILE} -p 0
+./plot --config ${CONFIG_FILE} -p 1
 ```
 
 The argument `-p` with an integer value refers to the first and second pipes respectively.

@@ -21,7 +21,7 @@ Build the `single_pipe` executable following instructions in the project directo
 The program additionally needs a JSON configuration file as an argument to run.
 
 ```bash
-${BUILD_DIR}/demos/single_pipe/single_pipe demos/single_pipe/config.json
+${BUILD_DIR}/demos/single_pipe/single_pipe config.json
 ```
 Set the environment variable or substitute `BUILD_DIR` to the build path.
 
@@ -32,5 +32,5 @@ The results will be written to an HDF5 file with a filename specified within the
 Finally, the `plot` executable file can parse the config and generated results file to write a PDF plot with the same name.
 
 ```bash
-./plot --config ./demos/single_pipe/config.json
+./plot --config config.json
 ```
