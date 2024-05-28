@@ -166,4 +166,4 @@ namespace PHModel {
         const double outlet_momentum
     );
 
-} // namespace phgasnets
+}
