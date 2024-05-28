@@ -25,6 +25,14 @@ License:
 
 ## Getting Started
 
+The library is structured into the following directories:
+
+| Directory           | Information                                                                     |
+|---------------------|---------------------------------------------------------------------------------|
+| `src`               | `phgasnets` library source code; implementation of port-Hamiltonian formulation |
+| `include/phgasnets` | `phgasnets` library headers; the public interface of the library                |
+| `demos`             | the testcase demos which uses the `phgasnets` library                           |
+
 To use the code, you must first set the environment and dependent libraries.
 Instructions provided here are provided for standard UNIX distributions, but maybe easily adopted(but not tested) in other operating systems.
 
@@ -38,12 +46,12 @@ Three demos are provided:
 
   - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
   - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
-  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with all four types of compressors placed midway.
+  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with a compressor placed midway modeled in four configurations.
 
 ### Docker Container
 
-The project offers a [`Dockerfile`](Dockerfile) to set the relevant dependencies, host the source code, build and run the demos,
-without having to install dependencies on the host.
+The project offers a [`Dockerfile`](Dockerfile) to automate the configuration and execution by,
+setting relevant dependencies, hosting the source code, building executables and running the demos.
 
 Necessary tools:
   - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine (tested with `26.1.3`).
@@ -91,9 +99,15 @@ Additional requirements are required for `plot` scripts in the demo:
 * [Matplotlib](https://matplotlib.org/) library to plot,
 * [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
 
-All these libraries are also available either through standard UNIX package managers or Python package manager, `pip`.
+All these libraries are also available either through standard UNIX package managers (for a system-wide installation) or Python package manager, `pip` (for a local installation).
+The **Latin Modern Math font is optional** and not installing will result in warnings, but will not break the plot scripts.
 
-The following sequence of commands builds `phgasnets`.
+A `requirements.txt` file is also included to install python dependencies for convenience, and maybe installed using
+```bash
+pip install -r requirements.txt
+```
+
+Once the dependencies are available, the following sequence of commands builds the project executables.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
