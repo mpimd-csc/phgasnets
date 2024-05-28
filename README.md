@@ -13,6 +13,13 @@ phgasnets-cpp
 
 Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
+Details:
+  - A speedy C++ implementation of port-Hamiltonian model for Gas Network with Compressors.
+  - Emphasis on including four different compressor models in formulation.
+  - Space discretization with second-order central finite differences.
+  - Time discretization with implicit midpoint method.
+  - Jacobian computation through numerical differentiation.
+
 Authors:
   - [Ashwin S. Nayak](https://orcid.org/0000-0002-9855-2377)
   - [Thomas Bendokat](https://orcid.org/0000-0002-0671-6291)
@@ -128,7 +135,8 @@ cmake --build build
 ```
 
 CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
-To compile in debug mode and utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/) use `-DCMAKE_BUILD_TYPE=Debug` instead and build.
+
+To compile in debug mode and utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/) use `-DCMAKE_BUILD_TYPE="Debug"` instead and build.
 
 ### Run Demos
 
@@ -155,7 +163,7 @@ A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and
 
 If you intend to develop the source code without modifying/installing any dependencies on your host computer, you can make use of [development containers](https://containers.dev/) for setting up the requisite environment.
 
-A specification file `.devcontainer.json` is provided (and recommended) for development workflow.
+A specification file [`.devcontainer.json`](.devcontainer.json) is provided for building the devcontainer and can be utilized by supporting editors.
 
 Necessary tools :
 - [Docker Engine](https://docs.docker.com/engine/install/),
