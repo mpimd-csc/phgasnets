@@ -102,12 +102,11 @@ Additional requirements are required for `plot` scripts in the demo,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [numpy](https://numpy.org) package for handling arrays,
 * [matplotlib](https://matplotlib.org/) plotting package,
-* [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font (optional).
+* (optional) [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
 
 All these libraries are also available either through standard UNIX package managers (for a system-wide installation) or Python package manager, `pip` (for a local installation).
-The **Latin Modern Math font is optional** and not installing will result in warnings, but will not break the plot scripts.
 
-A `requirements.txt` file is also included to install python dependencies for convenience, and maybe installed using
+A [`requirements.txt`](requirements.txt) file is also included to install python dependencies for convenience, and maybe installed using
 ```bash
 pip install -r requirements.txt
 ```
