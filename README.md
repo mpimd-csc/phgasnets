@@ -37,8 +37,8 @@ To use the code, you must first set the environment and dependent libraries.
 Instructions provided here are provided for standard UNIX distributions, but maybe easily adopted(but not tested) in other operating systems.
 
 You may either choose to use,
-  - [Build and run in containers](#docker-container): Recommended to primarily reproduce results
-  - [Manually configure and build source code](#build): Recommended for fine-grained customizations and develop source.
+  - [Build and run in containers](#run-using-docker-container): Recommended to primarily reproduce results
+  - [Manually configure and build source code](#compile-and-build): Recommended for fine-grained customizations and develop source.
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
 
@@ -50,7 +50,7 @@ Three demos are provided:
   - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
   - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with a compressor placed midway modeled in four configurations.
 
-### Docker Container
+## Run using docker container
 
 The project offers a [`Dockerfile`](Dockerfile) to automate the configuration and execution by,
 setting relevant dependencies, hosting the source code, building executables and running the demos.
@@ -77,29 +77,32 @@ This should run all the demos in a disposable container and store the generated 
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container. This also preserves user permissions on the files that are created within the container.
 
-### Build
+## Compile and Build
 
-Building requires installing the following dependencies (if not using the container):
+### Dependencies (if not using the container)
+
+Building requires installing the following dependencies:
 
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
 * [CMake](https://gitlab.kitware.com/cmake/cmake)
 * [Eigen3](https://gitlab.com/libeigen/eigen) `>=3.4.0` for handling linear algebra,
 * [Ceres](http://ceres-solver.org/) `>=2.0.0` for solving non-linear system of equations,
-* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) and [HighFive](https://bluebrain.github.io/HighFive/) `>=2.8` for writing/reading states to HDF5 format,
+* [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library with [HighFive](https://bluebrain.github.io/HighFive/) `>=2.8` interface for writing/reading states to HDF5 format,
 * [nlohmann_json](https://github.com/nlohmann/json) `>=3.10` for reading JSON configuration files.
 
 All these dependencies **except HighFive** are available through standard UNIX package managers.
-Instructions to install HighFive can be obtained [here](https://github.com/BlueBrain/HighFive/blob/v2.9.0/doc/installation.md).
+Instructions to install HighFive can be obtained [in their repository](https://github.com/BlueBrain/HighFive/blob/v2.9.0/doc/installation.md).
 
 > CMake offers version compatibility check for all these dependencies.
 
 Note the locations of all the libraries in case any were not installed through standard package managers.
 
-Additional requirements are required for `plot` scripts in the demo:
+Additional requirements are required for `plot` scripts in the demo,
 * [Python3](https://www.python.org) `>=3.4` interpreter,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
-* [Matplotlib](https://matplotlib.org/) library to plot,
-* [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
+* [numpy](https://numpy.org) package for handling arrays,
+* [matplotlib](https://matplotlib.org/) plotting package,
+* [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font (optional).
 
 All these libraries are also available either through standard UNIX package managers (for a system-wide installation) or Python package manager, `pip` (for a local installation).
 The **Latin Modern Math font is optional** and not installing will result in warnings, but will not break the plot scripts.
@@ -108,6 +111,8 @@ A `requirements.txt` file is also included to install python dependencies for co
 ```bash
 pip install -r requirements.txt
 ```
+
+### Compile
 
 Once the dependencies are available, the following sequence of commands builds the project executables.
 
@@ -126,7 +131,7 @@ cmake --build build
 CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
 To compile in debug mode and utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/) use `-DCMAKE_BUILD_TYPE=Debug` instead and build.
 
-## Run Demos
+### Run Demos
 
 The demo executables are available in the `build` directory and take configuration parameters `config.json` as input.
 
