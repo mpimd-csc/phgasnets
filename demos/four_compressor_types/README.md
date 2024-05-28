@@ -19,8 +19,8 @@ Four different compressor types are mentioned in the various `.json` files,
 
 | Compressor Type | Framework                       | Assumption        | `CONFIG_FILE`      |
 |-----------------|---------------------------------|-------------------|--------------------|
-| FPAM            | Fixed Output Pressure of 88 bar | Constant Momentum | `config_fpam.json` |
-| FPAV            | Fixed Output Pressure of 88 bar | Constant Velocity | `config_fpav.json` |
+| FPAM            | Fixed Output Pressure of 84 bar | Constant Momentum | `config_fpam.json` |
+| FPAV            | Fixed Output Pressure of 84 bar | Constant Velocity | `config_fpav.json` |
 | FCAM            | Fixed Compression Ratio of 1.2  | Constant Momentum | `config_fcam.json` |
 | FCAV            | Fixed Compression Ratio of 1.2  | Constant Velocity | `config_fcav.json` |
 
