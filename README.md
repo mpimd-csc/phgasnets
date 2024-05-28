@@ -54,9 +54,13 @@ Build the `phgasnets` image which contains the environment, copies the source co
 docker build -f Dockerfile --tag phgasnets .
 ```
 
-Create a folder named `results` to store results and run the container,
+Create a folder named `results` to store results in the host,
 ```bash
 mkdir results
+```
+
+Run the container by sharing the results folder within and user id information to manage the generated file permissions,
+```bash
 docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
@@ -82,7 +86,7 @@ Instructions to install HighFive can be obtained [here](https://github.com/BlueB
 Note the locations of all the libraries in case any were not installed through standard package managers.
 
 Additional requirements are required for `plot` scripts in the demo:
-* [Python3](https://www.python.org) `>=3.2` interpreter,
+* [Python3](https://www.python.org) `>=3.4` interpreter,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [Matplotlib](https://matplotlib.org/) library to plot,
 * [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
