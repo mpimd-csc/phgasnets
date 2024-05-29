@@ -1,0 +1,45 @@
+{
+  "ACC_GRAVITY": 9.80665,
+  "GAS_CONSTANT": 530.0,
+  "pipe": {
+    "length": 181500,
+    "diameter": 1.422,
+    "friction": 1.8e-3
+  },
+  "compressor": {
+    "type" : "FC",
+    "model": "AM",
+    "specification": 1.0
+  },
+  "fluid": {
+    "isentropic_exponent": 1.4
+  },
+  "initial_conditions": {
+    "pressure" : 8000000,
+    "momentum" : 463.33
+  },
+  "boundary_conditions": {
+    "inlet": {
+      "pressure": 8000000,
+      "temperature": 276.25
+    },
+    "outlet": {
+      "momentum": "momentum_at_outlet"
+    }
+  },
+  "discretization": {
+    "space": {
+      "resolution": 16,
+      "order": 1
+    },
+    "time": {
+      "start": 0,
+      "end": 24,
+      "step": 100
+    }
+  },
+  "io": {
+    "frequency": 1,
+    "filename": "results_pH_nocompressor"
+  }
+}

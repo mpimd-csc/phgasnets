@@ -23,6 +23,7 @@ Four different compressor types are mentioned in the various `.json` files,
 | FPAV            | Fixed Output Pressure of 84 bar | Constant Velocity | `config_fpav.json` |
 | FCAM            | Fixed Compression Ratio of 1.2  | Constant Momentum | `config_fcam.json` |
 | FCAV            | Fixed Compression Ratio of 1.2  | Constant Velocity | `config_fcav.json` |
+| No Compression  | Compression Ratio of 1.0        | -                 | `config_nocompressor.json`|
 
 ### Run demo
 
@@ -57,5 +58,5 @@ For plotting a unified plot with all the compressor configurations, you can use 
 This requires the directory with `.csv` files generated through `plot` script for the four compressor types mentioned through `OUT_DIR`.
 
 ```bash
-./plotall -O ${OUT_DIR}
+./plotall -O ${OUT_DIR} --compressor-types fcav fcam fpav fpam nocompressor
 ```

@@ -40,6 +40,6 @@
     },
     "io": {
       "frequency": 1,
-      "filename": "results_pH_FPAM"
+      "filename": "results_pH_fpam"
     }
 }
