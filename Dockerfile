@@ -44,6 +44,17 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     cmake --install build && \
     rm -rf ${HIGHFIVE_PATH}-src
 
+# provide a non-root user for devcontainer
+# the args for UID and GID will be overridden by VSCode
+# Ref https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=${USER_UID}
+
+RUN addgroup --gid ${USER_GID} ${USERNAME} && \
+    adduser --disabled-password --gecos '' --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} && \
+    usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
+
 # paths for hosting the project files
 ARG PROJECT_DIR=/phgasnets/src
 ARG BUILD_DIR=/phgasnets/build
@@ -64,17 +75,6 @@ ENV PROJECT_DIR ${PROJECT_DIR}
 ENV BUILD_DIR ${BUILD_DIR}
 ENV OUT_DIR ${OUT_DIR}
 ENV MPLCONFIGDIR /tmp/
-
-# provide a non-root user for devcontainer
-# the args for UID and GID will be overridden by VSCode
-# Ref https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=${USER_UID}
-
-RUN addgroup --gid ${USER_GID} ${USERNAME} && \
-    adduser --disabled-password --gecos '' --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} && \
-    usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
 
 # set default shell
 ENV SHELL /bin/bash
