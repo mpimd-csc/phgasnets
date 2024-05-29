@@ -18,7 +18,7 @@ PHModel::SteadySystem::SteadySystem(
     Jt(Jt), Rt(Rt), effort(effort), G(G), input_vec(input_vec)
 {}
 
-    // Function call to compute residual
+
 bool PHModel::SteadySystem::operator()(
     double const* const* guess_state,
     double* residual

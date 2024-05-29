@@ -44,7 +44,6 @@ void Network::set_gas_state(const Vector& state) {
   if (compressors[0].type == "FP") {
     compressors[0].update_compression_ratio(compressors[0].specification/precompressor_pressure);
   }
-  // pipes[1].temperature = compressors[0].temperature_scale * pipes[0].temperature;
 
   // update pipe-specific R and effort
   std::vector<std::reference_wrapper<BasePHOperator>> operators_r, operators_g;

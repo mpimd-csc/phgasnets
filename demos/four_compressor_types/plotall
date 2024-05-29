@@ -17,7 +17,6 @@ plot_params = {
     'legend.framealpha' : 0.8,
     'legend.edgecolor': 'gray',
     'legend.fontsize': 10,
-    # 'text.usetex': True,
     'figure.dpi': 300
 }
 
