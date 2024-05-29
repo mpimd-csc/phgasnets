@@ -96,7 +96,7 @@ for j in range(4):
 
 # Set Y labels on left plots
 axs[0,0].set_ylabel('Pressure [bar]')
-axs[1,0].set_ylabel('Massflux [kg/m^2-s]')
+axs[1,0].set_ylabel('Massflux [kg/m^2/s]')
 
 # Legend
 handles, labels = axs[1,2].get_legend_handles_labels()
