@@ -167,7 +167,7 @@ int main(int argc, char** argv){
   for (int t=1; t<Nt; ++t) {
 
     time = t_start*3600 + t * dt;
-    std::cout << "Time = " << time << "s (" << t << "/" << Nt << ")\n";
+    std::cout << "Time = " << time << "s (" << t << "/" << Nt << ")\r";
 
     // Update guess at inlet
     guess(0)                 = inlet_pressure/ (R*inlet_temperature);
