@@ -27,6 +27,9 @@ Authors:
 Affiliation:
   - [Max Planck Institute for Dynamics of Complex Technical Systems](https://www.mpi-magdeburg.mpg.de/), Magdeburg, Germany.
 
+Repository:
+  - https://gitlab.mpi-magdeburg.mpg.de/anayak/phgasnets-cpp
+
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
@@ -166,7 +169,7 @@ If you intend to develop the source code without modifying/installing any depend
 A specification file [`.devcontainer.json`](.devcontainer.json) is provided for building the devcontainer and can be utilized by supporting editors.
 
 Necessary tools :
-- [Docker Engine](https://docs.docker.com/engine/install/),
+- [Docker Engine](https://docs.docker.com/engine/install/) (tested with `26.1.3`),
 - [Visual Studio Code](https://code.visualstudio.com/) with [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension (support since 2019. Tested with version `1.87.2`).
 
 Start VS Code, run the "Dev Containers: Open Folder in Container..." command from the Command Palette (F1), and select the project folder.
