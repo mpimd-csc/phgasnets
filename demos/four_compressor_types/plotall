@@ -50,25 +50,25 @@ colors = ['red', 'blue', 'purple', 'gray', 'black']
 
 for compr, color in zip(compressor_types, colors):
     # Row 0, Col 1
-    axs[0,1].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,2], linestyle='-', color=color)
+    axs[0,1].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,2], linestyle='-', color=color, label=compr)
 
     # Row 0, Col 2
-    axs[0,2].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,1], linestyle='-', color=color)
+    axs[0,2].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,1], linestyle='-', color=color, label=compr)
 
     # Row 0, Col 3
-    axs[0,3].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,2], linestyle='-', color=color)
+    axs[0,3].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,2], linestyle='-', color=color, label=compr)
 
     # Row 1, Col 0
-    axs[1,0].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,3], linestyle='-', color=color)
+    axs[1,0].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,3], linestyle='-', color=color, label=compr)
 
     # Row 1, Col 1
-    axs[1,1].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,4], linestyle='-', color=color)
+    axs[1,1].plot(data[compr]['pipe0'][:,0], data[compr]['pipe0'][:,4], linestyle='-', color=color, label=compr)
 
     # Row 1, Col 2
-    axs[1,2].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,3], linestyle='-', color=color)
+    axs[1,2].plot(data[compr]['pipe1'][:,0], data[compr]['pipe1'][:,3], linestyle='-', color=color, label=compr)
 
 # Row 1, Col 3
-axs[1,3].plot(data['fcav']['pipe1'][:,0], data['fcav']['pipe1'][:,4], linestyle='-', color='green')
+axs[1,3].plot(data['fcav']['pipe1'][:,0], data['fcav']['pipe1'][:,4], linestyle='-', color='green', label='input')
 
 # Set Time limits
 for i in range(2):
@@ -77,7 +77,7 @@ for i in range(2):
 
 # Set Pressure and Massflux limits
 for j in range(4):
-  axs[0,j].set_ylim(70,95)
+  axs[0,j].set_ylim(65,95)
   axs[1,j].set_ylim(300,600)
 
 # Set y tick labels off on in-between plots
@@ -97,6 +97,11 @@ for j in range(4):
 # Set Y labels on left plots
 axs[0,0].set_ylabel('Pressure [bar]')
 axs[1,0].set_ylabel('Massflux [kg/m^2-s]')
+
+# Legend
+handles, labels = axs[1,2].get_legend_handles_labels()
+input_handle, input_label = axs[1,3].get_legend_handles_labels()
+fig.legend(handles+input_handle, labels+input_label, ncols=6, loc=(0.5, 0.5))
 
 outfile = args.out_dir / "results_four_compressor_types.pdf"
 plt.savefig(outfile, bbox_inches='tight')
