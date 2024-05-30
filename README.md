@@ -33,6 +33,23 @@ Repository:
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
 
+<!-- Table of Contents -->
+<details open>
+<summary>Table of Contents</summary>
+<ul>
+  <li><a href="#getting-started">Getting Started</a></li>
+  <li><a href="#run-using-docker-container">Run using docker container</a></li>
+  <li><a href="#compile-and-build">Compile and build</a>
+    <ul>
+      <li><a href="#dependencies-if-not-using-the-container">Dependencies (if not using the container)</a></li>
+      <li><a href="#compile">Compile</a></li>
+      <li><a href="#run-demos">Run demos</a></li>
+    </ul>
+  </li>
+  <li><a href="#development-container-for-developers">Development container (for developers)</a></li>
+</ul>
+</details>
+
 ## Getting Started
 
 The library is structured into the following directories:
