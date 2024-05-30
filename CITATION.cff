@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "phgasnets: Code supplement for article 'Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach'."
+version: 1.0
+date-released: 2024-05-29
+url: "https://gitlab.mpi-magdeburg.mpg.de/anayak/phgasnets-cpp"
+doi: "10.5281/zenodo.11387852"
+authors:
+- family-names: "Nayak"
+  given-names: "Ashwin S."
+  orcid: "https://orcid.org/0000-0002-9855-2377"
+- family-names: "Bendokat"
+  given-names: "Thomas"
+  orcid: "https://orcid.org/0000-0002-0671-6291"
