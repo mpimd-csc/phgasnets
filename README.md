@@ -54,11 +54,11 @@ Once the library is built, you can [**run the demos**](#run-demos) provided in t
 
 > For developers, a [development container](#development-container-for-developers) is also available to ease the workflow.
 
-Three demos are provided:
+Three demos are provided within [`demos/`](demos/):
 
-  - `single_pipe` demo runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
-  - `two_pipe_compressor` demo runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
-  - `four_compressor_types` demo runs the Yamal-Europe pipeline configuration with a compressor placed midway modeled in four configurations.
+  - [`single_pipe`](demos/single_pipe/) runs a transient simulation of the Yamal-Europe pipeline configuration (without a compressor).
+  - [`two_pipe_compressor`](demos/two_pipe_compressor/) runs the Yamal-Europe pipeline configuration with a FC-AV compressor (CR=1.2) placed midway.
+  - [`four_compressor_types`](demos/four_compressor_types/) runs the Yamal-Europe pipeline configuration with a compressor placed midway modeled in four configurations.
 
 ## Run using docker container
 
