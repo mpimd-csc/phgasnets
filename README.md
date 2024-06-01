@@ -13,12 +13,15 @@ phgasnets-cpp
 
 Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
+A speedy C++ implementation of port-Hamiltonian model for Gas Network with Compressors.
+
 Details:
-  - A speedy C++ implementation of port-Hamiltonian model for Gas Network with Compressors.
-  - Emphasis on including four different compressor models in formulation.
+  - Isothermal Euler equation model for pipes.
+  - Emphasis on including four different compressor models.
   - Space discretization with second-order central finite differences.
   - Time discretization with implicit midpoint method.
   - Jacobian computation through numerical differentiation.
+  - Nonlinear solve using Levenberg–Marquardt algorithm.
 
 Authors:
   - [Ashwin S. Nayak](https://orcid.org/0000-0002-9855-2377)
@@ -111,7 +114,7 @@ This should run all the demos in a disposable container and store the generated 
 Building requires installing the following dependencies:
 
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
-* [CMake](https://gitlab.kitware.com/cmake/cmake)
+* [CMake](https://gitlab.kitware.com/cmake/cmake) `>=3.9` for building,
 * [Eigen3](https://gitlab.com/libeigen/eigen) `>=3.4.0` for handling linear algebra,
 * [Ceres](http://ceres-solver.org/) `>=2.0.0` for solving non-linear system of equations,
 * [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library with [HighFive](https://bluebrain.github.io/HighFive/) `>=2.8` interface for writing/reading states to HDF5 format,
