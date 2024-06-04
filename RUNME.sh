@@ -20,13 +20,6 @@ CONFIG_FILE=${PROJECT_DIR}/demos/single_pipe/config.json
 ${DEMO_DIR}/single_pipe/single_pipe ${CONFIG_FILE}
 ${PROJECT_DIR}/demos/single_pipe/plot -c ${CONFIG_FILE} -O ${OUT_DIR}
 
-# Run two pipe + compressor testcase
-echo -e "\e[1;33m[DEMO] Run two_pipe_compressor\e[0m"
-CONFIG_FILE=${PROJECT_DIR}/demos/two_pipe_compressor/config.json
-${DEMO_DIR}/two_pipe_compressor/two_pipe_compressor ${CONFIG_FILE}
-${PROJECT_DIR}/demos/two_pipe_compressor/plot -c ${CONFIG_FILE} -p 0 -O ${OUT_DIR}
-${PROJECT_DIR}/demos/two_pipe_compressor/plot -c ${CONFIG_FILE} -p 1 -O ${OUT_DIR}
-
 # Run four compressor types
 echo -e "\e[1;33m[DEMO] Run four_compressor_types\e[0m"
 compressor_types=("fcam" "fcav" "fpav" "fpam" "nocompressor")
