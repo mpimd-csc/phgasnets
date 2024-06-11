@@ -44,7 +44,8 @@ namespace PHModel {
         virtual ~BasePHOperator() = default;
 
         protected:
-            const int n_rho, n_mom;
+            const int n_rho;
+            const int n_mom;
         public:
             std::vector<Triplet> data;
             SparseMatrix mat;
