@@ -34,7 +34,7 @@ Eigen::VectorXd verticallyBlockVectors(
  *
  * @throws None
  */
-SparseMatrix diagonalBlock(
+Eigen::SparseMatrix<double> diagonalBlock(
     const std::vector<std::reference_wrapper<BasePHOperator>>& operators
 );
 

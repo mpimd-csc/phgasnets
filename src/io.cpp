@@ -28,8 +28,8 @@ void NetworkStateWriter::writeState(const int& timetag, const int& time) {
 
   int counter = 0;
   for(auto& pipe: network.pipes){
-    Vector rho = pipe.rho;
-    Vector mom = pipe.mom;
+    Eigen::VectorXd rho = pipe.rho;
+    Eigen::VectorXd mom = pipe.mom;
 
     auto h5path = "pipe" + std::to_string(counter++) + "/" + std::to_string(timetag);
     H5Easy::dump(file, h5path + "/density", rho);

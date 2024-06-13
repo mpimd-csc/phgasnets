@@ -34,7 +34,7 @@ Eigen::VectorXd PHModel::verticallyBlockVectors(
  *
  * @throws None
  */
-SparseMatrix PHModel::diagonalBlock(
+Eigen::SparseMatrix<double> PHModel::diagonalBlock(
     const std::vector<std::reference_wrapper<BasePHOperator>>& operators
 ){
     int nnz = 0, n_rows = 0, n_cols = 0;
@@ -45,20 +45,20 @@ SparseMatrix PHModel::diagonalBlock(
     }
 
     // Add the first operator
-    std::vector<Triplet> data(nnz);
+    std::vector<Eigen::Triplet<double>> data(nnz);
     data.insert(data.end(), operators[0].get().data.begin(), operators[0].get().data.end());
     // Iteratively include data from rest of the operators taking care of row/column offset
     int startRow = operators[0].get().mat.rows();
     int startCol = operators[0].get().mat.cols();
     for (int i = 1; i < operators.size(); ++i) {
         for(auto& triplet : operators[i].get().data) {
-            data.push_back(Triplet(startRow + triplet.row(), startCol + triplet.col(), triplet.value()));
+            data.push_back(Eigen::Triplet<double>(startRow + triplet.row(), startCol + triplet.col(), triplet.value()));
         }
         startRow += operators[i].get().mat.rows();
         startCol += operators[i].get().mat.cols();
     }
 
-    SparseMatrix mat(n_rows, n_cols);
+    Eigen::SparseMatrix<double> mat(n_rows, n_cols);
     mat.setFromTriplets(data.begin(), data.end());
     return mat;
 }

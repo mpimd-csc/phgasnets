@@ -11,11 +11,6 @@
 # include "network.hpp"
 # include "utils.hpp"
 
-using SparseMatrix=Eigen::SparseMatrix<double>;
-using Vector=Eigen::VectorXd;
-using Vector2d=Eigen::Vector2d;
-
-
 namespace PHModel {
     struct SteadySystem{
         SteadySystem(
@@ -24,18 +19,19 @@ namespace PHModel {
             Rt_operator& Rt,
             Effort& effort,
             const G_operator& G,
-            const Vector2d& input_vec
+            const Eigen::Vector2d& input_vec
         );
 
         bool operator()(double const* const* guess_state, double* residual) const;
 
         private:
-            const int n_rho, n_mom;
+            const int n_rho;
+            const int n_mom;
             const Jt_operator& Jt;
             Rt_operator& Rt;
             Effort& effort;
             const G_operator& G;
-            const Vector2d& input_vec;
+            const Eigen::Vector2d& input_vec;
     };
 
     struct SteadyCompressorSystem{

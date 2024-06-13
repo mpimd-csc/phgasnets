@@ -30,7 +30,7 @@ Network::Network(
   effort.resize(n_res);
 }
 
-void Network::set_gas_state(const Vector& state) {
+void Network::set_gas_state(const Eigen::VectorXd& state) {
   // distribute state across network constituents
   int pipe_state_startIdx = 0;
   for (auto& pipe : pipes) {
@@ -70,8 +70,8 @@ void Network::set_gas_state(const Vector& state) {
   }
 }
 
-Vector Network::get_gas_state() const {
-  std::vector<Vector> states;
+Eigen::VectorXd Network::get_gas_state() const {
+  std::vector<Eigen::VectorXd> states;
   for (auto& pipe: pipes) {
     states.push_back(pipe.get_gas_state());
   }

@@ -16,7 +16,7 @@ E_operator::E_operator(
 {
     data.resize(n_rho+n_mom);
     for (int i = 0; i < n_rho+n_mom; ++i)
-        data[i] = Triplet(i, i, 1.0);
+        data[i] = Eigen::Triplet<double>(i, i, 1.0);
 
     mat.resize(n_rho+n_mom, n_rho+n_mom);
     mat.setFromTriplets(data.begin(), data.end());
@@ -42,8 +42,8 @@ U_operator::U_operator(
     BasePHOperator(n_rho, n_mom)
 {
     data.resize(2);
-    data[0] = Triplet(0, 0, 1.0);
-    data[1] = Triplet(1, n_rho+n_mom-1, -1.0);
+    data[0] = Eigen::Triplet<double>(0, 0, 1.0);
+    data[1] = Eigen::Triplet<double>(1, n_rho+n_mom-1, -1.0);
 
     mat.resize(2, n_rho+n_mom);
     mat.setFromTriplets(data.begin(), data.end());
@@ -58,16 +58,16 @@ J_operator::J_operator(
    BasePHOperator(n_rho, n_mom), mesh_width(mesh_width)
 {
     // Make two Dx triplets
-    std::vector<Triplet> dx_1 = derivative_operator(n_rho, mesh_width);
-    std::vector<Triplet> dx_2 = dx_1;
+    std::vector<Eigen::Triplet<double>> dx_1 = derivative_operator(n_rho, mesh_width);
+    std::vector<Eigen::Triplet<double>> dx_2 = dx_1;
 
     // Block 1: minus Dx triplets with n_mom column offset
     for (auto& triplet : dx_1)
-        triplet = Triplet(triplet.row(), n_mom+triplet.col(), -triplet.value());
+        triplet = Eigen::Triplet<double>(triplet.row(), n_mom+triplet.col(), -triplet.value());
 
     // Block 2 : Create minus Dx triplets with n_rho row offset
     for (auto& triplet : dx_2)
-        triplet = Triplet(n_rho+triplet.row(), triplet.col(), -triplet.value());
+        triplet = Eigen::Triplet<double>(n_rho+triplet.row(), triplet.col(), -triplet.value());
 
     // Concatenate these triplets to form triplets for J operator
     data.resize(3*n_rho+3*n_mom);
@@ -95,7 +95,7 @@ Jt_operator::Jt_operator(
 
     // Add the U_operator triplets with row offset and negative value.
     for (auto& triplet : U.data)
-        data.push_back(Triplet(n_rho+n_mom+triplet.row(), triplet.col(), -triplet.value()));
+        data.push_back(Eigen::Triplet<double>(n_rho+n_mom+triplet.row(), triplet.col(), -triplet.value()));
 
     // Create matrix operator
     mat.resize(n_rho+n_mom+2, n_rho+n_mom+2);
@@ -117,13 +117,13 @@ R_operator::R_operator(
 }
 
 void R_operator::update_state(
-    const Vector& rho,
-    const Vector& mom
+    const Eigen::VectorXd& rho,
+    const Eigen::VectorXd& mom
 ) {
-    Vector friction_term = (f * (mom.array()/rho.array()).abs()) / (2 * D);
+    Eigen::VectorXd friction_term = (f * (mom.array()/rho.array()).abs()) / (2 * D);
 
     for (int i = 0; i < n_mom; ++i)
-        data[i] = Triplet(n_rho+i, n_rho+i, friction_term(i));
+        data[i] = Eigen::Triplet<double>(n_rho+i, n_rho+i, friction_term(i));
 
     mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
 }
@@ -152,8 +152,8 @@ Rt_operator::Rt_operator(
  * @throws None
  */
 void Rt_operator::update_state(
-    const Vector& rho,
-    const Vector& mom
+    const Eigen::VectorXd& rho,
+    const Eigen::VectorXd& mom
 ) {
     // Update the R_operator
     R.update_state(rho, mom);
@@ -170,8 +170,8 @@ Y_operator::Y_operator(
     BasePHOperator(n_rho, n_mom)
 {
     data.resize(2);
-    data[0] = Triplet(0, n_rho, 1.0);
-    data[1] = Triplet(1, n_rho-1, 1.0);
+    data[0] = Eigen::Triplet<double>(0, n_rho, 1.0);
+    data[1] = Eigen::Triplet<double>(1, n_rho-1, 1.0);
 
     mat.resize(2, n_rho+n_mom);
     mat.setFromTriplets(data.begin(), data.end());
@@ -188,8 +188,8 @@ Effort::Effort(
 {}
 
 void Effort::update_state(
-    const Vector& rho,
-    const Vector& mom
+    const Eigen::VectorXd& rho,
+    const Eigen::VectorXd& mom
 ) {
     vec.segment(0, n_rho) = rho * PHModel::GAS_CONSTANT * temperature;
     vec.segment(n_rho, n_mom) = mom;
@@ -205,8 +205,8 @@ G_operator::G_operator(
     BasePHOperator(n_rho, n_mom)
 {
     data.resize(2);
-    data[0] = Triplet(n_rho+n_mom, 0, 1.0);
-    data[1] = Triplet(n_rho+n_mom+1, 1, 1.0);
+    data[0] = Eigen::Triplet<double>(n_rho+n_mom, 0, 1.0);
+    data[1] = Eigen::Triplet<double>(n_rho+n_mom+1, 1, 1.0);
 
     mat.resize(n_rho+n_mom+2, 2);
     mat.setFromTriplets(data.begin(), data.end());

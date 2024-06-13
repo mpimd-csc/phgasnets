@@ -15,15 +15,15 @@ namespace PHModel {
 
     Network(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);
 
-    void set_gas_state(const Vector& state);
+    void set_gas_state(const Eigen::VectorXd& state);
 
-    Vector get_gas_state() const;
+    Eigen::VectorXd get_gas_state() const;
 
     public:
       std::vector<DiscretePipe>& pipes;
       std::vector<Compressor>& compressors;
-      SparseMatrix E, J, R, G;
-      Vector effort;
+      Eigen::SparseMatrix<double> E, J, R, G;
+      Eigen::VectorXd effort;
       int n_state, n_res;
   };
 }

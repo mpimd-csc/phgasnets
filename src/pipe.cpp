@@ -27,10 +27,10 @@ namespace PHModel{
     effort(Effort(n_rho, n_mom, temperature)),
     G(G_operator(n_x+1, n_x+1))
   {
-    mesh = Vector::LinSpaced(n_x+1, 0.0, length);
+    mesh = Eigen::VectorXd::LinSpaced(n_x+1, 0.0, length);
   }
 
-  void DiscretePipe::set_gas_state(const Vector& new_state){
+  void DiscretePipe::set_gas_state(const Eigen::VectorXd& new_state){
     rho = new_state(Eigen::seqN(0, n_rho));
     mom = new_state(Eigen::seqN(n_rho, n_mom));
 
@@ -39,11 +39,11 @@ namespace PHModel{
     effort.update_state(rho, mom);
   }
 
-  void DiscretePipe::set_density(Vector& new_density){
+  void DiscretePipe::set_density(Eigen::VectorXd& new_density){
     rho = new_density;
   }
 
-  void DiscretePipe::set_pressure(Vector& new_pressure){
+  void DiscretePipe::set_pressure(Eigen::VectorXd& new_pressure){
     rho = new_pressure/(PHModel::GAS_CONSTANT*temperature);
   }
 
@@ -51,7 +51,7 @@ namespace PHModel{
     rho.setConstant(new_pressure/(PHModel::GAS_CONSTANT*temperature));
   }
 
-  void DiscretePipe::set_momentum(Vector& new_momentum){
+  void DiscretePipe::set_momentum(Eigen::VectorXd& new_momentum){
     mom = new_momentum;
   }
 
@@ -65,21 +65,21 @@ namespace PHModel{
     effort.temperature = new_temperature;
   }
 
-  Vector DiscretePipe::get_gas_state() const {
-    Vector state(rho.size()+mom.size());
+  Eigen::VectorXd DiscretePipe::get_gas_state() const {
+    Eigen::VectorXd state(rho.size()+mom.size());
     state << rho, mom;
     return state;
   }
 
-  Vector DiscretePipe::get_density() const {
+  Eigen::VectorXd DiscretePipe::get_density() const {
     return rho;
   }
 
-  Vector DiscretePipe::get_momentum() const {
+  Eigen::VectorXd DiscretePipe::get_momentum() const {
     return mom;
   }
 
-  Vector DiscretePipe::get_pressure() const {
+  Eigen::VectorXd DiscretePipe::get_pressure() const {
     return rho * PHModel::GAS_CONSTANT*temperature;
   }
 }

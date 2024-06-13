@@ -12,9 +12,6 @@
 # include <Eigen/SparseCore>
 # include "derivative.hpp"
 # include "gasconstant.hpp"
-using Vector = Eigen::VectorXd;
-using SparseMatrix = Eigen::SparseMatrix<double>;
-using Triplet = Eigen::Triplet<double>;
 
 namespace PHModel {
 
@@ -30,13 +27,13 @@ namespace PHModel {
             const int n_mom
         ): n_rho(n_rho), n_mom(n_mom) {}
 
-        void update_state(const Vector&, const Vector&) {}
+        void update_state(const Eigen::VectorXd&, const Eigen::VectorXd&) {}
 
         // WARN: Currently replaces only in existing non-zero entries
         void update_ij(const int i, const int j, const double value){
             for (int k = 0; k < data.size(); ++k)
                 if (data[k].row() == i && data[k].col() == j) {
-                    data[k] = Triplet(i, j, value);
+                    data[k] = Eigen::Triplet<double>(i, j, value);
                 }
             mat.coeffRef(i, j) = value;
         }
@@ -47,8 +44,8 @@ namespace PHModel {
             const int n_rho;
             const int n_mom;
         public:
-            std::vector<Triplet> data;
-            SparseMatrix mat;
+            std::vector<Eigen::Triplet<double>> data;
+            Eigen::SparseMatrix<double> mat;
     };
 
     struct E_operator: BasePHOperator{
@@ -103,8 +100,8 @@ namespace PHModel {
             const double diameter
         );
         void update_state(
-            const Vector& rho,
-            const Vector& mom
+            const Eigen::VectorXd& rho,
+            const Eigen::VectorXd& mom
         );
         public:
             const double f;
@@ -120,8 +117,8 @@ namespace PHModel {
         );
 
         void update_state(
-            const Vector& rho,
-            const Vector& mom
+            const Eigen::VectorXd& rho,
+            const Eigen::VectorXd& mom
         );
         private:
             R_operator R;
@@ -142,17 +139,18 @@ namespace PHModel {
         );
 
         void update_state(
-            const Vector& rho,
-            const Vector& mom
+            const Eigen::VectorXd& rho,
+            const Eigen::VectorXd& mom
         );
 
         private:
             const Y_operator Y;
-            const int n_rho, n_mom;
-            Vector vec;
+            const int n_rho;
+            const int n_mom;
+            Eigen::VectorXd vec;
         public:
             double temperature;
-            Vector vec_t;
+            Eigen::VectorXd vec_t;
     };
 
     struct G_operator: BasePHOperator{

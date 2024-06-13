@@ -8,13 +8,13 @@
 
 PHModel::TransientSystem::TransientSystem(
     const int n_rho, const int n_mom,
-    const Vector& current_state,
+    const Eigen::VectorXd& current_state,
     const Et_operator& Et,
     const Jt_operator& Jt,
     Rt_operator& Rt,
     Effort& effort,
     const G_operator& G,
-    const Vector2d& input_vec,
+    const Eigen::Vector2d& input_vec,
     const double time,
     const double timestep
 ) :
@@ -29,16 +29,16 @@ bool PHModel::TransientSystem::operator()(
     double* residual
 ) const
 {
-    Eigen::Map<const Vector> new_state(guess_state[0],n_rho+n_mom);
-    Eigen::Map<Vector> r(residual, n_rho+n_mom+2);
+    Eigen::Map<const Eigen::VectorXd> new_state(guess_state[0],n_rho+n_mom);
+    Eigen::Map<Eigen::VectorXd> r(residual, n_rho+n_mom+2);
 
     // Implicit midpoint rule
-    Vector z = (new_state + current_state) * 0.5;
-    Vector dz_dt = (new_state - current_state) / timestep;
+    Eigen::VectorXd z = (new_state + current_state) * 0.5;
+    Eigen::VectorXd dz_dt = (new_state - current_state) / timestep;
 
     // Distribute parameters into density and momentum vectors
-    Vector rho = z(Eigen::seqN(0, n_rho));
-    Vector mom = z(Eigen::seqN(n_rho, n_mom));
+    Eigen::VectorXd rho = z(Eigen::seqN(0, n_rho));
+    Eigen::VectorXd mom = z(Eigen::seqN(n_rho, n_mom));
 
     // Update effort and Rt_mat
     effort.update_state(rho, mom);
@@ -52,7 +52,7 @@ bool PHModel::TransientSystem::operator()(
 
 PHModel::TransientCompressorSystem::TransientCompressorSystem(
     Network& network,
-    const Vector& current_state,
+    const Eigen::VectorXd& current_state,
     const Eigen::Vector4d& input_vec,
     const double time,
     const double timestep
@@ -65,12 +65,12 @@ bool PHModel::TransientCompressorSystem::operator()(
     double const* const* guess_state,
     double* residual
 ) const {
-    Eigen::Map<const Vector> new_state(guess_state[0], network.n_state);
-    Eigen::Map<Vector> r(residual, network.n_res);
+    Eigen::Map<const Eigen::VectorXd> new_state(guess_state[0], network.n_state);
+    Eigen::Map<Eigen::VectorXd> r(residual, network.n_res);
 
     // Implicit midpoint rule
-    Vector z = (new_state + current_state) * 0.5;
-    Vector dz_dt = (new_state - current_state) / timestep;
+    Eigen::VectorXd z = (new_state + current_state) * 0.5;
+    Eigen::VectorXd dz_dt = (new_state - current_state) / timestep;
 
     network.set_gas_state(z);
 

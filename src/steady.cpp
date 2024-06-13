@@ -12,7 +12,7 @@ PHModel::SteadySystem::SteadySystem(
     Rt_operator& Rt,
     Effort& effort,
     const G_operator& G,
-    const Vector2d& input_vec
+    const Eigen::Vector2d& input_vec
 ) :
     n_rho(n_rho), n_mom(n_mom),
     Jt(Jt), Rt(Rt), effort(effort), G(G), input_vec(input_vec)
@@ -24,11 +24,11 @@ bool PHModel::SteadySystem::operator()(
     double* residual
 ) const {
     // Distribute parameters into density and momentum vectors
-    Eigen::Map<const Vector> z(guess_state[0],n_rho+n_mom);
-    Eigen::Map<Vector> r(residual, n_rho+n_mom+2);
+    Eigen::Map<const Eigen::VectorXd> z(guess_state[0],n_rho+n_mom);
+    Eigen::Map<Eigen::VectorXd> r(residual, n_rho+n_mom+2);
 
-    Vector rho = z(Eigen::seqN(0, n_rho));
-    Vector mom = z(Eigen::seqN(n_rho, n_mom));
+    Eigen::VectorXd rho = z(Eigen::seqN(0, n_rho));
+    Eigen::VectorXd mom = z(Eigen::seqN(n_rho, n_mom));
 
     // build necessary objects for non-linear eq
     effort.update_state(rho, mom);
@@ -51,8 +51,8 @@ bool PHModel::SteadyCompressorSystem::operator()(
     double const* const* guess_state,
     double* residual
 ) const {
-    Eigen::Map<const Vector> z(guess_state[0],network.n_state);
-    Eigen::Map<Vector> r(residual, network.n_res);
+    Eigen::Map<const Eigen::VectorXd> z(guess_state[0],network.n_state);
+    Eigen::Map<Eigen::VectorXd> r(residual, network.n_res);
 
     network.set_gas_state(z);
 
