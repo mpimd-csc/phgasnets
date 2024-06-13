@@ -35,7 +35,8 @@ namespace PHModel {
             Effort& effort;
             const G_operator& G;
             const Eigen::Vector2d input_vec;
-            const double time, timestep;
+            const double time;
+            const double timestep;
     };
 
     struct TransientCompressorSystem{
@@ -53,6 +54,7 @@ namespace PHModel {
             Network& network;
             const Eigen::VectorXd current_state;
             const Eigen::Vector4d input_vec;
-            const double time, timestep;
+            const double time;
+            const double timestep;
     };
 }
