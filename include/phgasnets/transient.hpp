@@ -13,13 +13,13 @@ namespace PHModel {
     struct TransientSystem{
         TransientSystem(
             const int n_rho, const int n_mom,
-            const Eigen::VectorXd& current_state,
+            const Eigen::Ref<const Eigen::VectorXd>& current_state,
             const Et_operator& Et,
             const Jt_operator& Jt,
             Rt_operator& Rt,
             Effort& effort,
             const G_operator& G,
-            const Eigen::Vector2d& input_vec,
+            const Eigen::Ref<const Eigen::Vector2d>& input_vec,
             const double time,
             const double timestep
         );
@@ -28,21 +28,21 @@ namespace PHModel {
 
         private:
             const int n_rho, n_mom;
-            const Eigen::VectorXd& current_state;
+            const Eigen::VectorXd current_state;
             const Et_operator& Et;
             const Jt_operator& Jt;
             Rt_operator& Rt;
             Effort& effort;
             const G_operator& G;
-            const Eigen::Vector2d& input_vec;
+            const Eigen::Vector2d input_vec;
             const double time, timestep;
     };
 
     struct TransientCompressorSystem{
         TransientCompressorSystem(
             Network& network,
-            const Eigen::VectorXd& current_state,
-            const Eigen::Vector4d& input_vec,
+            const Eigen::Ref<const Eigen::VectorXd>& current_state,
+            const Eigen::Ref<const Eigen::Vector4d>& input_vec,
             const double time,
             const double timestep
         );
@@ -51,8 +51,8 @@ namespace PHModel {
 
         private:
             Network& network;
-            const Eigen::VectorXd& current_state;
-            const Eigen::Vector4d& input_vec;
+            const Eigen::VectorXd current_state;
+            const Eigen::Vector4d input_vec;
             const double time, timestep;
     };
 }

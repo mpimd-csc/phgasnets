@@ -27,15 +27,15 @@ namespace PHModel{
 
     virtual ~DiscretePipe() = default; // Destructor
 
-    void set_gas_state(const Eigen::VectorXd& new_state);
+    void set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& new_state);
 
-    void set_density(Eigen::VectorXd& new_density);
+    void set_density(const Eigen::Ref<const Eigen::VectorXd>& new_density);
 
-    void set_pressure(Eigen::VectorXd& new_pressure);
+    void set_pressure(const Eigen::Ref<const Eigen::VectorXd>& new_pressure);
 
     void set_pressure(double new_pressure);
 
-    void set_momentum(Eigen::VectorXd& new_momentum);
+    void set_momentum(const Eigen::Ref<const Eigen::VectorXd>& new_momentum);
 
     void set_momentum(double new_momentum);
 

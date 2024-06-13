@@ -117,8 +117,8 @@ R_operator::R_operator(
 }
 
 void R_operator::update_state(
-    const Eigen::VectorXd& rho,
-    const Eigen::VectorXd& mom
+    const Eigen::Ref<const Eigen::VectorXd>& rho,
+    const Eigen::Ref<const Eigen::VectorXd>& mom
 ) {
     Eigen::VectorXd friction_term = (f * (mom.array()/rho.array()).abs()) / (2 * D);
 
@@ -152,8 +152,8 @@ Rt_operator::Rt_operator(
  * @throws None
  */
 void Rt_operator::update_state(
-    const Eigen::VectorXd& rho,
-    const Eigen::VectorXd& mom
+    const Eigen::Ref<const Eigen::VectorXd>& rho,
+    const Eigen::Ref<const Eigen::VectorXd>& mom
 ) {
     // Update the R_operator
     R.update_state(rho, mom);
@@ -188,8 +188,8 @@ Effort::Effort(
 {}
 
 void Effort::update_state(
-    const Eigen::VectorXd& rho,
-    const Eigen::VectorXd& mom
+    const Eigen::Ref<const Eigen::VectorXd>& rho,
+    const Eigen::Ref<const Eigen::VectorXd>& mom
 ) {
     vec.segment(0, n_rho) = rho * PHModel::GAS_CONSTANT * temperature;
     vec.segment(n_rho, n_mom) = mom;

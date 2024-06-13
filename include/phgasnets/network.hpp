@@ -15,7 +15,7 @@ namespace PHModel {
 
     Network(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);
 
-    void set_gas_state(const Eigen::VectorXd& state);
+    void set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state);
 
     Eigen::VectorXd get_gas_state() const;
 

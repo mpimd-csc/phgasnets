@@ -30,7 +30,7 @@ Network::Network(
   effort.resize(n_res);
 }
 
-void Network::set_gas_state(const Eigen::VectorXd& state) {
+void Network::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state) {
   // distribute state across network constituents
   int pipe_state_startIdx = 0;
   for (auto& pipe : pipes) {

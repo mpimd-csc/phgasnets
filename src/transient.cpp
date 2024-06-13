@@ -8,13 +8,13 @@
 
 PHModel::TransientSystem::TransientSystem(
     const int n_rho, const int n_mom,
-    const Eigen::VectorXd& current_state,
+    const Eigen::Ref<const Eigen::VectorXd>& current_state,
     const Et_operator& Et,
     const Jt_operator& Jt,
     Rt_operator& Rt,
     Effort& effort,
     const G_operator& G,
-    const Eigen::Vector2d& input_vec,
+    const Eigen::Ref<const Eigen::Vector2d>& input_vec,
     const double time,
     const double timestep
 ) :
@@ -52,8 +52,8 @@ bool PHModel::TransientSystem::operator()(
 
 PHModel::TransientCompressorSystem::TransientCompressorSystem(
     Network& network,
-    const Eigen::VectorXd& current_state,
-    const Eigen::Vector4d& input_vec,
+    const Eigen::Ref<const Eigen::VectorXd>& current_state,
+    const Eigen::Ref<const Eigen::Vector4d>& input_vec,
     const double time,
     const double timestep
 ) :

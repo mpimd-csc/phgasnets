@@ -27,7 +27,7 @@ namespace PHModel {
             const int n_mom
         ): n_rho(n_rho), n_mom(n_mom) {}
 
-        void update_state(const Eigen::VectorXd&, const Eigen::VectorXd&) {}
+        void update_state(const Eigen::Ref<const Eigen::VectorXd>&, const Eigen::Ref<const Eigen::VectorXd>&) {}
 
         // WARN: Currently replaces only in existing non-zero entries
         void update_ij(const int i, const int j, const double value){
@@ -100,8 +100,8 @@ namespace PHModel {
             const double diameter
         );
         void update_state(
-            const Eigen::VectorXd& rho,
-            const Eigen::VectorXd& mom
+            const Eigen::Ref<const Eigen::VectorXd>& rho,
+            const Eigen::Ref<const Eigen::VectorXd>& mom
         );
         public:
             const double f;
@@ -117,8 +117,8 @@ namespace PHModel {
         );
 
         void update_state(
-            const Eigen::VectorXd& rho,
-            const Eigen::VectorXd& mom
+            const Eigen::Ref<const Eigen::VectorXd>& rho,
+            const Eigen::Ref<const Eigen::VectorXd>& mom
         );
         private:
             R_operator R;
@@ -139,8 +139,8 @@ namespace PHModel {
         );
 
         void update_state(
-            const Eigen::VectorXd& rho,
-            const Eigen::VectorXd& mom
+            const Eigen::Ref<const Eigen::VectorXd>& rho,
+            const Eigen::Ref<const Eigen::VectorXd>& mom
         );
 
         private:
