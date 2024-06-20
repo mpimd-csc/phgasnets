@@ -47,13 +47,22 @@ PHModel::SteadyCompressorSystem::SteadyCompressorSystem(
   network(network), input_vec(input_vec)
 {}
 
+template<typename T>
 bool PHModel::SteadyCompressorSystem::operator()(
-    double const* const* guess_state,
-    double* residual
+    T const* const* guess_state,
+    T* residual
 ) const {
     Eigen::Map<const Eigen::VectorXd> z(guess_state[0],network.n_state);
     Eigen::Map<Eigen::VectorXd> r(residual, network.n_res);
 
+#if 1
+    static auto network = construct_network<T>(z);
+#else
+    static auto network = std::call([] () {
+        int x = 42;
+        return x;
+    });
+#endif
     network.set_gas_state(z);
 
     // solve non-linear eq and populate residual with result
