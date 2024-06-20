@@ -125,7 +125,7 @@ void R_operator::update_state(
     for (int i = 0; i < n_mom; ++i)
         data[i] = Eigen::Triplet<double>(n_rho+i, n_rho+i, friction_term(i));
 
-    mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
+    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
 }
 
 // Rt Operator constructor
@@ -159,7 +159,7 @@ void Rt_operator::update_state(
     R.update_state(rho, mom);
     // Update Rt operator
     data = R.data;
-    mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
+    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
 }
 
 // Y_operator constructor
