@@ -9,8 +9,8 @@
 PHModel::SteadySystem::SteadySystem(
     const int n_rho, const int n_mom,
     const Jt_operator& Jt,
-    Rt_operator& Rt,
-    Effort& effort,
+    RtStateOperator<double>& Rt,
+    EffortStateVec<double>& effort,
     const G_operator& G,
     const Eigen::Vector2d& input_vec
 ) :

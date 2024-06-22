@@ -6,6 +6,7 @@
 
 # include <Eigen/SparseCore>
 # include "operators.hpp"
+# include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "network.hpp"
@@ -16,8 +17,8 @@ namespace PHModel {
         SteadySystem(
             const int n_rho, const int n_mom,
             const Jt_operator& Jt,
-            Rt_operator& Rt,
-            Effort& effort,
+            RtStateOperator<double>& Rt,
+            EffortStateVec<double>& effort,
             const G_operator& G,
             const Eigen::Vector2d& input_vec
         );
@@ -28,8 +29,8 @@ namespace PHModel {
             const int n_rho;
             const int n_mom;
             const Jt_operator& Jt;
-            Rt_operator& Rt;
-            Effort& effort;
+            RtStateOperator<double>& Rt;
+            EffortStateVec<double>& effort;
             const G_operator& G;
             const Eigen::Vector2d& input_vec;
     };

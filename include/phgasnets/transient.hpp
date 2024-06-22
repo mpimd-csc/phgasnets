@@ -6,6 +6,7 @@
 
 # include <Eigen/SparseCore>
 # include "operators.hpp"
+# include "state_operators.hpp"
 # include "network.hpp"
 # include "utils.hpp"
 
@@ -16,8 +17,8 @@ namespace PHModel {
             const Eigen::Ref<const Eigen::VectorXd>& current_state,
             const Et_operator& Et,
             const Jt_operator& Jt,
-            Rt_operator& Rt,
-            Effort& effort,
+            RtStateOperator<double>& Rt,
+            EffortStateVec<double>& effort,
             const G_operator& G,
             const Eigen::Ref<const Eigen::Vector2d>& input_vec,
             const double time,
@@ -31,8 +32,8 @@ namespace PHModel {
             const Eigen::VectorXd current_state;
             const Et_operator& Et;
             const Jt_operator& Jt;
-            Rt_operator& Rt;
-            Effort& effort;
+            RtStateOperator<double>& Rt;
+            EffortStateVec<double>& effort;
             const G_operator& G;
             const Eigen::Vector2d input_vec;
             const double time;

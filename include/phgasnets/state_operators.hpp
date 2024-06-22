@@ -27,8 +27,8 @@ namespace PHModel{
 
     // Update State
     void update_state(
-      const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>&,
-      const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>&
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>&,
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>&
     ) {}
 
     // Update entry in the operator
@@ -67,8 +67,8 @@ namespace PHModel{
 
     // (Overloaded) Update State
     void update_state(
-        const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& rho,
-        const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& mom
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
     ) {
         Eigen::Vector<T, Eigen::Dynamic> friction_term =
           (f * (mom.array()/rho.array()).abs()) / (2 * D);
@@ -98,15 +98,15 @@ namespace PHModel{
       const double diameter
     ) :
         BaseStateOperator<T>(n_rho, n_mom),
-        RStateOperator<T>(RStateOperator<T>(n_rho, n_mom, friction, diameter))
+        R(RStateOperator<T>(n_rho, n_mom, friction, diameter))
     {
         this->data.resize(n_mom);
         this->mat.resize(n_rho+n_mom+2, n_rho+n_mom+2);
     }
 
     void update_state(
-      const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& rho,
-      const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& mom
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
     ) {
       // Update the RStateOperator
       R.update_state(rho, mom);
@@ -141,8 +141,8 @@ namespace PHModel{
       {}
 
       void update_state(
-        const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& rho,
-        const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& mom
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
       ){
         vec.segment(0, n_rho) = rho * PHModel::GAS_CONSTANT * temperature;
         vec.segment(n_rho, n_mom) = mom;

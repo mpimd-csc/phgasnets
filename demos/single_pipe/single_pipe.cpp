@@ -11,6 +11,7 @@
 #include <Eigen/Sparse>
 #include <ceres/ceres.h>
 #include "operators.hpp"
+#include "state_operators.hpp"
 #include "steady.hpp"
 #include "transient.hpp"
 #include <highfive/H5Easy.hpp>
@@ -72,8 +73,8 @@ int main(int argc, char** argv) {
   PHModel::set_gas_constant(R);
   auto Et     = PHModel::Et_operator(n_rho, n_mom);
   auto Jt     = PHModel::Jt_operator(n_rho, n_mom, mesh_width);
-  auto Rt     = PHModel::Rt_operator(n_rho, n_mom, pipe_friction, pipe_diameter);
-  auto effort = PHModel::Effort(n_rho, n_mom, temperature);
+  auto Rt     = PHModel::RtStateOperator<double>(n_rho, n_mom, pipe_friction, pipe_diameter);
+  auto effort = PHModel::EffortStateVec<double>(n_rho, n_mom, temperature);
   auto G      = PHModel::G_operator(n_rho, n_mom);
   auto u_b    = PHModel::input_vec(inlet_pressure, momentum_at_outlet(0.0));
 
