@@ -27,13 +27,4 @@ namespace PHModel {
       int n_state, n_res;
   };
 
-  // templated setters for autodiff
-  template <typename T>
-  void set_network_state(
-    const Network& network,
-    const Eigen::Ref<const Eigen::Vector<const T, Eigen::Dynamic>>& state
-  ){
-    // distribute states to pipes
-    // update system matrices
-  }
 }

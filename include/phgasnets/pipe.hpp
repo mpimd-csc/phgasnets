@@ -69,12 +69,4 @@ namespace PHModel{
       Eigen::Vector2d input_vec;
   };
 
-  // templated setters for autodiff
-  template<typename T>
-  void set_pipe_state(
-    const Pipe& pipe,
-    const Eigen::Ref<const Eigen::Vector<const T, Eigen::dynamic>& new_state
-  ){
-    // update state dependent operators
-  }
 }

@@ -15,14 +15,14 @@
 
 namespace PHModel {
 
-    struct BasePHOperator{
+    struct BaseOperator{
         /**
-         * Constructor for BasePHOperator.
+         * Constructor for BaseOperator.
          *
          * @param n_rho The number of rho.
          * @param n_mom The number of momentum.
          */
-        BasePHOperator(
+        BaseOperator(
             const int n_rho,
             const int n_mom
         ): n_rho(n_rho), n_mom(n_mom) {}
@@ -38,7 +38,7 @@ namespace PHModel {
             mat.coeffRef(i, j) = value;
         }
 
-        virtual ~BasePHOperator() = default;
+        virtual ~BaseOperator() = default;
 
         protected:
             const int n_rho;
@@ -48,14 +48,14 @@ namespace PHModel {
             Eigen::SparseMatrix<double> mat;
     };
 
-    struct E_operator: BasePHOperator{
+    struct E_operator: BaseOperator{
         E_operator(
             const int n_rho,
             const int n_mom
         );
     };
 
-    struct Et_operator: BasePHOperator{
+    struct Et_operator: BaseOperator{
         Et_operator(
             const int n_rho,
             const int n_mom
@@ -64,14 +64,14 @@ namespace PHModel {
             const E_operator E;
     };
 
-    struct U_operator: BasePHOperator{
+    struct U_operator: BaseOperator{
         U_operator(
             const int n_rho,
             const int n_mom
         );
     };
 
-    struct J_operator: BasePHOperator{
+    struct J_operator: BaseOperator{
         J_operator(
             const int n_rho,
             const int n_mom,
@@ -81,7 +81,7 @@ namespace PHModel {
             const double mesh_width;
     };
 
-    struct Jt_operator: BasePHOperator{
+    struct Jt_operator: BaseOperator{
         Jt_operator(
             const int n_rho,
             const int n_mom,
@@ -92,7 +92,7 @@ namespace PHModel {
             const U_operator U;
     };
 
-    struct R_operator: BasePHOperator{
+    struct R_operator: BaseOperator{
         R_operator(
             const int n_rho,
             const int n_mom,
@@ -108,7 +108,7 @@ namespace PHModel {
             const double D;
     };
 
-    struct Rt_operator: BasePHOperator{
+    struct Rt_operator: BaseOperator{
         Rt_operator(
             const int n_rho,
             const int n_mom,
@@ -124,7 +124,7 @@ namespace PHModel {
             R_operator R;
     };
 
-    struct Y_operator: BasePHOperator{
+    struct Y_operator: BaseOperator{
         Y_operator(
             const int n_rho,
             const int n_mom
@@ -153,7 +153,7 @@ namespace PHModel {
             Eigen::VectorXd vec_t;
     };
 
-    struct G_operator: BasePHOperator{
+    struct G_operator: BaseOperator{
         G_operator(
             const int n_rho,
             const int n_mom

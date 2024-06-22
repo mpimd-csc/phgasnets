@@ -26,16 +26,16 @@ Eigen::VectorXd PHModel::verticallyBlockVectors(
 }
 
 /**
- * Creates a diagonal block sparse matrix from a vector of BasePHOperator references.
+ * Creates a diagonal block sparse matrix from a vector of BaseOperator references.
  *
- * @param operators a vector of references to BasePHOperator objects
+ * @param operators a vector of references to BaseOperator objects
  *
- * @return a sparse matrix with diagonal blocks formed from the BasePHOperator objects
+ * @return a sparse matrix with diagonal blocks formed from the BaseOperator objects
  *
  * @throws None
  */
 Eigen::SparseMatrix<double> PHModel::diagonalBlock(
-    const std::vector<std::reference_wrapper<BasePHOperator>>& operators
+    const std::vector<std::reference_wrapper<BaseOperator>>& operators
 ){
     int nnz = 0, n_rows = 0, n_cols = 0;
     for (const auto& operator_ : operators) {

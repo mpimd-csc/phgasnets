@@ -14,7 +14,7 @@ Network::Network(
   pipes(pipes), compressors(compressors), n_state(0), n_res(0)
 {
   // diagonally block static operators
-  std::vector<std::reference_wrapper<BasePHOperator>> operators_e, operators_j, operators_r, operators_g;
+  std::vector<std::reference_wrapper<BaseOperator>> operators_e, operators_j, operators_r, operators_g;
   for (auto& pipe: pipes) {
     operators_e.push_back(std::ref(pipe.Et));
     operators_j.push_back(std::ref(pipe.Jt));
@@ -46,7 +46,7 @@ void Network::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state) {
   }
 
   // update pipe-specific R and effort
-  std::vector<std::reference_wrapper<BasePHOperator>> operators_r, operators_g;
+  std::vector<std::reference_wrapper<BaseOperator>> operators_r, operators_g;
   int pipe_res_startIdx = 0;
   for(auto& pipe : pipes){
     operators_r.push_back(std::ref(pipe.Rt));

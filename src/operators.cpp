@@ -12,7 +12,7 @@ E_operator::E_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BasePHOperator(n_rho, n_mom)
+    BaseOperator(n_rho, n_mom)
 {
     data.resize(n_rho+n_mom);
     for (int i = 0; i < n_rho+n_mom; ++i)
@@ -26,7 +26,7 @@ Et_operator::Et_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BasePHOperator(n_rho, n_mom),
+    BaseOperator(n_rho, n_mom),
     E(E_operator(n_rho, n_mom))
 {
     data = E.data;
@@ -39,7 +39,7 @@ U_operator::U_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BasePHOperator(n_rho, n_mom)
+    BaseOperator(n_rho, n_mom)
 {
     data.resize(2);
     data[0] = Eigen::Triplet<double>(0, 0, 1.0);
@@ -55,7 +55,7 @@ J_operator::J_operator(
     const int n_mom,
     const double mesh_width
 ) :
-   BasePHOperator(n_rho, n_mom), mesh_width(mesh_width)
+   BaseOperator(n_rho, n_mom), mesh_width(mesh_width)
 {
     // Make two Dx triplets
     std::vector<Eigen::Triplet<double>> dx_1 = derivative_operator(n_rho, mesh_width);
@@ -85,7 +85,7 @@ Jt_operator::Jt_operator(
     const int n_mom,
     const double mesh_width
 ) :
-    BasePHOperator(n_rho, n_mom),
+    BaseOperator(n_rho, n_mom),
     J(J_operator(n_rho, n_mom, mesh_width)),
     U(U_operator(n_rho, n_mom))
 {
@@ -109,7 +109,7 @@ R_operator::R_operator(
     const double friction,
     const double diameter
 ) :
-    BasePHOperator(n_rho, n_mom),
+    BaseOperator(n_rho, n_mom),
     f(friction), D(diameter)
 {
     data.resize(n_mom);
@@ -125,7 +125,7 @@ void R_operator::update_state(
     for (int i = 0; i < n_mom; ++i)
         data[i] = Eigen::Triplet<double>(n_rho+i, n_rho+i, friction_term(i));
 
-    mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
+    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
 }
 
 // Rt Operator constructor
@@ -135,7 +135,7 @@ Rt_operator::Rt_operator(
     const double friction,
     const double diameter
 ) :
-    BasePHOperator(n_rho, n_mom),
+    BaseOperator(n_rho, n_mom),
     R(R_operator(n_rho, n_mom, friction, diameter))
 {
     data.resize(n_mom);
@@ -159,7 +159,7 @@ void Rt_operator::update_state(
     R.update_state(rho, mom);
     // Update Rt operator
     data = R.data;
-    mat.setFromTriplets(data.begin(), data.end(), [] (const int&,const int& b) { return b; });
+    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
 }
 
 // Y_operator constructor
@@ -167,7 +167,7 @@ Y_operator::Y_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BasePHOperator(n_rho, n_mom)
+    BaseOperator(n_rho, n_mom)
 {
     data.resize(2);
     data[0] = Eigen::Triplet<double>(0, n_rho, 1.0);
@@ -202,7 +202,7 @@ G_operator::G_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BasePHOperator(n_rho, n_mom)
+    BaseOperator(n_rho, n_mom)
 {
     data.resize(2);
     data[0] = Eigen::Triplet<double>(n_rho+n_mom, 0, 1.0);
