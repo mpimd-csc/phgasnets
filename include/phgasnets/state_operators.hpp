@@ -4,7 +4,7 @@
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
 # include "operators.hpp"
-
+# include <ceres/jet.h>
 
 namespace PHModel{
 
@@ -70,13 +70,13 @@ namespace PHModel{
         const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
         const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
     ) {
-        Eigen::Vector<T, Eigen::Dynamic> friction_term =
-          (f * (mom.array()/rho.array()).abs()) / (2 * D);
 
-        for (int i = 0; i < this->n_mom; ++i)
-            this->data[i] = Eigen::Triplet<T>(
-              this->n_rho+i, this->n_rho+i, friction_term(i)
-            );
+        for (int i = 0; i < this->n_mom; ++i) {
+          auto friction_term = ceres::abs(f * mom(i)/rho(i) / (2 * D));
+          this->data[i] = Eigen::Triplet<T>(
+            this->n_rho+i, this->n_rho+i, friction_term
+          );
+        }
 
         this->mat.setFromTriplets(
           this->data.begin(), this->data.end(), [] (const T&, const T& b) { return b; }

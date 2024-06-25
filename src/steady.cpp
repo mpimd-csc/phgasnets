@@ -6,40 +6,6 @@
 
 # include "steady.hpp"
 
-PHModel::SteadySystem::SteadySystem(
-    const int n_rho, const int n_mom,
-    const Jt_operator& Jt,
-    RtStateOperator<double>& Rt,
-    EffortStateVec<double>& effort,
-    const G_operator& G,
-    const Eigen::Vector2d& input_vec
-) :
-    n_rho(n_rho), n_mom(n_mom),
-    Jt(Jt), Rt(Rt), effort(effort), G(G), input_vec(input_vec)
-{}
-
-
-bool PHModel::SteadySystem::operator()(
-    double const* const* guess_state,
-    double* residual
-) const {
-    // Distribute parameters into density and momentum vectors
-    Eigen::Map<const Eigen::VectorXd> z(guess_state[0],n_rho+n_mom);
-    Eigen::Map<Eigen::VectorXd> r(residual, n_rho+n_mom+2);
-
-    Eigen::VectorXd rho = z(Eigen::seqN(0, n_rho));
-    Eigen::VectorXd mom = z(Eigen::seqN(n_rho, n_mom));
-
-    // build necessary objects for non-linear eq
-    effort.update_state(rho, mom);
-    Rt.update_state(rho, mom);
-
-    // solve non-linear eq and populate residual with result
-    r = (Jt.mat - Rt.mat) * effort.vec_t + G.mat * input_vec;
-
-    return true;
-}
-
 PHModel::SteadyCompressorSystem::SteadyCompressorSystem(
     Network& network,
     const Eigen::Vector4d& input_vec
