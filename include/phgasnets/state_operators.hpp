@@ -152,4 +152,21 @@ namespace PHModel{
       }
   };
 
+  template<typename T>
+  struct GStateOperator: BaseStateOperator<T> {
+    GStateOperator(
+      const int n_rho,
+      const int n_mom
+    ) :
+      BaseStateOperator<T>(n_rho, n_mom)
+    {
+      this->data.resize(2);
+      this->data[0] = Eigen::Triplet<T>(n_rho+n_mom, 0, T(1.0));
+      this->data[1] = Eigen::Triplet<T>(n_rho+n_mom+1, 1, T(1.0));
+
+      this->mat.resize(n_rho+n_mom+2, 2);
+      this->mat.setFromTriplets(this->data.begin(), this->data.end());
+    }
+  };
+
 } // namespace PHModel
