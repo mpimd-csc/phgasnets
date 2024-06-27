@@ -28,6 +28,14 @@ typedef ceres::Solver Solver;
 typedef ceres::Problem Problem;
 typedef ceres::CostFunction CostFunction;
 
+// Switch between numeric and auto differentiation
+#if PHGASNETS_NUMERICDIFF
+template<typename T>
+  using DynamicDiffCostFunction = ceres::DynamicNumericDiffCostFunction<T>;
+#else
+template<typename T>
+  using DynamicDiffCostFunction = ceres::DynamicAutoDiffCostFunction<T>;
+#endif
 
 double momentum_at_outlet(double time) {
   if (time < 6*3600) {
@@ -88,7 +96,7 @@ int main(int argc, char** argv) {
 
   // SteadyState
   Problem problem_steady;
-  auto cost_function_steady = new ceres::DynamicAutoDiffCostFunction<PHModel::SteadySystem>(
+  auto cost_function_steady = new DynamicDiffCostFunction<PHModel::SteadySystem>(
       new PHModel::SteadySystem(
         n_rho, n_mom, Jt, G, pipe_friction, pipe_diameter, temperature, u_b
       )
@@ -146,7 +154,7 @@ int main(int argc, char** argv) {
 
     Problem problem_transient;
     auto cost_function_transient =
-        new ceres::DynamicAutoDiffCostFunction<PHModel::TransientSystem>(
+        new DynamicDiffCostFunction<PHModel::TransientSystem>(
             new PHModel::TransientSystem(
               n_rho, n_mom, current_state, Et, Jt, G, pipe_friction, pipe_diameter, temperature, u_b, time, dt
             )
