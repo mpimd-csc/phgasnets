@@ -30,11 +30,13 @@ typedef ceres::CostFunction CostFunction;
 
 // Switch between numeric and auto differentiation
 #if PHGASNETS_NUMERICDIFF
+#pragma message("Using NumericDiff")
 template<typename T>
   using DynamicDiffCostFunction = ceres::DynamicNumericDiffCostFunction<T>;
 #else
-template<typename T>
-  using DynamicDiffCostFunction = ceres::DynamicAutoDiffCostFunction<T>;
+#pragma message("Using AutoDiff")
+  template<typename T>
+    using DynamicDiffCostFunction = ceres::DynamicAutoDiffCostFunction<T>;
 #endif
 
 double momentum_at_outlet(double time) {
