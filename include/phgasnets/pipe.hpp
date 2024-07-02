@@ -68,4 +68,5 @@ namespace PHModel{
       G_operator G;
       Eigen::Vector2d input_vec;
   };
+
 }

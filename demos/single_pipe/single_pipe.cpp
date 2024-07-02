@@ -11,6 +11,7 @@
 #include <Eigen/Sparse>
 #include <ceres/ceres.h>
 #include "operators.hpp"
+#include "state_operators.hpp"
 #include "steady.hpp"
 #include "transient.hpp"
 #include <highfive/H5Easy.hpp>
@@ -27,6 +28,16 @@ typedef ceres::Solver Solver;
 typedef ceres::Problem Problem;
 typedef ceres::CostFunction CostFunction;
 
+// Switch between numeric and auto differentiation
+#if PHGASNETS_NUMERICDIFF
+#pragma message("Using NumericDiff")
+template<typename T>
+  using DynamicDiffCostFunction = ceres::DynamicNumericDiffCostFunction<T>;
+#else
+#pragma message("Using AutoDiff")
+  template<typename T>
+    using DynamicDiffCostFunction = ceres::DynamicAutoDiffCostFunction<T>;
+#endif
 
 double momentum_at_outlet(double time) {
   if (time < 6*3600) {
@@ -72,8 +83,6 @@ int main(int argc, char** argv) {
   PHModel::set_gas_constant(R);
   auto Et     = PHModel::Et_operator(n_rho, n_mom);
   auto Jt     = PHModel::Jt_operator(n_rho, n_mom, mesh_width);
-  auto Rt     = PHModel::Rt_operator(n_rho, n_mom, pipe_friction, pipe_diameter);
-  auto effort = PHModel::Effort(n_rho, n_mom, temperature);
   auto G      = PHModel::G_operator(n_rho, n_mom);
   auto u_b    = PHModel::input_vec(inlet_pressure, momentum_at_outlet(0.0));
 
@@ -89,9 +98,9 @@ int main(int argc, char** argv) {
 
   // SteadyState
   Problem problem_steady;
-  auto cost_function_steady = new ceres::DynamicNumericDiffCostFunction<PHModel::SteadySystem>(
+  auto cost_function_steady = new DynamicDiffCostFunction<PHModel::SteadySystem>(
       new PHModel::SteadySystem(
-        n_rho, n_mom, Jt, Rt, effort, G, u_b
+        n_rho, n_mom, Jt, G, pipe_friction, pipe_diameter, temperature, u_b
       )
   );
 
@@ -147,9 +156,9 @@ int main(int argc, char** argv) {
 
     Problem problem_transient;
     auto cost_function_transient =
-        new ceres::DynamicNumericDiffCostFunction<PHModel::TransientSystem>(
+        new DynamicDiffCostFunction<PHModel::TransientSystem>(
             new PHModel::TransientSystem(
-              n_rho, n_mom, current_state, Et, Jt, Rt, effort, G, u_b, time, dt
+              n_rho, n_mom, current_state, Et, Jt, G, pipe_friction, pipe_diameter, temperature, u_b, time, dt
             )
     );
 

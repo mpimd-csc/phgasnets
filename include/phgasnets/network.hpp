@@ -26,4 +26,5 @@ namespace PHModel {
       Eigen::VectorXd effort;
       int n_state, n_res;
   };
+
 }
