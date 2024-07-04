@@ -6,7 +6,7 @@
 # include "operators.hpp"
 # include <ceres/jet.h>
 
-namespace PHModel{
+namespace phgasnets{
 
   template<typename T>
   struct BaseStateOperator{
@@ -144,7 +144,7 @@ namespace PHModel{
         const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
         const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
       ){
-        vec.segment(0, n_rho) = rho * PHModel::GAS_CONSTANT * temperature;
+        vec.segment(0, n_rho) = rho * phgasnets::GAS_CONSTANT * temperature;
         vec.segment(n_rho, n_mom) = mom;
 
         vec_t.segment(0, n_rho+n_mom) = vec;
@@ -169,4 +169,4 @@ namespace PHModel{
     }
   };
 
-} // namespace PHModel
+} // namespace phgasnets

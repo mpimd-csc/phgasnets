@@ -6,7 +6,7 @@
 
 # include "transient.hpp"
 
-PHModel::TransientCompressorSystem::TransientCompressorSystem(
+phgasnets::TransientCompressorSystem::TransientCompressorSystem(
     Network& network,
     const Eigen::Ref<const Eigen::VectorXd>& current_state,
     const Eigen::Ref<const Eigen::Vector4d>& input_vec,
@@ -17,7 +17,7 @@ PHModel::TransientCompressorSystem::TransientCompressorSystem(
     input_vec(input_vec), time(time), timestep(timestep)
 {}
 
-bool PHModel::TransientCompressorSystem::operator()(
+bool phgasnets::TransientCompressorSystem::operator()(
     double const* const* guess_state,
     double* residual
 ) const {

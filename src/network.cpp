@@ -6,7 +6,7 @@
 
 # include "network.hpp"
 
-namespace PHModel {
+namespace phgasnets {
 Network::Network(
   std::vector<DiscretePipe>& pipes,
   std::vector<Compressor>& compressors
@@ -79,4 +79,4 @@ Eigen::VectorXd Network::get_gas_state() const {
   return verticallyBlockVectors(states);
 }
 
-} // namespace PHModel
+} // namespace phgasnets

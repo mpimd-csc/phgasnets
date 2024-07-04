@@ -80,11 +80,11 @@ int main(int argc, char** argv) {
   const int n_mom = Nx+1;
 
   // Create Port Hamiltonian Operators
-  PHModel::set_gas_constant(R);
-  auto Et     = PHModel::Et_operator(n_rho, n_mom);
-  auto Jt     = PHModel::Jt_operator(n_rho, n_mom, mesh_width);
-  auto G      = PHModel::G_operator(n_rho, n_mom);
-  auto u_b    = PHModel::input_vec(inlet_pressure, momentum_at_outlet(0.0));
+  phgasnets::set_gas_constant(R);
+  auto Et     = phgasnets::Et_operator(n_rho, n_mom);
+  auto Jt     = phgasnets::Jt_operator(n_rho, n_mom, mesh_width);
+  auto G      = phgasnets::G_operator(n_rho, n_mom);
+  auto u_b    = phgasnets::input_vec(inlet_pressure, momentum_at_outlet(0.0));
 
   // ------------------------------------------------------------------------
   // Steady State Solve
@@ -98,8 +98,8 @@ int main(int argc, char** argv) {
 
   // SteadyState
   Problem problem_steady;
-  auto cost_function_steady = new DynamicDiffCostFunction<PHModel::SteadySystem>(
-      new PHModel::SteadySystem(
+  auto cost_function_steady = new DynamicDiffCostFunction<phgasnets::SteadySystem>(
+      new phgasnets::SteadySystem(
         n_rho, n_mom, Jt, G, pipe_friction, pipe_diameter, temperature, u_b
       )
   );
@@ -150,14 +150,14 @@ int main(int argc, char** argv) {
     guess(0) = inlet_pressure/RT;
     guess(n_rho+n_mom-1) = momentum_at_outlet(time);
     u_b = (
-      PHModel::input_vec(inlet_pressure, momentum_at_outlet(time))
-      + PHModel::input_vec(inlet_pressure, momentum_at_outlet(time-dt))
+      phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time))
+      + phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time-dt))
     ) * 0.5;
 
     Problem problem_transient;
     auto cost_function_transient =
-        new DynamicDiffCostFunction<PHModel::TransientSystem>(
-            new PHModel::TransientSystem(
+        new DynamicDiffCostFunction<phgasnets::TransientSystem>(
+            new phgasnets::TransientSystem(
               n_rho, n_mom, current_state, Et, Jt, G, pipe_friction, pipe_diameter, temperature, u_b, time, dt
             )
     );

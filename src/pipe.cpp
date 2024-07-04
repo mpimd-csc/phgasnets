@@ -7,7 +7,7 @@
 # include "pipe.hpp"
 # include "operators.hpp"
 
-namespace PHModel{
+namespace phgasnets{
 
   DiscretePipe::DiscretePipe(
     const float length,
@@ -44,11 +44,11 @@ namespace PHModel{
   }
 
   void DiscretePipe::set_pressure(const Eigen::Ref<const Eigen::VectorXd>& new_pressure){
-    rho = new_pressure/(PHModel::GAS_CONSTANT*temperature);
+    rho = new_pressure/(phgasnets::GAS_CONSTANT*temperature);
   }
 
   void DiscretePipe::set_pressure(double new_pressure){
-    rho.setConstant(new_pressure/(PHModel::GAS_CONSTANT*temperature));
+    rho.setConstant(new_pressure/(phgasnets::GAS_CONSTANT*temperature));
   }
 
   void DiscretePipe::set_momentum(const Eigen::Ref<const Eigen::VectorXd>& new_momentum){
@@ -80,6 +80,6 @@ namespace PHModel{
   }
 
   Eigen::VectorXd DiscretePipe::get_pressure() const {
-    return rho * PHModel::GAS_CONSTANT*temperature;
+    return rho * phgasnets::GAS_CONSTANT*temperature;
   }
 }

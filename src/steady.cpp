@@ -6,7 +6,7 @@
 
 # include "steady.hpp"
 
-PHModel::SteadyCompressorSystem::SteadyCompressorSystem(
+phgasnets::SteadyCompressorSystem::SteadyCompressorSystem(
     Network& network,
     const Eigen::Vector4d& input_vec
 ) :
@@ -14,7 +14,7 @@ PHModel::SteadyCompressorSystem::SteadyCompressorSystem(
 {}
 
 
-bool PHModel::SteadyCompressorSystem::operator()(
+bool phgasnets::SteadyCompressorSystem::operator()(
     double const* const* guess_state,
     double* residual
 ) const {

@@ -7,7 +7,7 @@
 # include "network.hpp"
 # include <highfive/H5Easy.hpp>
 
-namespace PHModel{
+namespace phgasnets{
 
   struct NetworkStateWriter{
       NetworkStateWriter(const std::string& filename, const Network& network);

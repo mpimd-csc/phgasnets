@@ -13,7 +13,7 @@
 # include "derivative.hpp"
 # include "gasconstant.hpp"
 
-namespace PHModel {
+namespace phgasnets {
 
     struct BaseOperator{
         /**

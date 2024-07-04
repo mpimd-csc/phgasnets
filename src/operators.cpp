@@ -6,7 +6,7 @@
 
 #include "operators.hpp"
 
-using namespace PHModel;
+using namespace phgasnets;
 
 E_operator::E_operator(
     const int n_rho,
@@ -191,7 +191,7 @@ void Effort::update_state(
     const Eigen::Ref<const Eigen::VectorXd>& rho,
     const Eigen::Ref<const Eigen::VectorXd>& mom
 ) {
-    vec.segment(0, n_rho) = rho * PHModel::GAS_CONSTANT * temperature;
+    vec.segment(0, n_rho) = rho * phgasnets::GAS_CONSTANT * temperature;
     vec.segment(n_rho, n_mom) = mom;
 
     vec_t.segment(0, n_rho+n_mom) = vec;
@@ -212,7 +212,7 @@ G_operator::G_operator(
     mat.setFromTriplets(data.begin(), data.end());
 }
 
-Eigen::Vector2d PHModel::input_vec(
+Eigen::Vector2d phgasnets::input_vec(
     const double inlet_pressure,
     const double outlet_momentum
 ) {

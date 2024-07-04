@@ -6,7 +6,7 @@
 
 # include "io.hpp"
 
-namespace PHModel{
+namespace phgasnets{
 
 NetworkStateWriter::NetworkStateWriter(
   const std::string& filename,
@@ -33,7 +33,7 @@ void NetworkStateWriter::writeState(const int& timetag, const int& time) {
 
     auto h5path = "pipe" + std::to_string(counter++) + "/" + std::to_string(timetag);
     H5Easy::dump(file, h5path + "/density", rho);
-    H5Easy::dump(file, h5path + "/pressure", rho*PHModel::GAS_CONSTANT*pipe.temperature);
+    H5Easy::dump(file, h5path + "/pressure", rho*phgasnets::GAS_CONSTANT*pipe.temperature);
     H5Easy::dump(file, h5path + "/momentum", mom);
     H5Easy::dump(file, h5path + "/timestamp", time);
   }

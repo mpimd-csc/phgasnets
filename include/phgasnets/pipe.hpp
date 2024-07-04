@@ -13,7 +13,7 @@
 # include <memory>
 # include <unordered_map>
 
-namespace PHModel{
+namespace phgasnets{
 
   struct DiscretePipe{
 

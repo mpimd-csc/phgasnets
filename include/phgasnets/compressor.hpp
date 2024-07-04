@@ -12,7 +12,7 @@
 #include <functional>
 #include <variant>
 
-namespace PHModel {
+namespace phgasnets {
   struct Compressor {
     /**
      * Constructs a Compressor object with the specified compression ratio and isentropic exponent.

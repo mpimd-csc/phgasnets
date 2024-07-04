@@ -10,7 +10,7 @@
 # include "network.hpp"
 # include "utils.hpp"
 
-namespace PHModel {
+namespace phgasnets {
     struct TransientSystem{
         TransientSystem(
             const int n_rho, const int n_mom,

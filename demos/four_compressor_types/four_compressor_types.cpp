@@ -78,21 +78,21 @@ int main(int argc, char** argv){
   const int    Nx                = config["discretization"]["space"]["resolution"].get<int>();
 
   // Set model-wide constants
-  PHModel::set_gas_constant(R);
+  phgasnets::set_gas_constant(R);
 
   // // Make Pipes and Compressor objects
-  std::vector<PHModel::Compressor> compressors = {
-        PHModel::Compressor(compr_type, compr_model, compr_spec, kappa)
+  std::vector<phgasnets::Compressor> compressors = {
+        phgasnets::Compressor(compr_type, compr_model, compr_spec, kappa)
   };
 
   const double outlet_temperature = inlet_temperature * compressors[0].temperature_scale;
 
-  std::vector<PHModel::DiscretePipe> pipes = {
-    PHModel::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, inlet_temperature, Nx),
-    PHModel::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
+  std::vector<phgasnets::DiscretePipe> pipes = {
+    phgasnets::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, inlet_temperature, Nx),
+    phgasnets::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
   };
 
-  PHModel::Network network(pipes, compressors);
+  phgasnets::Network network(pipes, compressors);
 
   // ------------------------------------------------------------------------
   auto t1 = high_resolution_clock::now();
@@ -117,7 +117,7 @@ int main(int argc, char** argv){
   pipeR_init_density.setConstant(p0*network.compressors[0].compression_ratio/(R*outlet_temperature));
   pipeR_init_momentum.setConstant(mom0);
 
-  Vector init_state = PHModel::verticallyBlockVectors({
+  Vector init_state = phgasnets::verticallyBlockVectors({
     pipeL_init_density, pipeL_init_momentum,
     pipeR_init_density, pipeR_init_momentum
   });
@@ -139,8 +139,8 @@ int main(int argc, char** argv){
 
   // configure solver
   Problem problem_steady;
-  auto cost_function_steady = new ceres::DynamicNumericDiffCostFunction<PHModel::SteadyCompressorSystem>(
-      new PHModel::SteadyCompressorSystem(network, u_b)
+  auto cost_function_steady = new ceres::DynamicNumericDiffCostFunction<phgasnets::SteadyCompressorSystem>(
+      new phgasnets::SteadyCompressorSystem(network, u_b)
   );
 
   cost_function_steady->AddParameterBlock(network.n_state);
@@ -175,7 +175,7 @@ int main(int argc, char** argv){
   int io_frequency     = config["io"]["frequency"].get<int>();
   std::string filename = config["io"]["filename"].get<std::string>();
 
-  PHModel::NetworkStateWriter network_writer(filename+".h5", network);
+  phgasnets::NetworkStateWriter network_writer(filename+".h5", network);
   network_writer.writeMesh();
   network_writer.writeState(0, 0);
 
@@ -196,8 +196,8 @@ int main(int argc, char** argv){
 
     Problem problem_transient;
     auto cost_function_transient =
-      new ceres::DynamicNumericDiffCostFunction<PHModel::TransientCompressorSystem>(
-        new PHModel::TransientCompressorSystem(network, current_state, u_b, time, dt)
+      new ceres::DynamicNumericDiffCostFunction<phgasnets::TransientCompressorSystem>(
+        new phgasnets::TransientCompressorSystem(network, current_state, u_b, time, dt)
     );
 
     cost_function_transient->AddParameterBlock(network.n_state);

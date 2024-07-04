@@ -12,7 +12,7 @@
 # include "network.hpp"
 # include "utils.hpp"
 
-namespace PHModel {
+namespace phgasnets {
     struct SteadySystem{
         SteadySystem(
             const int n_rho, const int n_mom,

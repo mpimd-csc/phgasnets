@@ -10,7 +10,7 @@
 # include "utils.hpp"
 # include <vector>
 
-namespace PHModel {
+namespace phgasnets {
   struct Network {
 
     Network(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);

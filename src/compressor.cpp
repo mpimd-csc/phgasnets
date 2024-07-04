@@ -7,7 +7,7 @@
 # include "compressor.hpp"
 # include <cmath>
 
-namespace PHModel {
+namespace phgasnets {
 
 Compressor::Compressor(
   std::string type,
