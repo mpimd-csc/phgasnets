@@ -92,7 +92,7 @@ int main(int argc, char** argv){
     phgasnets::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
   };
 
-  phgasnets::Network network(pipes, compressors);
+  phgasnets::DiscreteNetwork network(pipes, compressors);
 
   // ------------------------------------------------------------------------
   auto t1 = high_resolution_clock::now();

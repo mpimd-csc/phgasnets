@@ -74,7 +74,7 @@ namespace phgasnets {
 
     struct TransientCompressorSystem{
         TransientCompressorSystem(
-            Network& network,
+            DiscreteNetwork& network,
             const Eigen::Ref<const Eigen::VectorXd>& current_state,
             const Eigen::Ref<const Eigen::Vector4d>& input_vec,
             const double time,
@@ -84,7 +84,7 @@ namespace phgasnets {
         bool operator()(double const* const* guess_state, double* residual) const;
 
         private:
-            Network& network;
+            DiscreteNetwork& network;
             const Eigen::VectorXd current_state;
             const Eigen::Vector4d input_vec;
             const double time;

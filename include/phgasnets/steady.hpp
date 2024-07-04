@@ -58,12 +58,12 @@ namespace phgasnets {
 
     struct SteadyCompressorSystem{
         SteadyCompressorSystem(
-            Network& network,
+            DiscreteNetwork& network,
             const Eigen::Vector4d& input_vec
         );
         bool operator()(double const* const* guess_state, double* residual) const;
         private:
-            Network& network;
+            DiscreteNetwork& network;
             const Eigen::Vector4d& input_vec;
     };
 }

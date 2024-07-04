@@ -10,12 +10,12 @@
 namespace phgasnets{
 
   struct NetworkStateWriter{
-      NetworkStateWriter(const std::string& filename, const Network& network);
+      NetworkStateWriter(const std::string& filename, const DiscreteNetwork& network);
       void writeMesh();
       void writeState(const int& timetag, const int& time);
       private:
         H5Easy::File file;
-        const Network& network;
+        const DiscreteNetwork& network;
   };
 
 }

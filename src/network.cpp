@@ -7,7 +7,7 @@
 # include "network.hpp"
 
 namespace phgasnets {
-Network::Network(
+DiscreteNetwork::DiscreteNetwork(
   std::vector<DiscretePipe>& pipes,
   std::vector<Compressor>& compressors
 ) :
@@ -30,7 +30,7 @@ Network::Network(
   effort.resize(n_res);
 }
 
-void Network::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state) {
+void DiscreteNetwork::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state) {
   // distribute state across network constituents
   int pipe_state_startIdx = 0;
   for (auto& pipe : pipes) {
@@ -70,7 +70,7 @@ void Network::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state) {
   }
 }
 
-Eigen::VectorXd Network::get_gas_state() const {
+Eigen::VectorXd DiscreteNetwork::get_gas_state() const {
   std::vector<Eigen::VectorXd> states;
   for (auto& pipe: pipes) {
     states.push_back(pipe.get_gas_state());

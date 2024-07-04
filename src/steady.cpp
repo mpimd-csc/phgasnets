@@ -7,7 +7,7 @@
 # include "steady.hpp"
 
 phgasnets::SteadyCompressorSystem::SteadyCompressorSystem(
-    Network& network,
+    DiscreteNetwork& network,
     const Eigen::Vector4d& input_vec
 ) :
   network(network), input_vec(input_vec)

@@ -11,9 +11,9 @@
 # include <vector>
 
 namespace phgasnets {
-  struct Network {
+  struct DiscreteNetwork {
 
-    Network(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);
+    DiscreteNetwork(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);
 
     void set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state);
 
