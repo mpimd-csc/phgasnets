@@ -87,9 +87,9 @@ int main(int argc, char** argv){
 
   const double outlet_temperature = inlet_temperature * compressors[0].temperature_scale;
 
-  std::vector<phgasnets::DiscretePipe> pipes = {
-    phgasnets::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, inlet_temperature, Nx),
-    phgasnets::DiscretePipe(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
+  std::vector<phgasnets::DiscretePipe<double>> pipes = {
+    phgasnets::DiscretePipe<double>(pipe_length, pipe_diameter, pipe_friction, inlet_temperature, Nx),
+    phgasnets::DiscretePipe<double>(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
   };
 
   phgasnets::DiscreteNetwork network(pipes, compressors);

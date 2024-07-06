@@ -13,14 +13,12 @@
 namespace phgasnets {
   struct DiscreteNetwork {
 
-    DiscreteNetwork(std::vector<DiscretePipe>& pipes, std::vector<Compressor>& compressors);
+    DiscreteNetwork(std::vector<DiscretePipe<double>>& pipes, std::vector<Compressor>& compressors);
 
     void set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& state);
 
-    Eigen::VectorXd get_gas_state() const;
-
     public:
-      std::vector<DiscretePipe>& pipes;
+      std::vector<DiscretePipe<double>>& pipes;
       std::vector<Compressor>& compressors;
       Eigen::SparseMatrix<double> E, J, R, G;
       Eigen::VectorXd effort;

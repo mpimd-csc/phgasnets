@@ -8,7 +8,7 @@
 
 namespace phgasnets {
 DiscreteNetwork::DiscreteNetwork(
-  std::vector<DiscretePipe>& pipes,
+  std::vector<DiscretePipe<double>>& pipes,
   std::vector<Compressor>& compressors
 ) :
   pipes(pipes), compressors(compressors), n_state(0), n_res(0)
@@ -35,10 +35,10 @@ void DiscreteNetwork::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& sta
   int pipe_state_startIdx = 0;
   for (auto& pipe : pipes) {
     auto pipe_state = state(Eigen::seqN(pipe_state_startIdx, pipe.n_state));
-    pipe.set_gas_state(pipe_state);
+    pipe.set_state(pipe_state);
     pipe_state_startIdx += pipe.n_state;
   }
-  auto precompressor_pressure = pipes[0].get_pressure()(Eigen::last);
+  auto precompressor_pressure = pipes[0].rho(Eigen::last) * phgasnets::GAS_CONSTANT * pipes[0].temperature;
 
   // set temperatures for post-compressor pipes
   if (compressors[0].type == "FP") {
@@ -68,15 +68,6 @@ void DiscreteNetwork::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& sta
       G.coeffRef(pipes[0].n_res-1, 1) *= std::pow(precompressor_pressure, 1.0/compressors[0].isentropic_exponent);
     }
   }
-}
-
-Eigen::VectorXd DiscreteNetwork::get_gas_state() const {
-  std::vector<Eigen::VectorXd> states;
-  for (auto& pipe: pipes) {
-    states.push_back(pipe.get_gas_state());
-  }
-
-  return verticallyBlockVectors(states);
 }
 
 } // namespace phgasnets

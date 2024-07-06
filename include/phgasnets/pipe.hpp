@@ -9,12 +9,14 @@
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
 # include "operators.hpp"
+# include "state_operators.hpp"
 # include <vector>
 # include <memory>
 # include <unordered_map>
 
 namespace phgasnets{
 
+  template <typename T>
   struct DiscretePipe{
 
     DiscretePipe(
@@ -22,32 +24,32 @@ namespace phgasnets{
       const float diameter,
       const float friction,
       const float temperature,
-      const int Nx
-    ); // Constructor
+      const int nx
+    ):
+    length(length), diameter(diameter), friction(friction),
+    n_x(nx), mesh_width(length/nx),  mesh(nx+1),
+    n_rho(nx+1), n_mom(nx+1), n_res(2*nx+4), n_state(2*nx+2),
+    rho(n_x+1), mom(nx+1),
+    temperature(temperature),
+    Et(Et_operator(n_x+1, n_x+1)),
+    Jt(Jt_operator(n_x+1, n_x+1, mesh_width)),
+    Rt(Rt_operator(n_x+1, n_x+1, friction, diameter)),
+    effort(Effort(n_rho, n_mom, temperature)),
+    G(G_operator(n_x+1, n_x+1))
+    {
+      mesh = Eigen::VectorXd::LinSpaced(n_x+1, 0.0, length);
+    }
 
     virtual ~DiscretePipe() = default; // Destructor
 
-    void set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& new_state);
+    void set_state(const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& new_state){
+      rho = new_state(Eigen::seqN(0, n_rho));
+      mom = new_state(Eigen::seqN(n_rho, n_mom));
 
-    void set_density(const Eigen::Ref<const Eigen::VectorXd>& new_density);
-
-    void set_pressure(const Eigen::Ref<const Eigen::VectorXd>& new_pressure);
-
-    void set_pressure(double new_pressure);
-
-    void set_momentum(const Eigen::Ref<const Eigen::VectorXd>& new_momentum);
-
-    void set_momentum(double new_momentum);
-
-    void set_temperature(float new_temperature);
-
-    Eigen::VectorXd get_gas_state() const;
-
-    Eigen::VectorXd get_density() const;
-
-    Eigen::VectorXd get_pressure() const;
-
-    Eigen::VectorXd get_momentum() const;
+      // Update state dependent operators
+      Rt.update_state(rho, mom);
+      effort.update_state(rho, mom);
+    }
 
     public:
       const int n_x;
