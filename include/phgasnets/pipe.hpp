@@ -33,9 +33,9 @@ namespace phgasnets{
     temperature(temperature),
     Et(Et_operator(n_x+1, n_x+1)),
     Jt(Jt_operator(n_x+1, n_x+1, mesh_width)),
-    Rt(Rt_operator(n_x+1, n_x+1, friction, diameter)),
-    effort(Effort(n_rho, n_mom, temperature)),
-    G(G_operator(n_x+1, n_x+1))
+    Rt(RtStateOperator<double>(n_x+1, n_x+1, friction, diameter)),
+    effort(EffortStateVec<double>(n_rho, n_mom, temperature)),
+    G(GStateOperator<double>(n_x+1, n_x+1))
     {
       mesh = Eigen::VectorXd::LinSpaced(n_x+1, 0.0, length);
     }
@@ -64,10 +64,10 @@ namespace phgasnets{
       float temperature;
       Eigen::VectorXd mesh, rho, mom;
       Et_operator Et;
-      Rt_operator Rt;
+      RtStateOperator<double> Rt;
       Jt_operator Jt;
-      Effort effort;
-      G_operator G;
+      EffortStateVec<double> effort;
+      GStateOperator<double> G;
       Eigen::Vector2d input_vec;
   };
 

@@ -14,7 +14,8 @@ DiscreteNetwork::DiscreteNetwork(
   pipes(pipes), compressors(compressors), n_state(0), n_res(0)
 {
   // diagonally block static operators
-  std::vector<std::reference_wrapper<BaseOperator>> operators_e, operators_j, operators_r, operators_g;
+  std::vector<std::reference_wrapper<BaseOperator>> operators_e, operators_j;
+  std::vector<std::reference_wrapper<BaseStateOperator<double>>> operators_r, operators_g;
   for (auto& pipe: pipes) {
     operators_e.push_back(std::ref(pipe.Et));
     operators_j.push_back(std::ref(pipe.Jt));
@@ -25,8 +26,8 @@ DiscreteNetwork::DiscreteNetwork(
   }
   E = diagonalBlock(operators_e);
   J = diagonalBlock(operators_j);
-  R = diagonalBlock(operators_r);
-  G = diagonalBlock(operators_g);
+  R = diagonalBlockT<double>(operators_r);
+  G = diagonalBlockT<double>(operators_g);
   effort.resize(n_res);
 }
 
@@ -46,7 +47,8 @@ void DiscreteNetwork::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& sta
   }
 
   // update pipe-specific R and effort
-  std::vector<std::reference_wrapper<BaseOperator>> operators_r, operators_g;
+  std::vector<std::reference_wrapper<BaseStateOperator<double>>> operators_r, operators_g;
+
   int pipe_res_startIdx = 0;
   for(auto& pipe : pipes){
     operators_r.push_back(std::ref(pipe.Rt));
@@ -56,7 +58,7 @@ void DiscreteNetwork::set_gas_state(const Eigen::Ref<const Eigen::VectorXd>& sta
   auto postcompressor_momentum = pipes[1].mom(0);
 
   // build network R operator
-  R = diagonalBlock(operators_r);
+  R = diagonalBlockT<double>(operators_r);
 
   // update network G operator
   G.coeffRef(pipes[0].n_res-1, 1) = -postcompressor_momentum;

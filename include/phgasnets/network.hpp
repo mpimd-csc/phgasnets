@@ -5,6 +5,8 @@
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
 # pragma once
+# include "operators.hpp"
+# include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "utils.hpp"
