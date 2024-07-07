@@ -10,7 +10,7 @@ namespace phgasnets{
 
 NetworkStateWriter::NetworkStateWriter(
   const std::string& filename,
-  const DiscreteNetwork& network
+  const DiscreteNetwork<double>& network
 ) :
   file(filename, H5Easy::File::Truncate),
   network(network)

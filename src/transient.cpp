@@ -7,7 +7,7 @@
 # include "transient.hpp"
 
 phgasnets::TransientCompressorSystem::TransientCompressorSystem(
-    DiscreteNetwork& network,
+    DiscreteNetwork<double>& network,
     const Eigen::Ref<const Eigen::VectorXd>& current_state,
     const Eigen::Ref<const Eigen::Vector4d>& input_vec,
     const double time,
@@ -28,7 +28,7 @@ bool phgasnets::TransientCompressorSystem::operator()(
     Eigen::VectorXd z = (new_state + current_state) * 0.5;
     Eigen::VectorXd dz_dt = (new_state - current_state) / timestep;
 
-    network.set_gas_state(z);
+    network.set_state(z);
 
     r = network.E * dz_dt - (network.J - network.R) * network.effort - network.G * input_vec;
 

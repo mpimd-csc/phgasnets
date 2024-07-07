@@ -1,5 +1,5 @@
 # target
-add_library(phgasnets derivative.cpp gasconstant.cpp operators.cpp compressor.cpp utils.cpp network.cpp io.cpp steady.cpp transient.cpp)
+add_library(phgasnets derivative.cpp gasconstant.cpp operators.cpp compressor.cpp utils.cpp io.cpp steady.cpp transient.cpp)
 
 target_include_directories(phgasnets PUBLIC
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/phgasnets>

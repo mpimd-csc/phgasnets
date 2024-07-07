@@ -92,7 +92,7 @@ int main(int argc, char** argv){
     phgasnets::DiscretePipe<double>(pipe_length, pipe_diameter, pipe_friction, outlet_temperature, Nx)
   };
 
-  phgasnets::DiscreteNetwork network(pipes, compressors);
+  phgasnets::DiscreteNetwork<double> network(pipes, compressors);
 
   // ------------------------------------------------------------------------
   auto t1 = high_resolution_clock::now();
@@ -159,7 +159,7 @@ int main(int argc, char** argv){
   auto t2       = high_resolution_clock::now();
   auto duration = duration_cast<seconds>( t2 - t1 );
   std::cout << "Steady solution computed in " << duration.count() << "s\n";
-  network.set_gas_state(init_state);
+  network.set_state(init_state);
   // ------------------------------------------------------------------------
   // Transient Solve
   const double t_start = config["discretization"]["time"]["start"].get<double>();
@@ -212,7 +212,7 @@ int main(int argc, char** argv){
     ceres::Solve(options, &problem_transient, &summary);
 
     current_state = guess; // Set the current state to the new solution
-    network.set_gas_state(current_state);
+    network.set_state(current_state);
 
     // IO
     if (t % io_frequency == 0)
