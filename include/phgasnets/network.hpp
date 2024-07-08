@@ -5,14 +5,31 @@
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
 # pragma once
+
+# include <nlohmann/json.hpp>
+# include <vector>
+
 # include "operators.hpp"
 # include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "utils.hpp"
-# include <vector>
+
+using json = nlohmann::json;
 
 namespace phgasnets {
+
+  struct Network{
+    Network(
+      std::vector<Pipe>& pipes,
+      std::vector<Compressor>& compressors
+    ): pipes(pipes), compressors(compressors)
+    {}
+
+    public:
+      std::vector<Pipe>& pipes;
+      std::vector<Compressor>& compressors;
+  };
 
   template<typename T>
   struct DiscreteNetwork {
@@ -83,12 +100,23 @@ namespace phgasnets {
     }
 
     public:
-      std::vector<DiscretePipe<double>>& pipes;
-      std::vector<Compressor>& compressors;
+      std::vector<DiscretePipe<T>> pipes;
+      std::vector<Compressor> compressors;
       Eigen::SparseMatrix<double> E, J;
       Eigen::SparseMatrix<T> R, G;
       Eigen::Vector<T, Eigen::Dynamic> effort;
       int n_state, n_res;
   };
 
-}
+  template<typename T>
+  DiscreteNetwork<T> discretize(Network& network, json& spatial_disc_params){
+
+    std::vector<DiscretePipe<T>> discrete_pipes;
+    int Nx = spatial_disc_params["resolution"];
+
+    for (auto& pipe: network.pipes)
+      discrete_pipes.push_back(DiscretePipe<T>(pipe, Nx));
+
+    return DiscreteNetwork<T>(discrete_pipes, network.compressors);
+  }
+} // namespace phgasnets

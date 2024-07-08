@@ -16,6 +16,25 @@
 
 namespace phgasnets{
 
+  struct Pipe{
+
+    Pipe(
+      const float length,
+      const float diameter,
+      const float friction,
+      const float temperature
+    ): length(length), diameter(diameter),
+    friction(friction), temperature(temperature)
+    {}
+
+  public:
+    const float length;
+    const float diameter;
+    const float friction;
+    float temperature;
+
+  };
+
   template <typename T>
   struct DiscretePipe{
 
@@ -33,12 +52,18 @@ namespace phgasnets{
     temperature(temperature),
     Et(Et_operator(n_x+1, n_x+1)),
     Jt(Jt_operator(n_x+1, n_x+1, mesh_width)),
-    Rt(RtStateOperator<double>(n_x+1, n_x+1, friction, diameter)),
-    effort(EffortStateVec<double>(n_rho, n_mom, temperature)),
-    G(GStateOperator<double>(n_x+1, n_x+1))
+    Rt(RtStateOperator<T>(n_x+1, n_x+1, friction, diameter)),
+    effort(EffortStateVec<T>(n_rho, n_mom, temperature)),
+    G(GStateOperator<T>(n_x+1, n_x+1))
     {
       mesh = Eigen::VectorXd::LinSpaced(n_x+1, 0.0, length);
     }
+
+    DiscretePipe(
+      const Pipe& pipe,
+      const int nx
+    ): DiscretePipe(pipe.length, pipe.diameter, pipe.friction, pipe.temperature, nx)
+    {}
 
     virtual ~DiscretePipe() = default; // Destructor
 
@@ -64,11 +89,10 @@ namespace phgasnets{
       float temperature;
       Eigen::VectorXd mesh, rho, mom;
       Et_operator Et;
-      RtStateOperator<double> Rt;
+      RtStateOperator<T> Rt;
       Jt_operator Jt;
-      EffortStateVec<double> effort;
-      GStateOperator<double> G;
-      Eigen::Vector2d input_vec;
+      EffortStateVec<T> effort;
+      GStateOperator<T> G;
   };
 
 }
