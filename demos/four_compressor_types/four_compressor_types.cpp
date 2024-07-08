@@ -34,6 +34,17 @@ typedef ceres::Solver Solver;
 typedef ceres::Problem Problem;
 typedef ceres::CostFunction CostFunction;
 
+// Switch between numeric and auto differentiation
+#if PHGASNETS_NUMERICDIFF
+#pragma message("Using NumericDiff")
+template<typename T>
+  using DynamicDiffCostFunction = ceres::DynamicNumericDiffCostFunction<T>;
+#else
+#pragma message("Using AutoDiff")
+  template<typename T>
+    using DynamicDiffCostFunction = ceres::DynamicAutoDiffCostFunction<T>;
+#endif
+
 double momentum_at_outlet(double time) {
   if (time < 6*3600) {
       return 463.33;
@@ -124,7 +135,7 @@ int main(int argc, char** argv){
     pipeR_init_density, pipeR_init_momentum
   });
 
-  // input at boundary
+  // boundary conditions
   Eigen::Vector4d u_b({
     inlet_pressure,
     0.0,
@@ -141,8 +152,8 @@ int main(int argc, char** argv){
 
   // configure solver
   Problem problem_steady;
-  auto cost_function_steady = new ceres::DynamicNumericDiffCostFunction<phgasnets::SteadyCompressorSystem>(
-      new phgasnets::SteadyCompressorSystem(network, u_b)
+  auto cost_function_steady = new DynamicDiffCostFunction<phgasnets::SteadyCompressorSystem>(
+      new phgasnets::SteadyCompressorSystem(net, config["discretization"]["space"], u_b)
   );
 
   cost_function_steady->AddParameterBlock(network.n_state);
@@ -161,7 +172,7 @@ int main(int argc, char** argv){
   auto t2       = high_resolution_clock::now();
   auto duration = duration_cast<seconds>( t2 - t1 );
   std::cout << "Steady solution computed in " << duration.count() << "s\n";
-  network.set_state(init_state);
+
   // ------------------------------------------------------------------------
   // Transient Solve
   const double t_start = config["discretization"]["time"]["start"].get<double>();
@@ -198,8 +209,8 @@ int main(int argc, char** argv){
 
     Problem problem_transient;
     auto cost_function_transient =
-      new ceres::DynamicNumericDiffCostFunction<phgasnets::TransientCompressorSystem>(
-        new phgasnets::TransientCompressorSystem(network, current_state, u_b, time, dt)
+      new DynamicDiffCostFunction<phgasnets::TransientCompressorSystem>(
+        new phgasnets::TransientCompressorSystem(net, config["discretization"], current_state, u_b, time)
     );
 
     cost_function_transient->AddParameterBlock(network.n_state);

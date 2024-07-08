@@ -15,8 +15,6 @@
 # include "compressor.hpp"
 # include "utils.hpp"
 
-using json = nlohmann::json;
-
 namespace phgasnets {
 
   struct Network{
@@ -109,7 +107,7 @@ namespace phgasnets {
   };
 
   template<typename T>
-  DiscreteNetwork<T> discretize(Network& network, json& spatial_disc_params){
+  DiscreteNetwork<T> discretize(const Network& network, const nlohmann::json& spatial_disc_params){
 
     std::vector<DiscretePipe<T>> discrete_pipes;
     int Nx = spatial_disc_params["resolution"];
