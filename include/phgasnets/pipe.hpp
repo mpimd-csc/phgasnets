@@ -87,7 +87,8 @@ namespace phgasnets{
       const float friction;
       const float mesh_width;
       float temperature;
-      Eigen::VectorXd mesh, rho, mom;
+      Eigen::VectorXd mesh;
+      Eigen::Vector<T, Eigen::Dynamic> rho, mom;
       Et_operator Et;
       RtStateOperator<T> Rt;
       Jt_operator Jt;

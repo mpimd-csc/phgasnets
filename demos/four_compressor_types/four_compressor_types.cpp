@@ -76,7 +76,6 @@ int main(int argc, char** argv){
   std::ifstream config_file(argv[1]);
   json config = json::parse(config_file);
 
-  const double R                 = config["GAS_CONSTANT"].get<double>();
   const double pipe_length       = config["pipe"]["length"].get<double>();
   const double pipe_diameter     = config["pipe"]["diameter"].get<double>();
   const double pipe_friction     = config["pipe"]["friction"].get<double>();
@@ -89,7 +88,7 @@ int main(int argc, char** argv){
   const int    Nx                = config["discretization"]["space"]["resolution"].get<int>();
 
   // Set model-wide constants
-  phgasnets::set_gas_constant(R);
+  phgasnets::set_gas_constant(config["GAS_CONSTANT"]);
 
   // // Make Pipes and Compressor objects
   std::vector<phgasnets::Compressor> compressors = {
@@ -116,7 +115,7 @@ int main(int argc, char** argv){
 
   // initial guess
   Vector pipeL_init_density(Nx+1), pipeL_init_momentum(Nx+1);
-  pipeL_init_density.setConstant(p0/(R*inlet_temperature));
+  pipeL_init_density.setConstant(p0/(phgasnets::GAS_CONSTANT*inlet_temperature));
   pipeL_init_momentum.setConstant(mom0/network.compressors[0].momentum_scale);
 
   if (network.compressors[0].type == "FP") {
@@ -127,7 +126,7 @@ int main(int argc, char** argv){
   }
 
   Vector pipeR_init_density(Nx+1), pipeR_init_momentum(Nx+1);
-  pipeR_init_density.setConstant(p0*network.compressors[0].compression_ratio/(R*outlet_temperature));
+  pipeR_init_density.setConstant(p0*network.compressors[0].compression_ratio/(phgasnets::GAS_CONSTANT*outlet_temperature));
   pipeR_init_momentum.setConstant(mom0);
 
   Vector init_state = phgasnets::verticallyBlockVectors({
@@ -201,7 +200,7 @@ int main(int argc, char** argv){
     std::cout << "Time = " << time << "s (" << t << "/" << Nt << ")\r";
 
     // Update guess at inlet
-    guess(0)                 = inlet_pressure/(R*inlet_temperature);
+    guess(0)                 = inlet_pressure/(phgasnets::GAS_CONSTANT*inlet_temperature);
     guess(network.n_state-1) = momentum_at_outlet(time);
 
     // Update input vector

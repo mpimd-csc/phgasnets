@@ -103,7 +103,8 @@ namespace phgasnets {
 
             r = (
                 discrete_network.E * dz_dt
-                - (discrete_network.J - discrete_network.R) * discrete_network.effort
+                - discrete_network.J * discrete_network.effort
+                + discrete_network.R * discrete_network.effort
                 - discrete_network.G * input_vec
             );
 

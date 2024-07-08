@@ -7,6 +7,7 @@
 # pragma once
 
 # include <nlohmann/json.hpp>
+# include <ceres/jet.h>
 # include <vector>
 
 # include "operators.hpp"
@@ -64,7 +65,7 @@ namespace phgasnets {
         pipe.set_state(pipe_state);
         pipe_state_startIdx += pipe.n_state;
       }
-      auto precompressor_pressure = pipes[0].rho(Eigen::last) * phgasnets::GAS_CONSTANT * pipes[0].temperature;
+      auto precompressor_pressure = phgasnets::GAS_CONSTANT * pipes[0].temperature * pipes[0].rho(Eigen::last);
 
       // set temperatures for post-compressor pipes
       if (compressors[0].type == "FP") {
@@ -92,7 +93,7 @@ namespace phgasnets {
       }
       else {
         if (compressors[0].type == "FP" && compressors[0].model == "AV") {
-          G.coeffRef(pipes[0].n_res-1, 1) *= T(std::pow(precompressor_pressure, 1.0/compressors[0].isentropic_exponent));
+          G.coeffRef(pipes[0].n_res-1, 1) *= T(ceres::pow(precompressor_pressure, 1.0/compressors[0].isentropic_exponent));
         }
       }
     }

@@ -80,7 +80,8 @@ namespace phgasnets {
 
             // solve non-linear eq and populate residual with result
             r = (
-                (discrete_network.J - discrete_network.R) * discrete_network.effort
+                discrete_network.J * discrete_network.effort
+                - discrete_network.R * discrete_network.effort
                 + discrete_network.G * input_vec
             );
 
