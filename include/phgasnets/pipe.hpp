@@ -8,6 +8,7 @@
 
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
+# include <nlohmann/json.hpp>
 # include "operators.hpp"
 # include "state_operators.hpp"
 # include <vector>
@@ -23,8 +24,13 @@ namespace phgasnets{
       const float diameter,
       const float friction,
       const float temperature
-    ): length(length), diameter(diameter),
-    friction(friction), temperature(temperature)
+    ): length(length), diameter(diameter), friction(friction), temperature(temperature)
+    {}
+
+    Pipe(
+      const nlohmann::json& params,
+      const float temperature
+    ): Pipe(params["length"], params["diameter"], params["friction"], temperature)
     {}
 
   public:

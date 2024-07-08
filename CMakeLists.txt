@@ -22,6 +22,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -fopenmp -march=nati
 # Compilation options
 # Find external dependencies
 
+# nlohmann_json
+find_package(nlohmann_json 3.10 REQUIRED)
+
 # Eigen
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})

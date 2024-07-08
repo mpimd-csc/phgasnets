@@ -76,14 +76,8 @@ int main(int argc, char** argv){
   std::ifstream config_file(argv[1]);
   json config = json::parse(config_file);
 
-  const double pipe_length       = config["pipe"]["length"].get<double>();
-  const double pipe_diameter     = config["pipe"]["diameter"].get<double>();
-  const double pipe_friction     = config["pipe"]["friction"].get<double>();
   const double inlet_temperature = config["boundary_conditions"]["inlet"]["temperature"].get<double>();
   const double inlet_pressure    = config["boundary_conditions"]["inlet"]["pressure"].get<double>();
-  const std::string compr_type   = config["compressor"]["type"].get<std::string>();
-  const std::string compr_model  = config["compressor"]["model"].get<std::string>();
-  const double compr_spec        = config["compressor"]["specification"].get<double>();
   const double kappa             = config["fluid"]["isentropic_exponent"].get<double>();
   const int    Nx                = config["discretization"]["space"]["resolution"].get<int>();
 
@@ -92,14 +86,14 @@ int main(int argc, char** argv){
 
   // // Make Pipes and Compressor objects
   std::vector<phgasnets::Compressor> compressors = {
-        phgasnets::Compressor(compr_type, compr_model, compr_spec, kappa)
+        phgasnets::Compressor(config["compressor"], kappa)
   };
 
   const double outlet_temperature = inlet_temperature * compressors[0].temperature_scale;
 
   std::vector<phgasnets::Pipe> pipes = {
-    phgasnets::Pipe(pipe_length, pipe_diameter, pipe_friction, inlet_temperature),
-    phgasnets::Pipe(pipe_length, pipe_diameter, pipe_friction, outlet_temperature)
+    phgasnets::Pipe(config["pipe"], inlet_temperature),
+    phgasnets::Pipe(config["pipe"], outlet_temperature)
   };
 
   phgasnets::Network net = phgasnets::Network(pipes, compressors);

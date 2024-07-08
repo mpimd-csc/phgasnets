@@ -6,11 +6,8 @@
 
 # pragma once
 
+#include <nlohmann/json.hpp>
 #include <string>
-#include <memory>
-#include <map>
-#include <functional>
-#include <variant>
 
 namespace phgasnets {
   struct Compressor {
@@ -30,6 +27,12 @@ namespace phgasnets {
         const double specification,
         const double isentropic_exponent
       );
+
+      Compressor(
+        const nlohmann::json& params,
+        const double isentropic_exponent
+      );
+
       void update_compression_ratio(double new_compression_ratio);
       public:
         const std::string type; // "FC type or FP type

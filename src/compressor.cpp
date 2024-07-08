@@ -30,6 +30,13 @@ Compressor::Compressor(
     }
 }
 
+Compressor::Compressor(
+  const nlohmann::json& params,
+  const double isentropic_exponent
+):
+  Compressor(params["type"], params["model"], params["specification"], isentropic_exponent)
+{}
+
 void Compressor::update_compression_ratio(double new_compression_ratio) {
   compression_ratio = new_compression_ratio;
   temperature_scale = std::pow(compression_ratio, (isentropic_exponent-1)/isentropic_exponent);
