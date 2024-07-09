@@ -20,7 +20,7 @@ Details:
   - Emphasis on including four different compressor models.
   - Space discretization with second-order central finite differences.
   - Time discretization with implicit midpoint method.
-  - Jacobian computation through numerical differentiation.
+  - Jacobian computation through automatic differentiation.
   - Nonlinear solve using Levenberg–Marquardt algorithm.
 
 Authors:
@@ -45,7 +45,7 @@ License:
   <li><a href="#compile-and-build">Compile and build</a>
     <ul>
       <li><a href="#dependencies-if-not-using-the-container">Dependencies (if not using the container)</a></li>
-      <li><a href="#compile">Compile</a></li>
+      <li><a href="#configure-and-compile">Compile</a></li>
       <li><a href="#run-demos">Run demos</a></li>
     </ul>
   </li>
@@ -140,16 +140,20 @@ A [`requirements.txt`](requirements.txt) file is also included to install python
 pip install -r requirements.txt
 ```
 
-### Compile
+### Configure and Compile
 
 Once the dependencies are available, the following sequence of commands builds the project executables.
 
 > Current working directory is assumed as the top-level project directory and the build files will be placed in `build` directory.
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE="Release"
+cmake -B build -S .
 ```
 This configures the project by finding the dependencies and generating host-specific build instructions.
+
+> Automatic differentiation is enabled by default for Jacobian construction. If you prefer to use finite-difference based numeric differentiation, configure with `-DPHGASNETS_NUMERICDIFF=ON` flag.
+
+> To compile in debug mode, you need to disable excessive compiler optimizations so as to utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/). Configure using `-DCMAKE_BUILD_TYPE="Debug"` flag.
 
 To compile and create executables,
 ```bash
@@ -158,28 +162,17 @@ cmake --build build
 
 CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
 
-To compile in debug mode and utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/) use `-DCMAKE_BUILD_TYPE="Debug"` instead and build.
-
 ### Run Demos
 
 The demo executables are available in the `build` directory and take configuration parameters `config.json` as input.
 
-To run the `single_pipe` demo, for example,
+A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results,
 
 ```bash
-build/demos/single_pipe/single_pipe demos/single_pipe/config.json
-```
-
-This runs the transient simulation and saves the state at each time instance into a HDF5 file.
-A `plot` script is provided to parse the config file, read the specified HDF5 files and plot the pressure/momentum values at the pipe endpoints.
-
-```bash
-demos/single_pipe/plot -c demos/single_pipe/config.json
+./RUNME.sh
 ```
 
 > For detailed description on each demo, refer to the READMEs within.
-
-A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results.
 
 ## Development Container (for developers)
 
@@ -195,4 +188,4 @@ Start VS Code, run the "Dev Containers: Open Folder in Container..." command fro
 While done for the first time, this should start building the container and can take a while (~5-10 min) and subsequently open the project within the container.
 The build is cached for subsequent runs and should be fairly quick thereon.
 
-Proceed to compiling `phgasnets` in the terminal and once the library is built, you can run the demos.
+Proceed to [compiling `phgasnets`](#compile-and-build) in the terminal and once the library is built, you can run the demos.
