@@ -9,20 +9,14 @@
 #
 FROM debian:12-slim
 
-# install all dependencies through apt
+# install all C++ dependencies through apt
 RUN apt-get update && \
     # set timezone within container
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     # install C++ dependencies from apt
     apt-get install -y build-essential cmake git pkg-config \
-        libeigen3-dev libceres-dev nlohmann-json3-dev libhdf5-dev && \
-    # install python dependencies for plot
-    apt-get install -y python3 python3-pip python3-numpy python3-matplotlib python3-h5py && \
-    # install latin modern fonts for plot
-    apt-get install -y fonts-lmodern fontconfig && \
-    mkdir -p /usr/local/share/fonts/otf && cd /usr/local/share/fonts/otf && \
-    ln -s /usr/share/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf && fc-cache
+        libeigen3-dev libmetis-dev libceres-dev nlohmann-json3-dev libhdf5-dev
 
 # install highfive - not available in apt
 ARG HIGHFIVE_PATH=/opt/highfive
@@ -43,6 +37,13 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     cmake --build build --parallel && \
     cmake --install build && \
     rm -rf ${HIGHFIVE_PATH}-src
+
+# install python dependencies for plot
+RUN apt-get install -y python3-minimal python3-numpy python3-matplotlib python3-h5py && \
+    # install latin modern fonts for plot
+    apt-get install -y fonts-lmodern fontconfig && \
+    mkdir -p /usr/local/share/fonts/otf && cd /usr/local/share/fonts/otf && \
+    ln -s /usr/share/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf && fc-cache
 
 # provide a non-root user for devcontainer
 # the args for UID and GID will be overridden by VSCode
@@ -71,12 +72,12 @@ RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
     cmake --build ${BUILD_DIR} --parallel
 
 # set env variables for RUNME
-ENV PROJECT_DIR ${PROJECT_DIR}
-ENV BUILD_DIR ${BUILD_DIR}
-ENV OUT_DIR ${OUT_DIR}
-ENV MPLCONFIGDIR /tmp/
+ENV PROJECT_DIR=${PROJECT_DIR}
+ENV BUILD_DIR=${BUILD_DIR}
+ENV OUT_DIR=${OUT_DIR}
+ENV MPLCONFIGDIR=/tmp/
 
 # set default shell
-ENV SHELL /bin/bash
+ENV SHELL=/bin/bash
 
-CMD ${PROJECT_DIR}/RUNME.sh
+CMD ["/phgasnets/src/RUNME.sh"]

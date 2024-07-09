@@ -12,7 +12,7 @@
 # include "operators.hpp"
 # include "state_operators.hpp"
 
-namespace PHModel{
+namespace phgasnets{
 
 /**
  * Creates a vertical block vector from a vector of Eigen::VectorXd objects.

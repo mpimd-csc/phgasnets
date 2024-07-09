@@ -80,13 +80,21 @@ int main(int argc, char** argv) {
   const int n_mom = Nx+1;
 
   // Create Port Hamiltonian Operators
-  PHModel::set_gas_constant(R);
-  auto Et     = PHModel::Et_operator(n_rho, n_mom);
-  auto Jt     = PHModel::Jt_operator(n_rho, n_mom, mesh_width);
-  auto G      = PHModel::G_operator(n_rho, n_mom);
-  auto u_b    = PHModel::input_vec(inlet_pressure, momentum_at_outlet(0.0));
+  phgasnets::set_gas_constant(R);
+  auto Et     = phgasnets::Et_operator(n_rho, n_mom);
+  auto Jt     = phgasnets::Jt_operator(n_rho, n_mom, mesh_width);
+  auto G      = phgasnets::G_operator(n_rho, n_mom);
+  auto u_b    = phgasnets::input_vec(inlet_pressure, momentum_at_outlet(0.0));
 
   // ------------------------------------------------------------------------
+  // Set CERES Solver Options
+  Solver::Summary summary;
+  Solver::Options options;
+  options.function_tolerance = 1e-8;
+  options.max_num_iterations = 2000;
+  options.num_threads = 8;
+  // ------------------------------------------------------------------------
+
   // Steady State Solve
 
   // initial state
@@ -98,8 +106,8 @@ int main(int argc, char** argv) {
 
   // SteadyState
   Problem problem_steady;
-  auto cost_function_steady = new DynamicDiffCostFunction<PHModel::SteadySystem>(
-      new PHModel::SteadySystem(
+  auto cost_function_steady = new DynamicDiffCostFunction<phgasnets::SteadySystem>(
+      new phgasnets::SteadySystem(
         n_rho, n_mom, Jt, G, pipe_friction, pipe_diameter, temperature, u_b
       )
   );
@@ -110,13 +118,6 @@ int main(int argc, char** argv) {
   // Second argument is the loss func.
   // in our case is the identity function (default), so we get a non-linear least squares problem.
   problem_steady.AddResidualBlock(cost_function_steady, nullptr, init_state.data());
-
-  // Set CERES Solver Options
-  Solver::Summary summary;
-  Solver::Options options;
-  options.function_tolerance = 1e-8;
-  options.max_num_iterations = 2000;
-  options.num_threads = 8;
 
   ceres::Solve(options, &problem_steady, &summary);
 
@@ -144,33 +145,31 @@ int main(int argc, char** argv) {
     H5Easy::dump(file, "/0/timestamp", 0.0);
   }
 
+  Problem problem_transient;
+  auto cost_function_transient =
+      new DynamicDiffCostFunction<phgasnets::TransientSystem>(
+          new phgasnets::TransientSystem(
+            n_rho, n_mom, current_state, Et, Jt, G, pipe_friction, pipe_diameter, temperature, u_b, time, dt
+          )
+  );
+
+  cost_function_transient->AddParameterBlock(n_rho+n_mom);
+  cost_function_transient->SetNumResiduals(n_rho+n_mom+2);
+  problem_transient.AddResidualBlock(cost_function_transient, nullptr, guess.data());
+
+  options.function_tolerance = 1e-8;
+
+  // Time Loop
   for (int t=1; t<Nt; ++t) {
     time = t_start*3600 + t * dt;
 
     guess(0) = inlet_pressure/RT;
     guess(n_rho+n_mom-1) = momentum_at_outlet(time);
     u_b = (
-      PHModel::input_vec(inlet_pressure, momentum_at_outlet(time))
-      + PHModel::input_vec(inlet_pressure, momentum_at_outlet(time-dt))
+      phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time))
+      + phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time-dt))
     ) * 0.5;
 
-    Problem problem_transient;
-    auto cost_function_transient =
-        new DynamicDiffCostFunction<PHModel::TransientSystem>(
-            new PHModel::TransientSystem(
-              n_rho, n_mom, current_state, Et, Jt, G, pipe_friction, pipe_diameter, temperature, u_b, time, dt
-            )
-    );
-
-    cost_function_transient->AddParameterBlock(n_rho+n_mom);
-    cost_function_transient->SetNumResiduals(n_rho+n_mom+2);
-    problem_transient.AddResidualBlock(cost_function_transient, nullptr, guess.data());
-
-    Solver::Options options;
-    Solver::Summary summary;
-    options.function_tolerance = 1e-8;
-    options.max_num_iterations = 2000;
-    options.num_threads = 4;
     ceres::Solve(options, &problem_transient, &summary);
 
     current_state = guess; // Set the current state to the new solution

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_DIR="${PROJECT_DIR:=$(dirname "$0")}"
+PROJECT_DIR="${PROJECT_DIR:=$(dirname "$(realpath "$0")")}"
 echo -e "\e[1;33m[INFO] Project directory:\e[0m ${PROJECT_DIR}"
 
 BUILD_DIR="${BUILD_DIR:=${PROJECT_DIR}/build}"

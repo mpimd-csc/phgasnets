@@ -6,7 +6,7 @@
 
 # include "utils.hpp"
 
-Eigen::VectorXd PHModel::verticallyBlockVectors(
+Eigen::VectorXd phgasnets::verticallyBlockVectors(
     const std::vector<Eigen::VectorXd>& vectors
 ){
     int total_rows = 0;
@@ -34,7 +34,7 @@ Eigen::VectorXd PHModel::verticallyBlockVectors(
  *
  * @throws None
  */
-Eigen::SparseMatrix<double> PHModel::diagonalBlock(
+Eigen::SparseMatrix<double> phgasnets::diagonalBlock(
     const std::vector<std::reference_wrapper<BaseOperator>>& operators
 ){
     int nnz = 0, n_rows = 0, n_cols = 0;

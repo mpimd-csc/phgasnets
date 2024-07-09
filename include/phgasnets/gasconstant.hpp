@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace PHModel {
+namespace phgasnets {
 
   extern double GAS_CONSTANT;
 

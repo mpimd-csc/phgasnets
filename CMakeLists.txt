@@ -18,9 +18,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Set build type specific flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -fopenmp -march=native -mfma -fpic -ftree-vectorize")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # Compilation options
 # Find external dependencies
+
+# nlohmann_json
+find_package(nlohmann_json 3.10 REQUIRED)
 
 # Eigen
 find_package(Eigen3 REQUIRED)

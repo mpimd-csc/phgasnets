@@ -5,6 +5,7 @@
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
 # include <Eigen/SparseCore>
+# include <nlohmann/json.hpp>
 # include "operators.hpp"
 # include "state_operators.hpp"
 # include "pipe.hpp"
@@ -12,7 +13,7 @@
 # include "network.hpp"
 # include "utils.hpp"
 
-namespace PHModel {
+namespace phgasnets {
     struct SteadySystem{
         SteadySystem(
             const int n_rho, const int n_mom,
@@ -58,12 +59,38 @@ namespace PHModel {
 
     struct SteadyCompressorSystem{
         SteadyCompressorSystem(
-            Network& network,
+            const Network& network,
+            const nlohmann::json& spatial_disc_params,
             const Eigen::Vector4d& input_vec
-        );
-        bool operator()(double const* const* guess_state, double* residual) const;
+        ) : network(network), spatial_disc_params(spatial_disc_params), input_vec(input_vec)
+        {}
+
+        template <typename T>
+        bool operator()(
+            T const* const* guess_state,
+            T* residual
+        ) const {
+
+            static auto discrete_network = discretize<T>(network, spatial_disc_params);
+
+            Eigen::Map<const Eigen::Vector<T, Eigen::Dynamic>> z(guess_state[0], discrete_network.n_state);
+            Eigen::Map<Eigen::Vector<T, Eigen::Dynamic>> r(residual, discrete_network.n_res);
+
+            discrete_network.set_state(z);
+
+            // solve non-linear eq and populate residual with result
+            r = (
+                discrete_network.J * discrete_network.effort
+                - discrete_network.R * discrete_network.effort
+                + discrete_network.G * input_vec
+            );
+
+            return true;
+        }
+
         private:
-            Network& network;
+            const Network& network;
+            const nlohmann::json& spatial_disc_params;
             const Eigen::Vector4d& input_vec;
     };
 }

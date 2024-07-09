@@ -7,7 +7,7 @@
 # include "compressor.hpp"
 # include <cmath>
 
-namespace PHModel {
+namespace phgasnets {
 
 Compressor::Compressor(
   std::string type,
@@ -29,6 +29,13 @@ Compressor::Compressor(
       this->update_compression_ratio(specification);
     }
 }
+
+Compressor::Compressor(
+  const nlohmann::json& params,
+  const double isentropic_exponent
+):
+  Compressor(params["type"], params["model"], params["specification"], isentropic_exponent)
+{}
 
 void Compressor::update_compression_ratio(double new_compression_ratio) {
   compression_ratio = new_compression_ratio;
