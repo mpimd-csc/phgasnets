@@ -78,6 +78,7 @@ int main(int argc, char** argv){
 
   const double inlet_temperature = config["boundary_conditions"]["inlet"]["temperature"].get<double>();
   const double inlet_pressure    = config["boundary_conditions"]["inlet"]["pressure"].get<double>();
+  const double compr_spec        = config["compressor"]["specification"].get<double>();
   const double kappa             = config["fluid"]["isentropic_exponent"].get<double>();
   const int    Nx                = config["discretization"]["space"]["resolution"].get<int>();
 
@@ -187,6 +188,22 @@ int main(int argc, char** argv){
 
   t1 = high_resolution_clock::now();
 
+  Problem problem_transient;
+  auto cost_function_transient =
+    new DynamicDiffCostFunction<phgasnets::TransientCompressorSystem>(
+      new phgasnets::TransientCompressorSystem(net, config["discretization"], current_state, u_b, time)
+  );
+
+  cost_function_transient->AddParameterBlock(network.n_state);
+  cost_function_transient->SetNumResiduals(network.n_res);
+  problem_transient.AddResidualBlock(cost_function_transient, nullptr, guess.data());
+
+  // Solver::Options options;
+  // Solver::Summary summary;
+  options.function_tolerance = 1e-12;
+  options.max_num_iterations = 2000;
+  options.num_threads        = 4;
+
   // Time Loop
   for (int t=1; t<Nt; ++t) {
 
@@ -200,21 +217,6 @@ int main(int argc, char** argv){
     // Update input vector
     u_b(3) = -(momentum_at_outlet(time) + momentum_at_outlet(time-dt)) * 0.5;
 
-    Problem problem_transient;
-    auto cost_function_transient =
-      new DynamicDiffCostFunction<phgasnets::TransientCompressorSystem>(
-        new phgasnets::TransientCompressorSystem(net, config["discretization"], current_state, u_b, time)
-    );
-
-    cost_function_transient->AddParameterBlock(network.n_state);
-    cost_function_transient->SetNumResiduals(network.n_res);
-    problem_transient.AddResidualBlock(cost_function_transient, nullptr, guess.data());
-
-    Solver::Options options;
-    Solver::Summary summary;
-    options.function_tolerance = 1e-12;
-    options.max_num_iterations = 2000;
-    options.num_threads        = 8;
     ceres::Solve(options, &problem_transient, &summary);
 
     current_state = guess; // Set the current state to the new solution

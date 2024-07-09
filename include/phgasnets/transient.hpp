@@ -23,8 +23,8 @@ namespace phgasnets {
             const double& diameter,
             const double& temperature,
             const Eigen::Ref<const Eigen::Vector2d>& input_vec,
-            const double time,
-            const double timestep
+            const double& time,
+            const double& timestep
         ):
             n_rho(n_rho), n_mom(n_mom),
             current_state(current_state),
@@ -61,16 +61,16 @@ namespace phgasnets {
 
         private:
             const int n_rho, n_mom;
-            const Eigen::VectorXd current_state;
+            Eigen::Ref<const Eigen::VectorXd> current_state;
             const Et_operator& Et;
             const Jt_operator& Jt;
             const G_operator& G;
-            const double f;
-            const double D;
-            const double temperature;
-            const Eigen::Vector2d input_vec;
-            const double time;
-            const double timestep;
+            const double& f;
+            const double& D;
+            const double& temperature;
+            Eigen::Ref<const Eigen::Vector2d> input_vec;
+            const double& time;
+            const double& timestep;
     };
 
     struct TransientCompressorSystem{
@@ -114,9 +114,9 @@ namespace phgasnets {
         private:
             const Network& network;
             const nlohmann::json& disc_params;
-            const Eigen::VectorXd current_state;
-            const Eigen::Vector4d input_vec;
-            const double time;
+            Eigen::Ref<const Eigen::VectorXd> current_state;
+            Eigen::Ref<const Eigen::Vector4d> input_vec;
+            const double& time;
             const double timestep;
     };
 }
