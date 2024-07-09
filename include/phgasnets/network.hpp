@@ -65,12 +65,6 @@ namespace phgasnets {
         pipe.set_state(pipe_state);
         pipe_state_startIdx += pipe.n_state;
       }
-      auto precompressor_pressure = phgasnets::GAS_CONSTANT * pipes[0].temperature * pipes[0].rho(Eigen::last);
-
-      // set temperatures for post-compressor pipes
-      if (compressors[0].type == "FP") {
-        compressors[0].update_compression_ratio(compressors[0].specification/precompressor_pressure);
-      }
 
       // update pipe-specific R and effort
       std::vector<std::reference_wrapper<BaseStateOperator<T>>> operators_r, operators_g;
@@ -81,19 +75,21 @@ namespace phgasnets {
         effort(Eigen::seqN(pipe_res_startIdx, pipe.n_res)) = pipe.effort.vec_t;
         pipe_res_startIdx += pipe.n_res;
       }
-      auto postcompressor_momentum = pipes[1].mom(0);
 
       // build network R operator
       R = diagonalBlockT<T>(operators_r);
 
       // update network G operator
-      G.coeffRef(pipes[0].n_res-1, 1) = T(-postcompressor_momentum);
+      auto precompressor_pressure = phgasnets::GAS_CONSTANT * pipes[0].temperature * pipes[0].rho(Eigen::last);
+      auto postcompressor_momentum = pipes[1].mom(0);
+
+      G.coeffRef(pipes[0].n_res-1, 1) = -postcompressor_momentum;
       if (compressors[0].type == "FC") {
         G.coeffRef(pipes[0].n_res+pipes[1].n_res-2, 2) = T(precompressor_pressure);
       }
       else {
         if (compressors[0].type == "FP" && compressors[0].model == "AV") {
-          G.coeffRef(pipes[0].n_res-1, 1) *= T(ceres::pow(precompressor_pressure, 1.0/compressors[0].isentropic_exponent));
+          G.coeffRef(pipes[0].n_res-1, 1) *= ceres::pow(precompressor_pressure, 1.0/compressors[0].isentropic_exponent);
         }
       }
     }
