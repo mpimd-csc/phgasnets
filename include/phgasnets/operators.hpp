@@ -4,14 +4,14 @@
 //
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
-#pragma once
-# include <unordered_map>
-# include <memory>
+# pragma once
+
+# include "derivative.hpp"
+# include "gasconstant.hpp"
+
 # include <vector>
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
-# include "derivative.hpp"
-# include "gasconstant.hpp"
 
 namespace phgasnets {
 

@@ -4,6 +4,8 @@
 //
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
+# pragma once
+
 # include <vector>
 # include <Eigen/Core>
 # include <Eigen/QR>

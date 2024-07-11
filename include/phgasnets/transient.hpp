@@ -4,12 +4,15 @@
 //
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
-# include <Eigen/SparseCore>
-# include <nlohmann/json.hpp>
+# pragma once
+
 # include "operators.hpp"
 # include "state_operators.hpp"
 # include "network.hpp"
 # include "utils.hpp"
+
+# include <Eigen/SparseCore>
+# include <nlohmann/json.hpp>
 
 namespace phgasnets {
     struct TransientSystem{

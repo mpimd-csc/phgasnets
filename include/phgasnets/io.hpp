@@ -4,7 +4,10 @@
 //
 // SPDX-License-Identifier:  GPL-3.0-or-later
 
+# pragma once
+
 # include "network.hpp"
+
 # include <highfive/H5Easy.hpp>
 
 namespace phgasnets{

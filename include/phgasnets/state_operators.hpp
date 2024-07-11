@@ -1,9 +1,16 @@
+// Copyright (C) 2024 Max Planck Institute for Dynamics of Complex Technical Systems, Magdeburg
+//
+// This file is part of phgasnets
+//
+// SPDX-License-Identifier:  GPL-3.0-or-later
+
 # pragma once
+
+# include "operators.hpp"
 
 # include <vector>
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
-# include "operators.hpp"
 # include <ceres/jet.h>
 
 namespace phgasnets{

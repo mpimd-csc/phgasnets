@@ -6,15 +6,15 @@
 
 # pragma once
 
-# include <nlohmann/json.hpp>
-# include <ceres/jet.h>
-# include <vector>
-
 # include "operators.hpp"
 # include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "utils.hpp"
+
+# include <nlohmann/json.hpp>
+# include <ceres/jet.h>
+# include <vector>
 
 namespace phgasnets {
 

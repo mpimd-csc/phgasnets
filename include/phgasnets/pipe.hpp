@@ -6,11 +6,12 @@
 
 # pragma once
 
+# include "operators.hpp"
+# include "state_operators.hpp"
+
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
 # include <nlohmann/json.hpp>
-# include "operators.hpp"
-# include "state_operators.hpp"
 # include <vector>
 # include <memory>
 # include <unordered_map>
