@@ -160,7 +160,7 @@ int main(int argc, char** argv){
   Solver::Options options;
   options.function_tolerance = 1e-12;
   options.max_num_iterations = 2000;
-  options.num_threads        = 8;
+  options.num_threads        = 1;
 
   ceres::Solve(options, &problem_steady, &summary);
   auto t2       = high_resolution_clock::now();
@@ -197,12 +197,6 @@ int main(int argc, char** argv){
   cost_function_transient->AddParameterBlock(network.n_state);
   cost_function_transient->SetNumResiduals(network.n_res);
   problem_transient.AddResidualBlock(cost_function_transient, nullptr, guess.data());
-
-  // Solver::Options options;
-  // Solver::Summary summary;
-  options.function_tolerance = 1e-12;
-  options.max_num_iterations = 2000;
-  options.num_threads        = 4;
 
   // Time Loop
   for (int t=1; t<Nt; ++t) {

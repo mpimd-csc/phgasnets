@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
   Solver::Options options;
   options.function_tolerance = 1e-8;
   options.max_num_iterations = 2000;
-  options.num_threads = 8;
+  options.num_threads = 1; // runtime threads
   // ------------------------------------------------------------------------
 
   // Steady State Solve

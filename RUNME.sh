@@ -11,6 +11,10 @@ echo -e "\e[1;33m[INFO] Results directory:\e[0m ${OUT_DIR}"
 
 DEMO_DIR="${BUILD_DIR}/demos"
 
+# Restrict threading if you use the parallel BLAS version
+# https://wiki.debian.org/DebianScience/LinearAlgebraLibraries
+export OMP_NUM_THREADS=1
+
 # Change to output directory
 pushd ${OUT_DIR} > /dev/null
 
