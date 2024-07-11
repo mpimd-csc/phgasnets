@@ -18,11 +18,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Set build type specific flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -fopenmp -march=native -mfma -fpic -ftree-vectorize")
+
+# Set default build type to Release if not specified
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+endif()
+
+# Set possible build types
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-# Compilation options
-# Find external dependencies
-
+# External dependencies
 # nlohmann_json
 find_package(nlohmann_json 3.10 REQUIRED)
 
