@@ -151,7 +151,9 @@ cmake -B build -S .
 ```
 This configures the project by finding the dependencies and generating host-specific build instructions.
 
-> Automatic differentiation is enabled by default for Jacobian construction. If you prefer to use finite-difference based numeric differentiation, configure with `-DPHGASNETS_NUMERICDIFF=ON` flag.
+> CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated by e.g.,`-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
+
+> Automatic differentiation is enabled by default for Jacobian construction. If you prefer to use finite-difference based numeric differentiation, configure with `-DPHGASNETS_NUMERICDIFF=ON` flag. Read more about how automatic derivatives are computed [here](http://ceres-solver.org/automatic_derivatives.html).
 
 > To compile in debug mode, you need to disable excessive compiler optimizations so as to utilize debuggers like [`gdb`](https://www.sourceware.org/gdb/). Configure using `-DCMAKE_BUILD_TYPE="Debug"` flag.
 
@@ -159,8 +161,6 @@ To compile and create executables,
 ```bash
 cmake --build build
 ```
-
-CMake looks for the dependencies in standard UNIX paths, but if any of the dependencies are at a custom location their paths may be indicated through `-DCMAKE_PREFIX_PATH="/path/to/ceres;/path/to/highfive"`.
 
 ### Run Demos
 
