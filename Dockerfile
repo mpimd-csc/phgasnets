@@ -16,7 +16,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     # install C++ dependencies from apt
     apt-get install -y build-essential cmake git pkg-config \
-        libeigen3-dev libmetis-dev libceres-dev nlohmann-json3-dev libhdf5-dev
+        libopenblas-dev libeigen3-dev libmetis-dev libceres-dev nlohmann-json3-dev libhdf5-dev
 
 # install highfive - not available in apt
 ARG HIGHFIVE_PATH=/opt/highfive
@@ -35,7 +35,7 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
         -DHIGHFIVE_UNIT_TESTS=Off \
         -DHIGHFIVE_BUILD_DOCS=Off && \
     cmake --build build --parallel && \
-    cmake --install build && \
+    cmake --install build && cd && \
     rm -rf ${HIGHFIVE_PATH}-src
 
 # install python dependencies for plot
