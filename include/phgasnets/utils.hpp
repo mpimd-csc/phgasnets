@@ -7,7 +7,6 @@
 # pragma once
 
 # include "operators.hpp"
-# include "state_operators.hpp"
 
 # include <vector>
 # include <Eigen/Core>
@@ -37,13 +36,9 @@ Eigen::VectorXd verticallyBlockVectors(
  *
  * @throws None
  */
-Eigen::SparseMatrix<double> diagonalBlock(
-    const std::vector<std::reference_wrapper<BaseOperator>>& operators
-);
-
 template <typename T>
-Eigen::SparseMatrix<T> diagonalBlockT(
-    const std::vector<std::reference_wrapper<BaseStateOperator<T>>>& operators
+Eigen::SparseMatrix<T> diagonalBlock(
+    const std::vector<std::reference_wrapper<BaseOperator<T>>>& operators
 ){
     int nnz = 0, n_rows = 0, n_cols = 0;
     for (const auto& operator_ : operators) {

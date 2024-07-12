@@ -12,157 +12,219 @@
 # include <vector>
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
+# include <ceres/jet.h>
 
 namespace phgasnets {
 
-    struct BaseOperator{
-        /**
-         * Constructor for BaseOperator.
-         *
-         * @param n_rho The number of rho.
-         * @param n_mom The number of momentum.
-         */
-        BaseOperator(
-            const int n_rho,
-            const int n_mom
-        ): n_rho(n_rho), n_mom(n_mom) {}
+  template<typename T>
+  struct BaseOperator{
 
-        void update_state(const Eigen::Ref<const Eigen::VectorXd>&, const Eigen::Ref<const Eigen::VectorXd>&) {}
+    protected:
+      const int n_rho;
+      const int n_mom;
 
-        // WARN: Currently replaces only in existing non-zero entries
-        void update_ij(const int i, const int j, const double value){
-            for (int k = 0; k < data.size(); ++k)
-                if (data[k].row() == i && data[k].col() == j) {
-                    data[k] = Eigen::Triplet<double>(i, j, value);
-                }
-            mat.coeffRef(i, j) = value;
+    public:
+    std::vector<Eigen::Triplet<T>> data;
+    Eigen::SparseMatrix<T> mat;
+
+    // Constructor
+    BaseOperator(
+        const int n_rho,
+        const int n_mom
+    ): n_rho(n_rho), n_mom(n_mom) {}
+
+    // Update State
+    void update_state(
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>&,
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>&
+    ) {}
+
+    // Update entry in the operator
+    // WARN: Currently replaces only in existing non-zero entries
+    void update_ij(const int i, const int j, const T value){
+        for (int k = 0; k < data.size(); ++k)
+            if (data[k].row() == i && data[k].col() == j) {
+                data[k] = Eigen::Triplet<T>(i, j, value);
+            }
+        mat.coeffRef(i, j) = value;
+    }
+
+    // Destructor
+    virtual ~BaseOperator() = default;
+
+  };
+
+  struct E_operator: BaseOperator<double>{
+      E_operator(
+          const int n_rho,
+          const int n_mom
+      );
+  };
+
+  struct Et_operator: BaseOperator<double>{
+      Et_operator(
+          const int n_rho,
+          const int n_mom
+      );
+      private:
+          const E_operator E;
+  };
+
+  struct U_operator: BaseOperator<double>{
+      U_operator(
+          const int n_rho,
+          const int n_mom
+      );
+  };
+
+  struct J_operator: BaseOperator<double>{
+      J_operator(
+          const int n_rho,
+          const int n_mom,
+          const double mesh_width
+      );
+      private:
+          const double mesh_width;
+  };
+
+  struct Jt_operator: BaseOperator<double>{
+      Jt_operator(
+          const int n_rho,
+          const int n_mom,
+          const double mesh_width
+      );
+      private:
+          const J_operator J;
+          const U_operator U;
+  };
+
+  struct Y_operator: BaseOperator<double>{
+      Y_operator(
+          const int n_rho,
+          const int n_mom
+      );
+  };
+
+  template <typename T>
+  struct R_operator: BaseOperator<T>{
+
+    const double f;
+    const double D;
+
+    // Constructor
+    R_operator(
+        const int n_rho,
+        const int n_mom,
+        const double friction,
+        const double diameter
+    ) :
+      BaseOperator<T>(n_rho, n_mom), f(friction), D(diameter)
+    {
+      this->data.resize(n_mom);
+      this->mat.resize(n_rho+n_mom, n_rho+n_mom);
+    }
+
+    // (Overloaded) Update State
+    void update_state(
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
+    ) {
+
+        for (int i = 0; i < this->n_mom; ++i) {
+          auto friction_term = ceres::abs(f * mom(i)/rho(i) / (2 * D));
+          this->data[i] = Eigen::Triplet<T>(
+            this->n_rho+i, this->n_rho+i, friction_term
+          );
         }
 
-        virtual ~BaseOperator() = default;
-
-        protected:
-            const int n_rho;
-            const int n_mom;
-        public:
-            std::vector<Eigen::Triplet<double>> data;
-            Eigen::SparseMatrix<double> mat;
-    };
-
-    struct E_operator: BaseOperator{
-        E_operator(
-            const int n_rho,
-            const int n_mom
+        this->mat.setFromTriplets(
+          this->data.begin(), this->data.end(), [] (const T&, const T& b) { return b; }
         );
-    };
+    }
+  }; // struct R_operator
 
-    struct Et_operator: BaseOperator{
-        Et_operator(
-            const int n_rho,
-            const int n_mom
-        );
-        private:
-            const E_operator E;
-    };
+  template <typename T>
+  struct Rt_operator: BaseOperator<T> {
 
-    struct U_operator: BaseOperator{
-        U_operator(
-            const int n_rho,
-            const int n_mom
-        );
-    };
+    private:
+      R_operator<T> R;
 
-    struct J_operator: BaseOperator{
-        J_operator(
-            const int n_rho,
-            const int n_mom,
-            const double mesh_width
-        );
-        private:
-            const double mesh_width;
-    };
+    public:
+    Rt_operator(
+      const int n_rho,
+      const int n_mom,
+      const double friction,
+      const double diameter
+    ) :
+        BaseOperator<T>(n_rho, n_mom),
+        R(R_operator<T>(n_rho, n_mom, friction, diameter))
+    {
+        this->data.resize(n_mom);
+        this->mat.resize(n_rho+n_mom+2, n_rho+n_mom+2);
+    }
 
-    struct Jt_operator: BaseOperator{
-        Jt_operator(
-            const int n_rho,
-            const int n_mom,
-            const double mesh_width
-        );
-        private:
-            const J_operator J;
-            const U_operator U;
-    };
+    void update_state(
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+      const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
+    ) {
+      // Update the R_operator
+      R.update_state(rho, mom);
+      // Update self
+      this->data = R.data;
+      this->mat.setFromTriplets(
+        this->data.begin(), this->data.end(), [] (const T&, const T& b) { return b; }
+      );
+    }
+  }; // struct Rt_operator
 
-    struct R_operator: BaseOperator{
-        R_operator(
-            const int n_rho,
-            const int n_mom,
-            const double friction,
-            const double diameter
-        );
-        void update_state(
-            const Eigen::Ref<const Eigen::VectorXd>& rho,
-            const Eigen::Ref<const Eigen::VectorXd>& mom
-        );
-        public:
-            const double f;
-            const double D;
-    };
+  template <typename T>
+  struct effortVec {
+    private:
+      const Y_operator Y;
+      const int n_rho;
+      const int n_mom;
+      Eigen::Vector<T, Eigen::Dynamic> vec;
 
-    struct Rt_operator: BaseOperator{
-        Rt_operator(
-            const int n_rho,
-            const int n_mom,
-            const double friction,
-            const double diameter
-        );
+    public:
+      double temperature;
+      Eigen::Vector<T, Eigen::Dynamic> vec_t;
 
-        void update_state(
-            const Eigen::Ref<const Eigen::VectorXd>& rho,
-            const Eigen::Ref<const Eigen::VectorXd>& mom
-        );
-        private:
-            R_operator R;
-    };
+      effortVec(
+        const int n_rho,
+        const int n_mom,
+        const double temperature
+      ) :
+      n_rho(n_rho), n_mom(n_mom), Y(Y_operator(n_rho, n_mom)),
+      temperature(temperature),
+      vec(n_rho+n_mom), vec_t(n_rho+n_mom+2)
+      {}
 
-    struct Y_operator: BaseOperator{
-        Y_operator(
-            const int n_rho,
-            const int n_mom
-        );
-    };
+      void update_state(
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& rho,
+        const Eigen::Ref<const Eigen::Vector<T, Eigen::Dynamic>>& mom
+      ){
+        vec.segment(0, n_rho) = rho * phgasnets::GAS_CONSTANT * temperature;
+        vec.segment(n_rho, n_mom) = mom;
 
-    struct Effort{
-        Effort(
-            const int n_rho,
-            const int n_mom,
-            const double temperature
-        );
+        vec_t.segment(0, n_rho+n_mom) = vec;
+        vec_t.segment(n_rho+n_mom, 2) = Y.mat * vec;
+      }
+  };
 
-        void update_state(
-            const Eigen::Ref<const Eigen::VectorXd>& rho,
-            const Eigen::Ref<const Eigen::VectorXd>& mom
-        );
+  template<typename T>
+  struct G_operator: BaseOperator<T> {
+    G_operator(
+      const int n_rho,
+      const int n_mom
+    ) :
+      BaseOperator<T>(n_rho, n_mom)
+    {
+      this->data.resize(2);
+      this->data[0] = Eigen::Triplet<T>(n_rho+n_mom, 0, T(1.0));
+      this->data[1] = Eigen::Triplet<T>(n_rho+n_mom+1, 1, T(1.0));
 
-        private:
-            const Y_operator Y;
-            const int n_rho;
-            const int n_mom;
-            Eigen::VectorXd vec;
-        public:
-            double temperature;
-            Eigen::VectorXd vec_t;
-    };
-
-    struct G_operator: BaseOperator{
-        G_operator(
-            const int n_rho,
-            const int n_mom
-        );
-    };
-
-    Eigen::Vector2d input_vec(
-        const double inlet_pressure,
-        const double outlet_momentum
-    );
-
+      this->mat.resize(n_rho+n_mom+2, 2);
+      this->mat.setFromTriplets(this->data.begin(), this->data.end());
+    }
+  };
 }

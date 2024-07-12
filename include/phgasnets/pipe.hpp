@@ -7,8 +7,6 @@
 # pragma once
 
 # include "operators.hpp"
-# include "state_operators.hpp"
-
 # include <Eigen/Core>
 # include <Eigen/SparseCore>
 # include <nlohmann/json.hpp>
@@ -59,9 +57,9 @@ namespace phgasnets{
     temperature(temperature),
     Et(Et_operator(n_x+1, n_x+1)),
     Jt(Jt_operator(n_x+1, n_x+1, mesh_width)),
-    Rt(RtStateOperator<T>(n_x+1, n_x+1, friction, diameter)),
-    effort(EffortStateVec<T>(n_rho, n_mom, temperature)),
-    G(GStateOperator<T>(n_x+1, n_x+1))
+    Rt(Rt_operator<T>(n_x+1, n_x+1, friction, diameter)),
+    effort(effortVec<T>(n_rho, n_mom, temperature)),
+    G(G_operator<T>(n_x+1, n_x+1))
     {
       mesh = Eigen::VectorXd::LinSpaced(n_x+1, 0.0, length);
     }
@@ -97,10 +95,10 @@ namespace phgasnets{
       Eigen::VectorXd mesh;
       Eigen::Vector<T, Eigen::Dynamic> rho, mom;
       Et_operator Et;
-      RtStateOperator<T> Rt;
+      Rt_operator<T> Rt;
       Jt_operator Jt;
-      EffortStateVec<T> effort;
-      GStateOperator<T> G;
+      effortVec<T> effort;
+      G_operator<T> G;
   };
 
 }

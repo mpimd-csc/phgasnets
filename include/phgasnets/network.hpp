@@ -7,7 +7,6 @@
 # pragma once
 
 # include "operators.hpp"
-# include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "utils.hpp"
@@ -40,8 +39,8 @@ namespace phgasnets {
       pipes(pipes), compressors(compressors), n_state(0), n_res(0)
     {
       // diagonally block static operators
-      std::vector<std::reference_wrapper<BaseOperator>> operators_e, operators_j;
-      std::vector<std::reference_wrapper<BaseStateOperator<T>>> operators_r, operators_g;
+      std::vector<std::reference_wrapper<BaseOperator<double>>> operators_e, operators_j;
+      std::vector<std::reference_wrapper<BaseOperator<T>>> operators_r, operators_g;
       for (auto& pipe: pipes) {
         operators_e.push_back(std::ref(pipe.Et));
         operators_j.push_back(std::ref(pipe.Jt));
@@ -50,10 +49,10 @@ namespace phgasnets {
         n_state += pipe.n_state;
         n_res += pipe.n_res;
       }
-      E = diagonalBlock(operators_e);
-      J = diagonalBlock(operators_j);
-      R = diagonalBlockT<T>(operators_r);
-      G = diagonalBlockT<T>(operators_g);
+      E = diagonalBlock<double>(operators_e);
+      J = diagonalBlock<double>(operators_j);
+      R = diagonalBlock<T>(operators_r);
+      G = diagonalBlock<T>(operators_g);
       effort.resize(n_res);
     };
 
@@ -67,7 +66,7 @@ namespace phgasnets {
       }
 
       // update pipe-specific R and effort
-      std::vector<std::reference_wrapper<BaseStateOperator<T>>> operators_r, operators_g;
+      std::vector<std::reference_wrapper<BaseOperator<T>>> operators_r, operators_g;
 
       int pipe_res_startIdx = 0;
       for(auto& pipe : pipes){
@@ -77,7 +76,7 @@ namespace phgasnets {
       }
 
       // build network R operator
-      R = diagonalBlockT<T>(operators_r);
+      R = diagonalBlock<T>(operators_r);
 
       // update network G operator
       auto precompressor_pressure = phgasnets::GAS_CONSTANT * pipes[0].temperature * pipes[0].rho(Eigen::last);

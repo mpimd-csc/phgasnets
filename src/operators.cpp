@@ -12,7 +12,7 @@ E_operator::E_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BaseOperator(n_rho, n_mom)
+    BaseOperator<double>(n_rho, n_mom)
 {
     data.resize(n_rho+n_mom);
     for (int i = 0; i < n_rho+n_mom; ++i)
@@ -26,7 +26,7 @@ Et_operator::Et_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BaseOperator(n_rho, n_mom),
+    BaseOperator<double>(n_rho, n_mom),
     E(E_operator(n_rho, n_mom))
 {
     data = E.data;
@@ -39,7 +39,7 @@ U_operator::U_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BaseOperator(n_rho, n_mom)
+    BaseOperator<double>(n_rho, n_mom)
 {
     data.resize(2);
     data[0] = Eigen::Triplet<double>(0, 0, 1.0);
@@ -55,7 +55,7 @@ J_operator::J_operator(
     const int n_mom,
     const double mesh_width
 ) :
-   BaseOperator(n_rho, n_mom), mesh_width(mesh_width)
+   BaseOperator<double>(n_rho, n_mom), mesh_width(mesh_width)
 {
     // Make two Dx triplets
     std::vector<Eigen::Triplet<double>> dx_1 = derivative_operator(n_rho, mesh_width);
@@ -85,7 +85,7 @@ Jt_operator::Jt_operator(
     const int n_mom,
     const double mesh_width
 ) :
-    BaseOperator(n_rho, n_mom),
+    BaseOperator<double>(n_rho, n_mom),
     J(J_operator(n_rho, n_mom, mesh_width)),
     U(U_operator(n_rho, n_mom))
 {
@@ -102,72 +102,12 @@ Jt_operator::Jt_operator(
     mat.setFromTriplets(data.begin(), data.end());
 }
 
-// R Operator constructor
-R_operator::R_operator(
-    const int n_rho,
-    const int n_mom,
-    const double friction,
-    const double diameter
-) :
-    BaseOperator(n_rho, n_mom),
-    f(friction), D(diameter)
-{
-    data.resize(n_mom);
-    mat.resize(n_rho+n_mom, n_rho+n_mom);
-}
-
-void R_operator::update_state(
-    const Eigen::Ref<const Eigen::VectorXd>& rho,
-    const Eigen::Ref<const Eigen::VectorXd>& mom
-) {
-    Eigen::VectorXd friction_term = (f * (mom.array()/rho.array()).abs()) / (2 * D);
-
-    for (int i = 0; i < n_mom; ++i)
-        data[i] = Eigen::Triplet<double>(n_rho+i, n_rho+i, friction_term(i));
-
-    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
-}
-
-// Rt Operator constructor
-Rt_operator::Rt_operator(
-    const int n_rho,
-    const int n_mom,
-    const double friction,
-    const double diameter
-) :
-    BaseOperator(n_rho, n_mom),
-    R(R_operator(n_rho, n_mom, friction, diameter))
-{
-    data.resize(n_mom);
-    mat.resize(n_rho+n_mom+2, n_rho+n_mom+2);
-}
-
-
-/**
- * Updates the state of Rt_operator based on the input rho and mom vectors.
- *
- * @param rho The vector containing density values.
- * @param mom The vector containing momentum values.
- *
- * @throws None
- */
-void Rt_operator::update_state(
-    const Eigen::Ref<const Eigen::VectorXd>& rho,
-    const Eigen::Ref<const Eigen::VectorXd>& mom
-) {
-    // Update the R_operator
-    R.update_state(rho, mom);
-    // Update Rt operator
-    data = R.data;
-    mat.setFromTriplets(data.begin(), data.end(), [] (const double&,const double& b) { return b; });
-}
-
 // Y_operator constructor
 Y_operator::Y_operator(
     const int n_rho,
     const int n_mom
 ) :
-    BaseOperator(n_rho, n_mom)
+    BaseOperator<double>(n_rho, n_mom)
 {
     data.resize(2);
     data[0] = Eigen::Triplet<double>(0, n_rho, 1.0);
@@ -175,46 +115,4 @@ Y_operator::Y_operator(
 
     mat.resize(2, n_rho+n_mom);
     mat.setFromTriplets(data.begin(), data.end());
-}
-
-Effort::Effort(
-    const int n_rho,
-    const int n_mom,
-    const double temperature
-) :
-    n_rho(n_rho), n_mom(n_mom), Y(Y_operator(n_rho, n_mom)),
-    temperature(temperature),
-    vec(n_rho+n_mom), vec_t(n_rho+n_mom+2)
-{}
-
-void Effort::update_state(
-    const Eigen::Ref<const Eigen::VectorXd>& rho,
-    const Eigen::Ref<const Eigen::VectorXd>& mom
-) {
-    vec.segment(0, n_rho) = rho * phgasnets::GAS_CONSTANT * temperature;
-    vec.segment(n_rho, n_mom) = mom;
-
-    vec_t.segment(0, n_rho+n_mom) = vec;
-    vec_t.segment(n_rho+n_mom, 2) = Y.mat * vec;
-}
-
-G_operator::G_operator(
-    const int n_rho,
-    const int n_mom
-) :
-    BaseOperator(n_rho, n_mom)
-{
-    data.resize(2);
-    data[0] = Eigen::Triplet<double>(n_rho+n_mom, 0, 1.0);
-    data[1] = Eigen::Triplet<double>(n_rho+n_mom+1, 1, 1.0);
-
-    mat.resize(n_rho+n_mom+2, 2);
-    mat.setFromTriplets(data.begin(), data.end());
-}
-
-Eigen::Vector2d phgasnets::input_vec(
-    const double inlet_pressure,
-    const double outlet_momentum
-) {
-    return Eigen::Vector2d {{ inlet_pressure, -outlet_momentum}};
 }
