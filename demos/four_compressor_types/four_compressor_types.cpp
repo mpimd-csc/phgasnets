@@ -11,7 +11,6 @@
 # include <chrono>
 # include <ceres/ceres.h>
 # include <nlohmann/json.hpp>
-# include <glog/logging.h>
 
 # include "gasconstant.hpp"
 # include "utils.hpp"
@@ -59,11 +58,8 @@ double momentum_at_outlet(double time) {
 
 int main(int argc, char** argv){
 
-  google::InitGoogleLogging(argv[0]);
-
   using std::chrono::high_resolution_clock;
   using std::chrono::duration_cast;
-  // using std::chrono::duration;
   using std::chrono::seconds;
 
   // Check for JSON input
