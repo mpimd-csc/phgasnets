@@ -11,7 +11,7 @@
 #include <Eigen/Sparse>
 #include <ceres/ceres.h>
 #include "operators.hpp"
-#include "state_operators.hpp"
+
 #include "steady.hpp"
 #include "transient.hpp"
 #include <highfive/H5Easy.hpp>
@@ -83,8 +83,8 @@ int main(int argc, char** argv) {
   phgasnets::set_gas_constant(R);
   auto Et     = phgasnets::Et_operator(n_rho, n_mom);
   auto Jt     = phgasnets::Jt_operator(n_rho, n_mom, mesh_width);
-  auto G      = phgasnets::G_operator(n_rho, n_mom);
-  auto u_b    = phgasnets::input_vec(inlet_pressure, momentum_at_outlet(0.0));
+  auto G      = phgasnets::G_operator<double>(n_rho, n_mom);
+  Eigen::Vector2d u_b({inlet_pressure, -momentum_at_outlet(0.0)});
 
   // ------------------------------------------------------------------------
   // Set CERES Solver Options
@@ -166,8 +166,8 @@ int main(int argc, char** argv) {
     guess(0) = inlet_pressure/RT;
     guess(n_rho+n_mom-1) = momentum_at_outlet(time);
     u_b = (
-      phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time))
-      + phgasnets::input_vec(inlet_pressure, momentum_at_outlet(time-dt))
+      Eigen::Vector2d({inlet_pressure, -momentum_at_outlet(time)})
+      + Eigen::Vector2d({inlet_pressure, -momentum_at_outlet(time-dt)})
     ) * 0.5;
 
     ceres::Solve(options, &problem_transient, &summary);

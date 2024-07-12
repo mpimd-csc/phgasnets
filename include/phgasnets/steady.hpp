@@ -7,7 +7,6 @@
 # pragma once
 
 # include "operators.hpp"
-# include "state_operators.hpp"
 # include "pipe.hpp"
 # include "compressor.hpp"
 # include "network.hpp"
@@ -21,7 +20,7 @@ namespace phgasnets {
         SteadySystem(
             const int n_rho, const int n_mom,
             const Jt_operator& Jt,
-            const G_operator& G,
+            const G_operator<double>& G,
             const double& friction,
             const double& diameter,
             const double& temperature,
@@ -38,8 +37,8 @@ namespace phgasnets {
             auto mom = z(Eigen::seqN(n_rho, n_mom));
 
             // build necessary objects for non-linear eq
-            static auto Rt = RtStateOperator<T>(n_rho, n_mom, f, D);
-            static auto effort = EffortStateVec<T>(n_rho, n_mom, temperature);
+            static auto Rt = Rt_operator<T>(n_rho, n_mom, f, D);
+            static auto effort = effortVec<T>(n_rho, n_mom, temperature);
             effort.update_state(rho, mom);
             Rt.update_state(rho, mom);
 
@@ -56,7 +55,7 @@ namespace phgasnets {
             const double D;
             const double temperature;
             const Jt_operator& Jt;
-            const G_operator& G;
+            const G_operator<double>& G;
             const Eigen::Vector2d& input_vec;
     };
 

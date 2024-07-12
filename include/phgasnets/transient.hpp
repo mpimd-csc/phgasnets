@@ -7,7 +7,6 @@
 # pragma once
 
 # include "operators.hpp"
-# include "state_operators.hpp"
 # include "network.hpp"
 # include "utils.hpp"
 
@@ -21,7 +20,7 @@ namespace phgasnets {
             const Eigen::Ref<const Eigen::VectorXd>& current_state,
             const Et_operator& Et,
             const Jt_operator& Jt,
-            const G_operator& G,
+            const G_operator<double>& G,
             const double& friction,
             const double& diameter,
             const double& temperature,
@@ -50,8 +49,8 @@ namespace phgasnets {
             auto mom = z(Eigen::seqN(n_rho, n_mom));
 
             // build necessary objects for non-linear eq
-            static auto Rt = RtStateOperator<T>(n_rho, n_mom, f, D);
-            static auto effort = EffortStateVec<T>(n_rho, n_mom, temperature);
+            static auto Rt = Rt_operator<T>(n_rho, n_mom, f, D);
+            static auto effort = effortVec<T>(n_rho, n_mom, temperature);
             // Update effort and Rt_mat
             effort.update_state(rho, mom);
             Rt.update_state(rho, mom);
@@ -67,7 +66,7 @@ namespace phgasnets {
             Eigen::Ref<const Eigen::VectorXd> current_state;
             const Et_operator& Et;
             const Jt_operator& Jt;
-            const G_operator& G;
+            const G_operator<double>& G;
             const double& f;
             const double& D;
             const double& temperature;
