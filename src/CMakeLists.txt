@@ -6,4 +6,4 @@ target_include_directories(phgasnets PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_link_libraries(phgasnets PUBLIC HighFive)
+target_link_libraries(phgasnets PUBLIC Ceres::ceres nlohmann_json::nlohmann_json HighFive)

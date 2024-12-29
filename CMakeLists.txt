@@ -43,6 +43,9 @@ find_package(HDF5 REQUIRED)
 # HighFive
 find_package(HighFive 2.8 REQUIRED)
 
+# Ceres
+find_package(Ceres 2.0.0 REQUIRED)
+
 # compile the library
 add_subdirectory(src)
 
