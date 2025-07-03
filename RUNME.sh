@@ -37,7 +37,7 @@ do
   ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 0 -O ${PHGASNETS_OUT_DIR} --csv
   ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 1 -O ${PHGASNETS_OUT_DIR} --csv
 done
-${PROJECT_DIR}/demos/four_compressor_types/plotall -O ${PHGASNETS_OUT_DIR} --compressor-types "${compressor_types[@]}"
+${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plotall -O ${PHGASNETS_OUT_DIR} --compressor-types "${compressor_types[@]}"
 
 # Change back to start directory
 popd > /dev/null
