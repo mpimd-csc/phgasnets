@@ -16,6 +16,8 @@ DEMO_DIR="${BUILD_DIR}/demos"
 export OMP_NUM_THREADS=1
 
 # Change to output directory
+# Create the directory if it doesn't exist
+[ -d "$OUT_DIR" ] || mkdir -p "$OUT_DIR"
 pushd ${OUT_DIR} > /dev/null
 
 # Run single pipe testcase
