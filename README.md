@@ -42,7 +42,8 @@ License:
 <ul>
   <li><a href="#getting-started">Getting Started</a></li>
   <li><a href="#run-using-docker-container">Run using docker container</a></li>
-  <li><a href="#compile-and-build">Compile and build</a>
+  <li><a href="#run-using-vcpkg">Run using vcpkg</a></li>
+  <li><a href="#compile-and-build">Compile and build manually</a>
     <ul>
       <li><a href="#dependencies-if-not-using-the-container">Dependencies (if not using the container)</a></li>
       <li><a href="#configure-and-compile">Compile</a></li>
@@ -109,20 +110,20 @@ This should run all the demos in a disposable container and store the generated 
 
 ## Run using vcpkg
 
-The project offers a `vcpkg.json` file to manage all dependencies.
+The project offers a `vcpkg.json` file to manage all dependencies. This minimizes efforts in installation of dependencies,
 
 Prerequisites:
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
 * [CMake](https://gitlab.kitware.com/cmake/cmake) `>=3.9` for building
-* [Python3](https://www.python.org) `>=3.10` interpreter for plots
+* [Python3](https://www.python.org) `==3.12` interpreter for plots
 * (optional) [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
 
 1. Clone the [vcpkg](https://github.com/microsoft/vcpkg) repository and `phgasnets` repository
 ```bash
-git clone https://github.com/microsoft/vcpkg.git
+git clone --depth 1 https://github.com/microsoft/vcpkg.git
 git clone https://github.com/mpimd-csc/phgasnets.git
 ```
-2. Bootstrap vspkg
+2. Bootstrap `vcpkg`,
 ```bash
 ./vcpkg/bootstrap-vcpkg.sh
 ```
@@ -164,7 +165,7 @@ Instructions to install HighFive can be obtained [in their repository](https://g
 Note the locations of all the libraries in case any were not installed through standard package managers.
 
 Additional requirements are required for `plot` scripts in the demo,
-* [Python3](https://www.python.org) `>=3.10` interpreter,
+* [Python3](https://www.python.org) `==3.12` interpreter,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [numpy](https://numpy.org) package for handling arrays,
 * [matplotlib](https://matplotlib.org/) plotting package,
