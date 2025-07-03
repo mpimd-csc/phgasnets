@@ -57,24 +57,24 @@ RUN addgroup --gid ${USER_GID} ${USERNAME} && \
     usermod --uid ${USER_UID} --gid ${USER_GID} ${USERNAME}
 
 # paths for hosting the project files
-ARG PROJECT_DIR=/phgasnets/src
-ARG BUILD_DIR=/phgasnets/build
-ARG OUT_DIR=/phgasnets/run
+ARG PHGASNETS_PROJECT_DIR=/phgasnets/src
+ARG PHGASNETS_BUILD_DIR=/phgasnets/build
+ARG PHGASNETS_OUT_DIR=/phgasnets/run
 
 # copy relevant project source files into container
-COPY demos ${PROJECT_DIR}/demos
-COPY include ${PROJECT_DIR}/include
-COPY src ${PROJECT_DIR}/src
-COPY CMakeLists.txt README.md LICENSE.md RUNME.sh ${PROJECT_DIR}/
+COPY demos ${PHGASNETS_PROJECT_DIR}/demos
+COPY include ${PHGASNETS_PROJECT_DIR}/include
+COPY src ${PHGASNETS_PROJECT_DIR}/src
+COPY CMakeLists.txt README.md LICENSE.md RUNME.sh ${PHGASNETS_PROJECT_DIR}/
 
 # build source
-RUN cmake -B ${BUILD_DIR} -S ${PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build ${BUILD_DIR} --parallel
+RUN cmake -B ${PHGASNETS_BUILD_DIR} -S ${PHGASNETS_PROJECT_DIR} -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build ${PHGASNETS_BUILD_DIR} --parallel
 
 # set env variables for RUNME
-ENV PROJECT_DIR=${PROJECT_DIR}
-ENV BUILD_DIR=${BUILD_DIR}
-ENV OUT_DIR=${OUT_DIR}
+ENV PHGASNETS_PROJECT_DIR=${PHGASNETS_PROJECT_DIR}
+ENV PHGASNETS_BUILD_DIR=${PHGASNETS_BUILD_DIR}
+ENV PHGASNETS_OUT_DIR=${PHGASNETS_OUT_DIR}
 ENV MPLCONFIGDIR=/tmp/
 
 # set default shell
