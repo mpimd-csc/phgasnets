@@ -1,0 +1,9 @@
+[project]
+name = "phgasnets"
+version = "1.0.0"
+requires-python = ">=3.10"
+dependencies = [
+    "h5py>=3.7.0",
+    "matplotlib>=3.6.3",
+    "numpy>=1.24.2",
+]

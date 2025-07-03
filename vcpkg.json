@@ -1,0 +1,14 @@
+{
+  "name": "phgasnets",
+  "version-semver": "1.0.0",
+  "description": "Port-Hamiltonian model for gas networks with compressors",
+  "homepage": "https://github.com/mpimd-csc/phgasnets",
+  "license": "GPL-3.0-only",
+  "dependencies": [
+    "eigen3",
+    "ceres",
+    "hdf5",
+    "nlohmann-json",
+    "highfive"
+  ]
+}
