@@ -1,12 +1,12 @@
 
-            _                                      _        
-           | |                                    | |       
-     _ __  | |__    __ _   __ _  ___  _ __    ___ | |_  ___ 
+            _                                      _
+           | |                                    | |
+     _ __  | |__    __ _   __ _  ___  _ __    ___ | |_  ___
     | '_ \ | '_ \  / _` | / _` |/ __|| '_ \  / _ \| __|/ __|
     | |_) || | | || (_| || (_| |\__ \| | | ||  __/| |_ \__ \
     | .__/ |_| |_| \__, | \__,_||___/|_| |_| \___| \__||___/
-    | |             __/ |                                   
-    |_|            |___/                                    
+    | |             __/ |
+    |_|            |___/
 
 phgasnets-cpp
 =============
@@ -68,6 +68,7 @@ Instructions provided here are provided for standard UNIX distributions, but may
 
 You may either choose to use,
   - [Build and run in containers](#run-using-docker-container): Recommended to primarily reproduce results
+  - [Build and run natively](#run-using-vcpkg): Recommended to reproduce results natively if containers are not an option.
   - [Manually configure and build source code](#compile-and-build): Recommended for fine-grained customizations and develop source.
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
@@ -106,6 +107,42 @@ This should run all the demos in a disposable container and store the generated 
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container. This also preserves user permissions on the files that are created within the container.
 
+## Run using vcpkg
+
+The project offers a `vcpkg.json` file to manage all dependencies.
+
+Prerequisites:
+* [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
+* [CMake](https://gitlab.kitware.com/cmake/cmake) `>=3.9` for building
+* [Python3](https://www.python.org) `>=3.10` interpreter for plots
+* (optional) [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
+
+1. Clone the [vcpkg](https://github.com/microsoft/vcpkg) repository and `phgasnets` repository
+```bash
+git clone https://github.com/microsoft/vcpkg.git
+git clone https://github.com/mpimd-csc/phgasnets.git
+```
+2. Bootstrap vspkg
+```bash
+./vcpkg/bootstrap-vcpkg.sh
+```
+3. Build `phgasnets` using `vcpkg` to handle dependencies,
+```bash
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake --build build
+```
+4. Install Python dependencies for plot scripts
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install .
+```
+4. Run the demos
+```bash
+source RUNME.sh
+```
+This should produce all the results in the `results` folder.
+
 ## Compile and Build
 
 ### Dependencies (if not using the container)
@@ -127,7 +164,7 @@ Instructions to install HighFive can be obtained [in their repository](https://g
 Note the locations of all the libraries in case any were not installed through standard package managers.
 
 Additional requirements are required for `plot` scripts in the demo,
-* [Python3](https://www.python.org) `>=3.4` interpreter,
+* [Python3](https://www.python.org) `>=3.10` interpreter,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [numpy](https://numpy.org) package for handling arrays,
 * [matplotlib](https://matplotlib.org/) plotting package,
@@ -135,9 +172,11 @@ Additional requirements are required for `plot` scripts in the demo,
 
 All these libraries are also available either through standard UNIX package managers (for a system-wide installation) or Python package manager, `pip` (for a local installation).
 
-A [`requirements.txt`](requirements.txt) file is also included to install python dependencies for convenience, and maybe installed using
+A [`pyproject.toml`](pyproject.toml) file is also included to install python dependencies for convenience, and maybe installed using
 ```bash
-pip install -r requirements.txt
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install .
 ```
 
 ### Configure and Compile
@@ -169,7 +208,7 @@ The demo executables are available in the `build` directory and take configurati
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results,
 
 ```bash
-./RUNME.sh
+source RUNME.sh
 ```
 
 > For detailed description on each demo, refer to the READMEs within.
