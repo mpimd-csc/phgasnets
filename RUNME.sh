@@ -11,6 +11,9 @@ echo -e "\e[1;33m[INFO] Results directory:\e[0m ${PHGASNETS_OUT_DIR}"
 
 PHGASNETS_DEMO_DIR="${PHGASNETS_BUILD_DIR}/demos"
 
+# Quit on error
+set -e
+
 # Restrict threading if you use the parallel BLAS version
 # https://wiki.debian.org/DebianScience/LinearAlgebraLibraries
 export OMP_NUM_THREADS=1
