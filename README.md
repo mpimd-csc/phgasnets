@@ -115,28 +115,25 @@ The project offers a `vcpkg.json` file to manage all dependencies. This minimize
 Prerequisites:
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
 * [CMake](https://gitlab.kitware.com/cmake/cmake) `>=3.9` for building
-* [Python3](https://www.python.org) `==3.12` interpreter for plots
-* (optional) [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
+* [git](https://git-scm.com/) for cloning the repository
+* [Python3](https://www.python.org) `>=3.9` interpreter for plots. See [uv](https://github.com/astral-sh/uv) or [pyenv](https://github.com/pyenv/pyenv) for managing Python versions.
 
-1. Clone the [vcpkg](https://github.com/microsoft/vcpkg) repository and `phgasnets` repository
+1. Clone this repository and [vcpkg](https://github.com/microsoft/vcpkg) repository within
 ```bash
-git clone --depth 1 https://github.com/microsoft/vcpkg.git
 git clone https://github.com/mpimd-csc/phgasnets.git
+cd phgasnets
+git clone --depth 1 https://github.com/microsoft/vcpkg.git .vcpkg
 ```
-2. Bootstrap `vcpkg`,
+2. Build `phgasnets` using `vcpkg` to handle dependencies,
 ```bash
-./vcpkg/bootstrap-vcpkg.sh
-```
-3. Build `phgasnets` using `vcpkg` to handle dependencies,
-```bash
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./.vcpkg/scripts/buildsystems/vcpkg.cmake
 cmake --build build
 ```
-4. Install Python dependencies for plot scripts
+3. Install Python dependencies for plotting scripts
 ```bash
 python3 -m venv .venv
-. .venv/bin/activate
-pip install .
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
 ```
 4. Run the demos
 ```bash
@@ -165,19 +162,18 @@ Instructions to install HighFive can be obtained [in their repository](https://g
 Note the locations of all the libraries in case any were not installed through standard package managers.
 
 Additional requirements are required for `plot` scripts in the demo,
-* [Python3](https://www.python.org) `==3.12` interpreter,
+* [Python3](https://www.python.org) `>=3.9` interpreter,
 * [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [numpy](https://numpy.org) package for handling arrays,
 * [matplotlib](https://matplotlib.org/) plotting package,
-* (optional) [Latin Modern Math](https://www.gust.org.pl/projects/e-foundry/latin-modern) font.
 
 All these libraries are also available either through standard UNIX package managers (for a system-wide installation) or Python package manager, `pip` (for a local installation).
 
-A [`pyproject.toml`](pyproject.toml) file is also included to install python dependencies for convenience, and maybe installed using
+A [`requirements.txt`](requirements.txt) file is also included to install python dependencies for convenience, and maybe installed using
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
-python3 -m pip install .
+python3 -m pip install -r requirements.txt
 ```
 
 ### Configure and Compile
