@@ -1,0 +1,19 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - cmake@3.31.5
+  - eigen@3.4.0
+  - ceres-solver@2.0.0
+  - highfive@2.10.0
+  - nlohmann-json@3.10.0
+  - python@3.10
+  - py-h5py@3.13.0
+  - py-numpy@1.24.2
+  - py-matplotlib@3.6.3
+  view: true
+  concretizer:
+    unify: true

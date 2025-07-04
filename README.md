@@ -42,6 +42,7 @@ License:
 <ul>
   <li><a href="#getting-started">Getting Started</a></li>
   <li><a href="#run-using-docker-container">Run using docker container</a></li>
+  <li><a href="#run-using-spack">Run using spack</a></li>
   <li><a href="#run-using-vcpkg">Run using vcpkg</a></li>
   <li><a href="#compile-and-build">Compile and build manually</a>
     <ul>
@@ -69,7 +70,7 @@ Instructions provided here are provided for standard UNIX distributions, but may
 
 You may either choose to use,
   - [Build and run in containers](#run-using-docker-container): Recommended to primarily reproduce results
-  - [Build and run natively](#run-using-vcpkg): Recommended to reproduce results natively if containers are not an option.
+  - Build and run natively (using [spack](#run-using-spack) or [vcpkg](#run-using-vcpkg)): Recommended to reproduce results natively if containers are not an option.
   - [Manually configure and build source code](#compile-and-build): Recommended for fine-grained customizations and develop source.
 
 Once the library is built, you can [**run the demos**](#run-demos) provided in the `demos/` folder.
@@ -108,9 +109,50 @@ This should run all the demos in a disposable container and store the generated 
 
 > Ensure that the directory to store the results exists before running, since this needs to be mounted as shared volume within the host and container. This also preserves user permissions on the files that are created within the container.
 
+# Run using spack
+
+[Spack](https://spack.io/) is a package management tool which fetches, builds and installs multiple versions and configurations of the dependencies that `phgasnets` need in isolated environments.
+
+A `spack.yaml` configuration file is included with the project containing the dependencies required.
+
+Prerequisites:
+* [git](https://git-scm.com/) for cloning repositories
+
+1. Clone this repository and [spack](https://github.com/spack/spack) repository within.
+
+```bash
+git clone https://github.com/mpimd-csc/phgasnets.git
+cd phgasnets
+
+git clone --depth 1 https://github.com/spack/spack.git .spack
+```
+
+2. Create, activate spack environment from within the project directory,
+
+```bash
+spack env create phgasnets
+spack env activate -p phgasnets
+spack install
+```
+
+This command should technically parse `spack.yaml` and install the C++ and Python dependencies required.
+
+3. Build `phgasnets`,
+
+```bash
+cmake -B build -S .
+cmake --build build
+```
+Since you are in the spack environment, CMake should find all the right dependencies.
+
+4.  Run the demos
+```bash
+./RUNME.sh
+```
+
 ## Run using vcpkg
 
-The project offers a `vcpkg.json` file to manage all dependencies. This minimizes efforts in installation of dependencies,
+The project offers a `vcpkg.json` file to fetch and build all dependencies which minimizes efforts in their installation. Unfortunately, python dependencies need to be installed manually.
 
 Prerequisites:
 * [gcc](https://gcc.gnu.org/) (or any C++17-compliant compiler)
