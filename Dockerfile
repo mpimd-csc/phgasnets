@@ -39,11 +39,7 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     rm -rf ${HIGHFIVE_PATH}-src
 
 # install python dependencies for plot
-RUN apt-get install -y python3-minimal python3-numpy python3-matplotlib python3-h5py && \
-    # install latin modern fonts for plot
-    apt-get install -y fonts-lmodern fontconfig && \
-    mkdir -p /usr/local/share/fonts/otf && cd /usr/local/share/fonts/otf && \
-    ln -s /usr/share/texmf/fonts/opentype/public/lm-math/latinmodern-math.otf && fc-cache
+RUN apt-get install -y python3-minimal python3-numpy python3-matplotlib python3-h5py
 
 # provide a non-root user for devcontainer
 # the args for UID and GID will be overridden by VSCode
