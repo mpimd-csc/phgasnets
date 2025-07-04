@@ -1,9 +1,8 @@
-*.pdf
-*.h5
-*.csv
-
 results
 build
-
 .venv
 *.egg-info/
+.spack-env
+.vcpkg
+spack.lock
+docs/_build
