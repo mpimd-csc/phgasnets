@@ -6,9 +6,9 @@
 A `spack.yaml` configuration file is included with the project containing the dependencies required.
 
 Prerequisites:
-* [git](https://git-scm.com/) for cloning repositories
+* [**Git**](https://git-scm.com/) for cloning repositories
 
-1. Clone this repository and [spack](https://github.com/spack/spack) repository within.
+1. Clone the `phgasnets` repository and [`spack`](https://github.com/spack/spack) repository within.
 
 ```bash
 git clone https://github.com/mpimd-csc/phgasnets.git
@@ -20,9 +20,9 @@ git clone --depth 1 https://github.com/spack/spack.git .spack
 2. Create, activate spack environment from within the project directory,
 
 ```bash
-spack env create phgasnets
-spack env activate -p phgasnets
-spack install
+.spack/bin/spack env create phgasnets
+.spack/bin/spack env activate -p phgasnets
+.spack/bin/spack install
 ```
 
 This command should technically parse `spack.yaml` and install the C++ and Python dependencies required.

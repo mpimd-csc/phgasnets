@@ -134,9 +134,9 @@ git clone --depth 1 https://github.com/spack/spack.git .spack
 2. Create, activate spack environment from within the project directory,
 
 ```bash
-spack env create phgasnets
-spack env activate -p phgasnets
-spack install
+.spack/bin/spack env create phgasnets
+.spack/bin/spack env activate -p phgasnets
+.spack/bin/spack install
 ```
 
 This command should technically parse `spack.yaml` and install the C++ and Python dependencies required.
