@@ -88,26 +88,21 @@ The following demos are provided within [`demos/`](demos/):
 
 ## Run using docker container
 
-The project offers a [`Dockerfile`](Dockerfile) to automate the configuration and execution by,
-setting relevant dependencies, hosting the source code, building executables and running the demos.
+The project offers a [`Dockerfile`](Dockerfile) to automate the configuration and execution by, setting relevant dependencies, hosting the source code, building executables and running the demos.
 
 Necessary tools:
-  - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine (tested with `26.1.3`).
+  - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine.
 
-Build the `phgasnets` image which contains the environment, copies the source code and builds executables
+The compiled image from `Dockerfile` is already shared on [docker hub](https://hub.docker.com/r/ashwinsnayak/phgasnets). Pull the image which contains the environment, includes the source code and builds executables,
 
 ```bash
-docker build -f Dockerfile --tag phgasnets .
+docker pull ashwinsnayak/phgasnets:1.0.0
 ```
 
-Create a folder named `results` to store results in the host,
+Create a folder named `results` to store results in the host and run the container by sharing the results folder within and user id information to manage the generated file permissions,
 ```bash
 mkdir results
-```
-
-Run the container by sharing the results folder within and user id information to manage the generated file permissions,
-```bash
-docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets
+docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run ashwinsnayak/phgasnets:1.0.0
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 

@@ -7,20 +7,24 @@ setting relevant dependencies, hosting the source code, building executables and
 Necessary tools:
   - [Docker Desktop](https://docs.docker.com/desktop/) specifically Docker Engine (tested with `26.1.3`).
 
-Build the `phgasnets` image which contains the environment, copies the source code and builds executables
+The compiled image from `Dockerfile` is already shared on [DockerHub](https://hub.docker.com/r/ashwinsnayak/phgasnets). Pull the image which contains the environment, includes the source code and builds executables,
 
 ```bash
-docker build -f Dockerfile --tag phgasnets .
+docker pull ashwinsnayak/phgasnets:1.0.0 --tag phgasnets
 ```
 
-Create a folder named `results` to store results in the host,
+:::{note}
+Alternatively, you can build the `phgasnets` image which contains the environment, copies the source code and builds executables
+
+```bash
+docker build -f Dockerfile --tag phgasnets:1.0.0 .
+```
+:::
+
+Create a folder named `results` to store results in the host, and run the container by sharing the results folder within and user id information to manage the generated file permissions,
 ```bash
 mkdir results
-```
-
-Run the container by sharing the results folder within and user id information to manage the generated file permissions,
-```bash
-docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets
+docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run phgasnets:1.0.0
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 
