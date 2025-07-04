@@ -137,7 +137,7 @@ python3 -m pip install -r requirements.txt
 ```
 4. Run the demos
 ```bash
-source RUNME.sh
+./RUNME.sh
 ```
 This should produce all the results in the `results` folder.
 
@@ -205,7 +205,7 @@ The demo executables are available in the `build` directory and take configurati
 A convenience script [`RUNME.sh`](RUNME.sh) is provided to run all the demos and plot results,
 
 ```bash
-source RUNME.sh
+./RUNME.sh
 ```
 
 > For detailed description on each demo, refer to the READMEs within.
