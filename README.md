@@ -8,8 +8,10 @@
     | |             __/ |
     |_|            |___/
 
-phgasnets-cpp
-=============
+phgasnets
+=========
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11387852.svg)](https://doi.org/10.5281/zenodo.11387852)
 
 Code supplement for "Modelling Gas Networks with Compressors: A Port-Hamiltonian Approach"
 
@@ -35,6 +37,8 @@ Repository:
 
 License:
   - GNU GPL v3, see [`LICENSE.md`](LICENSE.md).
+
+Documentation: [![Documentation Status](https://readthedocs.org/projects/phgasnets/badge/?version=latest)](https://phgasnets.readthedocs.io/en/latest/?badge=latest)
 
 <!-- Table of Contents -->
 <details open>
