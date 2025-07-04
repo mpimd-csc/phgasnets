@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 plot_params = {
-    'font.family': 'Latin Modern Math',
+    # 'font.family': 'Latin Modern Math',
     'font.size': 13,
     'axes.grid': True,
     'lines.linewidth': 1.8,
