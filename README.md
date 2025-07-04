@@ -135,7 +135,7 @@ git clone --depth 1 https://github.com/spack/spack.git .spack
 
 ```bash
 .spack/bin/spack env create phgasnets
-.spack/bin/spack env activate -p phgasnets
+eval "$(./.spack/bin/spack env activate --sh -p .)"
 .spack/bin/spack install
 ```
 

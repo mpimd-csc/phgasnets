@@ -21,7 +21,7 @@ git clone --depth 1 https://github.com/spack/spack.git .spack
 
 ```bash
 .spack/bin/spack env create phgasnets
-.spack/bin/spack env activate -p phgasnets
+eval "$(./.spack/bin/spack env activate --sh -p .)"
 .spack/bin/spack install
 ```
 
@@ -39,3 +39,9 @@ Since you are in the spack environment, CMake should find all the right dependen
 ```bash
 ./RUNME.sh
 ```
+
+
+:::{tip}
+You can deactivate the spack environment using the following command:
+eval "$(./.spack/bin/spack env deactivate --sh -p .)"
+:::
