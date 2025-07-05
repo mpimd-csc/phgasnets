@@ -11,15 +11,7 @@
 # include <chrono>
 # include <ceres/ceres.h>
 # include <nlohmann/json.hpp>
-
-# include "gasconstant.hpp"
-# include "utils.hpp"
-# include "pipe.hpp"
-# include "compressor.hpp"
-# include "network.hpp"
-# include "steady.hpp"
-# include "transient.hpp"
-# include "io.hpp"
+# include "phgasnets.hpp"
 
 // Define the json library
 using json = nlohmann::json;
