@@ -10,11 +10,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <ceres/ceres.h>
-#include "operators.hpp"
-
-#include "steady.hpp"
-#include "transient.hpp"
 #include <highfive/H5Easy.hpp>
+#include "phgasnets.hpp"
 
 // Define the json library
 using json = nlohmann::json;
@@ -134,15 +131,31 @@ int main(int argc, char** argv) {
 
   // Read config for io frequency and filename
   int io_frequency = config["io"]["frequency"].get<int>();
-  std::string filename = config["io"]["filename"].get<std::string>()+".h5";
-  H5Easy::File file(filename, H5Easy::File::Truncate);
+  std::string filename = config["io"]["filename"].get<std::string>();
+  H5Easy::File file(filename+".h5", H5Easy::File::Truncate);
+
+  // CSV write out: Init
+  std::vector<double>
+    timestamps(Nt),
+    inflow_pressure(Nt),
+    outflow_pressure(Nt),
+    inflow_momentum(Nt),
+    outflow_momentum(Nt);
+
   {
     Vector rho = current_state(Eigen::seqN(0, n_rho));
     Vector mom = current_state(Eigen::seqN(n_rho, n_mom));
+
     H5Easy::dump(file, "/mesh", mesh);
     H5Easy::dump(file, "/0/density", rho);
     H5Easy::dump(file, "/0/momentum", mom);
     H5Easy::dump(file, "/0/timestamp", 0.0);
+
+    timestamps[0] = 0.0;
+    inflow_pressure[0] = rho(0)*RT/1e5;
+    outflow_pressure[0] = rho(Eigen::last)*RT/1e5;
+    inflow_momentum[0] = mom(0);
+    outflow_momentum[0] = mom(Eigen::last);
   }
 
   Problem problem_transient;
@@ -181,10 +194,40 @@ int main(int argc, char** argv) {
         H5Easy::dump(file, "/" + std::to_string(t) + "/density", rho);
         H5Easy::dump(file, "/" + std::to_string(t) + "/momentum", mom);
         H5Easy::dump(file, "/" + std::to_string(t) + "/timestamp", time);
+
+        timestamps[t] = time/3600.0;
+        inflow_pressure[t] = rho(0)*RT/1e5;
+        outflow_pressure[t] = rho(Eigen::last)*RT/1e5;
+        inflow_momentum[t] = mom(0);
+        outflow_momentum[t] = mom(Eigen::last);
     }
   }
 
-  std::cout << "Results written in [" << filename << "]" << std::endl;
+  phgasnets::writeColumnsToCSV(
+    filename+".csv",
+    {
+      "time",
+      "inletPressure",
+      "outletPressure",
+      "inletMomentum",
+      "outletMomentum"
+    },
+    {
+      timestamps,
+      inflow_pressure,
+      outflow_pressure,
+      inflow_momentum,
+      outflow_momentum
+    }
+  );
+
+  std::cout
+    << "Results written in ["
+    << filename+".h5"
+    << "] and ["
+    << filename+".csv"
+    << "]"
+    << std::endl;
   // ------------------------------------------------------------------------
   // Orderly exit
   return 0;
