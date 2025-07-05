@@ -66,4 +66,19 @@ Eigen::SparseMatrix<T> diagonalBlock(
     return mat;
 }
 
+/*
+ * Writes a vector of vectors of doubles to a CSV file.
+ *
+ * @param filename the name of the file to write to
+ * @param column_names the names of the columns
+ * @param columns the data to write
+ *
+ * @throws None
+ */
+void writeColumnsToCSV(
+    const std::string& filename,
+    const std::vector<std::string>& column_names,
+    const std::vector<std::vector<double>>& columns
+);
+
 }
