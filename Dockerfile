@@ -16,7 +16,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     # install C++ dependencies from apt
     apt-get install -y build-essential cmake git pkg-config \
-        libopenblas-dev libeigen3-dev libmetis-dev libceres-dev nlohmann-json3-dev libhdf5-dev
+        libopenblas-dev libeigen3-dev libmetis-dev libceres-dev nlohmann-json3-dev libhdf5-dev libargparse-dev
 
 # install highfive - not available in apt
 ARG HIGHFIVE_PATH=/opt/highfive
