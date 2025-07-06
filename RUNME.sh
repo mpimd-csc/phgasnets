@@ -26,7 +26,7 @@ pushd ${PHGASNETS_OUT_DIR} > /dev/null
 # Run single pipe testcase
 echo -e "\e[1;33m[DEMO] Run single_pipe_testcase\e[0m"
 PHGASNETS_CONFIG_FILE=${PHGASNETS_PROJECT_DIR}/demos/single_pipe/config.json
-${PHGASNETS_DEMO_DIR}/single_pipe/single_pipe ${PHGASNETS_CONFIG_FILE}
+${PHGASNETS_DEMO_DIR}/single_pipe/single_pipe -c ${PHGASNETS_CONFIG_FILE} --csv
 ${PHGASNETS_PROJECT_DIR}/demos/single_pipe/plot -c ${PHGASNETS_CONFIG_FILE} -O ${PHGASNETS_OUT_DIR}
 
 # Run four compressor types

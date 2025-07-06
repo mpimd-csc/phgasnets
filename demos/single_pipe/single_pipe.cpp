@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <argparse/argparse.hpp>
 #include <nlohmann/json.hpp>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -49,14 +50,27 @@ double momentum_at_outlet(double time) {
 }
 
 int main(int argc, char** argv) {
-  // Check for JSON input
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <config-file>.json\n";
-    return 1; // Return an error code if not provided
-  }
+  argparse::ArgumentParser parser("single_pipe", "1.0", argparse::default_arguments::help);
+  parser.add_argument("-c", "--config")
+    .help("Path to the <config-file>.json")
+    .default_value("config.json")
+    .required();
 
+  parser.add_argument("--csv")
+    .help("Flag to output <csv-file>.csv")
+    .default_value(false)
+    .implicit_value(true);
+
+  try {
+    parser.parse_args(argc, argv);
+  }
+  catch (const std::exception& err) {
+    std::cerr << err.what() << std::endl;
+    std::cerr << parser;
+    std::exit(1);
+  }
   // Read the JSON file
-  std::ifstream config_file(argv[1]);
+  std::ifstream config_file(parser.get<std::string>("config"));
   json config = json::parse(config_file);
 
   const double R              = config["GAS_CONSTANT"].get<double>();
@@ -203,31 +217,38 @@ int main(int argc, char** argv) {
     }
   }
 
-  phgasnets::writeColumnsToCSV(
-    filename+".csv",
-    {
-      "time",
-      "inletPressure",
-      "outletPressure",
-      "inletMomentum",
-      "outletMomentum"
-    },
-    {
-      timestamps,
-      inflow_pressure,
-      outflow_pressure,
-      inflow_momentum,
-      outflow_momentum
-    }
-  );
-
   std::cout
     << "Results written in ["
     << filename+".h5"
-    << "] and ["
-    << filename+".csv"
     << "]"
     << std::endl;
+
+  if (parser.get<bool>("csv")) {
+    phgasnets::writeColumnsToCSV(
+      filename+".csv",
+      {
+        "time",
+        "inletPressure",
+        "outletPressure",
+        "inletMomentum",
+        "outletMomentum"
+      },
+      {
+        timestamps,
+        inflow_pressure,
+        outflow_pressure,
+        inflow_momentum,
+        outflow_momentum
+      }
+    );
+
+    std::cout
+      << "CSV file written in ["
+      << filename+".csv"
+      << "]"
+      << std::endl;
+  }
+
   // ------------------------------------------------------------------------
   // Orderly exit
   return 0;

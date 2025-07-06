@@ -9,6 +9,7 @@
     "ceres",
     "hdf5",
     "nlohmann-json",
-    "highfive"
+    "highfive",
+    "argparse"
   ]
 }
