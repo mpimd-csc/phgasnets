@@ -6,3 +6,6 @@ build
 .vcpkg
 spack.lock
 docs/_build
+.spack
+.zed
+.ropeproject
