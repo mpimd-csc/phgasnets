@@ -7,6 +7,7 @@ spack:
   specs:
   - cmake
   - eigen@3.4.0
+  - cpp-argparse@3.1
   - ceres-solver@2.0.0
   - highfive@2.10.0
   - nlohmann-json@3.10.0
