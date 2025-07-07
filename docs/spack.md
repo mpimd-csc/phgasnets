@@ -31,11 +31,13 @@ This command should technically parse `spack.yaml` and install the C++ and Pytho
 
 ```bash
 cmake -B build -S .
-cmake --build build
+cmake --build build --parallel
 ```
+
 Since you are in the spack environment, CMake should find all the right dependencies.
 
 4.  Run the demos
+
 ```bash
 ./RUNME.sh
 ```
@@ -43,5 +45,9 @@ Since you are in the spack environment, CMake should find all the right dependen
 
 :::{tip}
 You can deactivate the spack environment using the following command:
-eval "$(./.spack/bin/spack env deactivate --sh -p .)"
+
+```bash
+eval "$(./.spack/bin/spack env deactivate --sh)"
+```
+
 :::
