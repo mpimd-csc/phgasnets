@@ -11,7 +11,6 @@ spack:
   - highfive@2.10.0
   - nlohmann-json@3.10.0
   - python@3.10
-  - py-h5py@3.13.0
   - py-numpy@1.24.2
   - py-matplotlib@3.6.3
   view: true

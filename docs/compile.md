@@ -23,7 +23,6 @@ The locations of all the libraries need to be noted especially where these were 
 
 Additional requirements are required for `plot` scripts in the demo,
 * [Python3](https://www.python.org) `>=3.9` interpreter,
-* [h5py](https://www.h5py.org/) package to parse HDF5 files,
 * [numpy](https://numpy.org) package for handling arrays,
 * [matplotlib](https://matplotlib.org/) plotting package,
 

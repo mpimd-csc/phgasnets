@@ -39,7 +39,7 @@ RUN mkdir -p ${HIGHFIVE_PATH}-src && cd ${HIGHFIVE_PATH}-src && \
     rm -rf ${HIGHFIVE_PATH}-src
 
 # install python dependencies for plot
-RUN apt-get install -y python3-minimal python3-numpy python3-matplotlib python3-h5py
+RUN apt-get install -y python3-minimal python3-numpy python3-matplotlib
 
 # provide a non-root user for devcontainer
 # the args for UID and GID will be overridden by VSCode

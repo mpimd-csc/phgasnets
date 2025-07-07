@@ -6,6 +6,8 @@
 
 # include <iostream>
 # include <fstream>
+# include <array>
+#include <argparse/argparse.hpp>
 # include <Eigen/Dense>
 # include <Eigen/Sparse>
 # include <chrono>
@@ -54,14 +56,27 @@ int main(int argc, char** argv){
   using std::chrono::duration_cast;
   using std::chrono::seconds;
 
-  // Check for JSON input
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <config-file>.json\n";
-    return 1; // Return an error code if not provided
-  }
+  argparse::ArgumentParser parser("single_pipe", "1.0", argparse::default_arguments::help);
+  parser.add_argument("-c", "--config")
+    .help("Path to the <config-file>.json")
+    .default_value("config.json")
+    .required();
 
+  parser.add_argument("--csv")
+    .help("Flag to output <csv-file>.csv")
+    .default_value(false)
+    .implicit_value(true);
+
+  try {
+    parser.parse_args(argc, argv);
+  }
+  catch (const std::exception& err) {
+    std::cerr << err.what() << std::endl;
+    std::cerr << parser;
+    std::exit(1);
+  }
   // Read the JSON file
-  std::ifstream config_file(argv[1]);
+  std::ifstream config_file(parser.get<std::string>("config"));
   json config = json::parse(config_file);
 
   const double inlet_temperature = config["boundary_conditions"]["inlet"]["temperature"].get<double>();
@@ -174,6 +189,31 @@ int main(int argc, char** argv){
   network_writer.writeMesh();
   network_writer.writeState(0, 0);
 
+  // CSV write out: Initialize vectors
+  std::vector<double> timestamps(Nt);
+  std::vector<std::vector<double>> inflow_pressure;
+  std::vector<std::vector<double>> outflow_pressure;
+  std::vector<std::vector<double>> inflow_momentum;
+  std::vector<std::vector<double>> outflow_momentum;
+
+  std::size_t i = 0;
+  for(auto& pipe: network.pipes){
+    double RT  = phgasnets::GAS_CONSTANT*pipe.temperature;
+
+    timestamps[0] = 0.0;
+    inflow_pressure.push_back(std::vector<double>(Nt));
+    outflow_pressure.push_back(std::vector<double>(Nt));
+    inflow_momentum.push_back(std::vector<double>(Nt));
+    outflow_momentum.push_back(std::vector<double>(Nt));
+
+    inflow_pressure[i][0] = pipe.rho(0)*RT/1e5;
+    outflow_pressure[i][0] = pipe.rho(Eigen::last)*RT/1e5;
+    inflow_momentum[i][0] = pipe.mom(0);
+    outflow_momentum[i][0] = pipe.mom(Eigen::last);
+
+    ++i;
+  }
+
   t1 = high_resolution_clock::now();
 
   Problem problem_transient;
@@ -205,11 +245,59 @@ int main(int argc, char** argv){
     network.set_state(current_state);
 
     // IO
-    if (t % io_frequency == 0)
+    if (t % io_frequency == 0) {
         network_writer.writeState(t, time);
+
+        std::size_t i = 0;
+        for(auto& pipe: network.pipes){
+          double RT  = phgasnets::GAS_CONSTANT*pipe.temperature;
+
+          timestamps[t] = time/3600.0;
+
+          inflow_pressure[i][t] = pipe.rho(0)*RT/1e5;
+          outflow_pressure[i][t] = pipe.rho(Eigen::last)*RT/1e5;
+          inflow_momentum[i][t] = pipe.mom(0);
+          outflow_momentum[i][t] = pipe.mom(Eigen::last);
+
+          ++i;
+        }
+    }
   }
 
   std::cout << "Results written in [" << filename << "]" << std::endl;
+
+  if (parser.get<bool>("csv")) {
+
+    std::size_t i = 0;
+    for(auto& pipe: network.pipes){
+      phgasnets::writeColumnsToCSV(
+        filename+"_pipe"+std::to_string(i)+".csv",
+        {
+          "time",
+          "inletPressure",
+          "outletPressure",
+          "inletMomentum",
+          "outletMomentum"
+        },
+        {
+          timestamps,
+          inflow_pressure[i],
+          outflow_pressure[i],
+          inflow_momentum[i],
+          outflow_momentum[i]
+        }
+      );
+
+      std::cout
+        << "CSV file written in ["
+        << filename+"_pipe"+std::to_string(i)+".csv"
+        << "]"
+        << std::endl;
+
+      ++i;
+    }
+
+  }
 
   t2       = high_resolution_clock::now();
   duration = duration_cast<seconds>( t2 - t1 );

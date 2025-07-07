@@ -36,9 +36,9 @@ for COMPR_TYPE in "${compressor_types[@]}"
 do
   echo -e "\e[33m[COMPR_TYPE] ${COMPR_TYPE}\e[0m"
   PHGASNETS_CONFIG_FILE=${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/"config_${COMPR_TYPE}.json"
-  ${PHGASNETS_DEMO_DIR}/four_compressor_types/four_compressor_types ${PHGASNETS_CONFIG_FILE}
-  ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 0 -O ${PHGASNETS_OUT_DIR} --csv
-  ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 1 -O ${PHGASNETS_OUT_DIR} --csv
+  ${PHGASNETS_DEMO_DIR}/four_compressor_types/four_compressor_types -c ${PHGASNETS_CONFIG_FILE} --csv
+  ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 0 -O ${PHGASNETS_OUT_DIR}
+  ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plot -c ${PHGASNETS_CONFIG_FILE} -p 1 -O ${PHGASNETS_OUT_DIR}
 done
 ${PHGASNETS_PROJECT_DIR}/demos/four_compressor_types/plotall -O ${PHGASNETS_OUT_DIR} --compressor-types "${compressor_types[@]}"
 
