@@ -12,7 +12,7 @@
 #include <Eigen/Sparse>
 #include <ceres/ceres.h>
 #include <highfive/H5Easy.hpp>
-#include "phgasnets.hpp"
+#include <phgasnets>
 
 // Define the json library
 using json = nlohmann::json;

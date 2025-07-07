@@ -11,7 +11,7 @@
 # include <chrono>
 # include <ceres/ceres.h>
 # include <nlohmann/json.hpp>
-# include "phgasnets.hpp"
+# include <phgasnets>
 
 // Define the json library
 using json = nlohmann::json;
