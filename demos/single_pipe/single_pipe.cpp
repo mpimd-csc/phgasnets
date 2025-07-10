@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <argparse/argparse.hpp>
+#include <cxxopts.hpp>
 #include <nlohmann/json.hpp>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -50,27 +50,41 @@ double momentum_at_outlet(double time) {
 }
 
 int main(int argc, char** argv) {
-  argparse::ArgumentParser parser("single_pipe", "1.0", argparse::default_arguments::help);
-  parser.add_argument("-c", "--config")
-    .help("Path to the <config-file>.json")
-    .default_value("config.json")
-    .required();
+  cxxopts::Options parser("single_pipe", "Demo for single_pipe testcase");
+  parser.add_options()
+    (
+      "c,config",
+      "Path to the <config-file>.json",
+      cxxopts::value<std::string>()
+        ->default_value("config.json")
+    )
+    (
+      "csv",
+      "Flag to output <csv-file>.csv",
+      cxxopts::value<bool>()
+        ->default_value("false")
+        ->implicit_value("true")
+    )
+    ("h,help", "Print usage")
+    ;
 
-  parser.add_argument("--csv")
-    .help("Flag to output <csv-file>.csv")
-    .default_value(false)
-    .implicit_value(true);
-
+  cxxopts::ParseResult args;
   try {
-    parser.parse_args(argc, argv);
+    args = parser.parse(argc, argv);
   }
-  catch (const std::exception& err) {
+  catch (const cxxopts::exceptions::exception& err) {
     std::cerr << err.what() << std::endl;
-    std::cerr << parser;
+    std::cerr << parser.help() << std::endl;
     std::exit(1);
   }
+
+  if (args.count("help")) {
+    std::cout << parser.help() << std::endl;
+    return 0;
+  }
+
   // Read the JSON file
-  std::ifstream config_file(parser.get<std::string>("config"));
+  std::ifstream config_file(args["config"].as<std::string>());
   json config = json::parse(config_file);
 
   const double R              = config["GAS_CONSTANT"].get<double>();
@@ -223,7 +237,7 @@ int main(int argc, char** argv) {
     << "]"
     << std::endl;
 
-  if (parser.get<bool>("csv")) {
+  if (args.count("csv")) {
     phgasnets::writeColumnsToCSV(
       filename+".csv",
       {

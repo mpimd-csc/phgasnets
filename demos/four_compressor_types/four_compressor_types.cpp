@@ -7,7 +7,7 @@
 # include <iostream>
 # include <fstream>
 # include <array>
-# include <argparse/argparse.hpp>
+# include <cxxopts.hpp>
 # include <Eigen/Dense>
 # include <Eigen/Sparse>
 # include <chrono>
@@ -56,27 +56,41 @@ int main(int argc, char** argv){
   using std::chrono::duration_cast;
   using std::chrono::seconds;
 
-  argparse::ArgumentParser parser("single_pipe", "1.0", argparse::default_arguments::help);
-  parser.add_argument("-c", "--config")
-    .help("Path to the <config-file>.json")
-    .default_value("config.json")
-    .required();
+  cxxopts::Options parser("four_compressor_types", "Demo for four_compressor_types testcase");
+  parser.add_options()
+    (
+      "c,config",
+      "Path to the <config-file>.json",
+      cxxopts::value<std::string>()
+        ->default_value("config.json")
+    )
+    (
+      "csv",
+      "Flag to output <csv-file>.csv",
+      cxxopts::value<bool>()
+        ->default_value("false")
+        ->implicit_value("true")
+    )
+    ("h,help", "Print usage")
+    ;
 
-  parser.add_argument("--csv")
-    .help("Flag to output <csv-file>.csv")
-    .default_value(false)
-    .implicit_value(true);
-
+  cxxopts::ParseResult args;
   try {
-    parser.parse_args(argc, argv);
+    args = parser.parse(argc, argv);
   }
-  catch (const std::exception& err) {
+  catch (const cxxopts::exceptions::exception& err) {
     std::cerr << err.what() << std::endl;
-    std::cerr << parser;
+    std::cerr << parser.help() << std::endl;
     std::exit(1);
   }
+
+  if (args.count("help")) {
+    std::cout << parser.help() << std::endl;
+    return 0;
+  }
+
   // Read the JSON file
-  std::ifstream config_file(parser.get<std::string>("config"));
+  std::ifstream config_file(args["config"].as<std::string>());
   json config = json::parse(config_file);
 
   const double inlet_temperature = config["boundary_conditions"]["inlet"]["temperature"].get<double>();
@@ -266,7 +280,7 @@ int main(int argc, char** argv){
 
   std::cout << "Results written in [" << filename << "]" << std::endl;
 
-  if (parser.get<bool>("csv")) {
+  if (args.count("csv")) {
 
     std::size_t i = 0;
     for(auto& pipe: network.pipes){

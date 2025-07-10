@@ -10,6 +10,6 @@
     "hdf5",
     "nlohmann-json",
     "highfive",
-    "argparse"
+    "cxxopts"
   ]
 }
