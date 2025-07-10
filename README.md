@@ -96,13 +96,13 @@ Necessary tools:
 The compiled image from `Dockerfile` is already shared on [docker hub](https://hub.docker.com/r/ashwinsnayak/phgasnets). Pull the image which contains the environment, includes the source code and builds executables,
 
 ```bash
-docker pull ashwinsnayak/phgasnets:1.0.0
+docker pull ashwinsnayak/phgasnets:1.1.0
 ```
 
 Create a folder named `results` to store results in the host and run the container by sharing the results folder within and user id information to manage the generated file permissions,
 ```bash
 mkdir results
-docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run ashwinsnayak/phgasnets:1.0.0
+docker run --rm -u $(id -u):$(id -g) -v ${PWD}/results:/phgasnets/run ashwinsnayak/phgasnets:1.1.0
 ```
 This should run all the demos in a disposable container and store the generated PDFs in the `results` folder.
 

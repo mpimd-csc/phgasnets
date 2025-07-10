@@ -10,14 +10,14 @@ Necessary tools:
 The compiled image from `Dockerfile` is already shared on [DockerHub](https://hub.docker.com/r/ashwinsnayak/phgasnets). Pull the image which contains the environment, includes the source code and builds executables,
 
 ```bash
-docker pull ashwinsnayak/phgasnets:1.0.0 --tag phgasnets
+docker pull ashwinsnayak/phgasnets:1.1.0 --tag phgasnets
 ```
 
 :::{note}
 Alternatively, you can build the `phgasnets` image which contains the environment, copies the source code and builds executables
 
 ```bash
-docker build -f Dockerfile --tag phgasnets:1.0.0 .
+docker build -f Dockerfile --tag phgasnets:1.1.0 .
 ```
 :::
 
