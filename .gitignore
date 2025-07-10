@@ -4,7 +4,6 @@ build
 *.egg-info/
 .spack-env
 .vcpkg
-spack.lock
 docs/_build
 .spack
 .zed
