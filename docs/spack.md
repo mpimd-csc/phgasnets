@@ -22,8 +22,10 @@ git clone --depth 1 https://github.com/spack/spack.git .spack
 ```bash
 .spack/bin/spack env create phgasnets
 eval "$(./.spack/bin/spack env activate --sh -p .)"
-.spack/bin/spack install
+.spack/bin/spack install --deprecated
 ```
+
+> The `--deprecated` flag is necessary since one of the underlying dependency in the software stack has been marked deprecated. This will be fixed in an update.
 
 This command should technically parse `spack.yaml` and install the C++ and Python dependencies required.
 

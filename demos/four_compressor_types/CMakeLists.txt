@@ -1,8 +1,11 @@
 option(PHGASNETS_NUMERICDIFF "Enable numeric differentiation" OFF)
 
+# Zlib
+find_package(ZLIB REQUIRED)
+
 # Add executables
 add_executable(four_compressor_types four_compressor_types.cpp)
-target_link_libraries(four_compressor_types PRIVATE phgasnets Ceres::ceres nlohmann_json::nlohmann_json HighFive)
+target_link_libraries(four_compressor_types PRIVATE phgasnets Ceres::ceres nlohmann_json::nlohmann_json HighFive ZLIB::ZLIB)
 
 if(PHGASNETS_NUMERICDIFF)
     set_source_files_properties(four_compressor_types PROPERTIES COMPILE_DEFINITIONS "PHGASNETS_NUMERICDIFF=1")
